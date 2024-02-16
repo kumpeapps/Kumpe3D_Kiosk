@@ -1,8 +1,8 @@
 """Kumpe3D Kiosk"""
 
+import flet as ft
 import home
 import addroll
-import flet as ft
 from params import Params
 from bottom_bar import bottom_bar
 
