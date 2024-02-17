@@ -5,7 +5,7 @@ import socket
 import requests
 import flet as ft
 from dotenv import load_dotenv
-import logo  # pylint: disable=import-error
+# import logo  # pylint: disable=import-error
 from params import Params
 
 # from ip_host import get_ip
@@ -17,9 +17,9 @@ userid = os.getenv(key="USERID", default="")
 
 def main(page: ft.Page, active: bool = True, login: bool = False):
     """Main Function"""
-    img_container = ft.Container(
-        content=ft.Image(src_base64=logo.logo_base64), alignment=ft.alignment.top_center
-    )
+    # img_container = ft.Container(
+    #     content=ft.Image(src_base64=logo.logo_base64), alignment=ft.alignment.top_center
+    # )
 
     def did_login(_):
         send_request(username_field.value, password_field.value)
@@ -52,8 +52,8 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
         content=ft.ElevatedButton(text="Login", on_click=did_login),
         alignment=ft.alignment.center,
     )
-    page.controls = [img_container, username_field, password_field, submit_container]
-    img_container.visible = active
+    page.controls = [username_field, password_field, submit_container]
+    # img_container.visible = active
     username_field.visible = login
     password_field.visible = login
     submit_container.visible = login
