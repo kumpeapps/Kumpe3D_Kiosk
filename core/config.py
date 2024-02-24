@@ -40,14 +40,14 @@ class ConfigApp:
             def productionq_go(_):
                 page.go("/production_queue")
 
-            def addstockandprint_go(_):
-                page.go("/add_stock_and_print_label")
+            # def addstockandprint_go(_):
+            #     page.go("/add_stock_and_print_label")
 
             def productlabel_go(_):
                 page.go("/print_product_label")
 
-            def filamentcolorscard_go(_):
-                page.go("/print_filament_colors_card")
+            # def filamentcolorscard_go(_):
+            #     page.go("/print_filament_colors_card")
 
             return fs.Viewsy(
                 drawer=ft.NavigationDrawer(

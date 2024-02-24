@@ -1,6 +1,7 @@
 """Print Product Label"""
 
 import os
+
 try:
     from beepy import beep
 except ImportError:
@@ -62,7 +63,6 @@ def printproductlabel_page(data: fs.Datasy):
             },
         )
 
-
     # Run the function
     def generate_label(sku: str):
         """Generate PDF Product Label"""
@@ -71,7 +71,6 @@ def printproductlabel_page(data: fs.Datasy):
             "label.pdf",
         )
 
-
     def print_label():
         """Print Product Label PDF to Printer"""
         # Only print in production environment
@@ -79,7 +78,6 @@ def printproductlabel_page(data: fs.Datasy):
             os.system(
                 "lp -d Product_Label_Printer -o media=50x80mm -o orientation-requested=4 label.pdf"
             )
-
 
     def print_product_label(_):
         """Prints Product Label"""

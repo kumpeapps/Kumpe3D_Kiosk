@@ -37,7 +37,7 @@ def login_x(page: ft.Page):
         open_dlg()
         return False
 
-    match(
+    match (
         page.title,
         Params.Access.basic,
         Params.Access.production,
@@ -69,8 +69,8 @@ def login_x(page: ft.Page):
     return False
 
 
-app.add_pages([login, addstock, addroll, openroll, emptyroll, productionq, printproductlabel])
+app.add_pages(
+    [login, addstock, addroll, openroll, emptyroll, productionq, printproductlabel]
+)
 ConfigApp(app)
 
-# We run the application
-app.run()

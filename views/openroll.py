@@ -12,6 +12,7 @@ from core.params import Params as params
 
 openroll = fs.AddPagesy()
 
+
 @openroll.page(route="/open_roll", protected_route=True)
 def openroll_page(data: fs.Datasy):
     """Main Function for Open Roll"""
@@ -45,7 +46,7 @@ def openroll_page(data: fs.Datasy):
         )
         page.banner.open = True
         page.update()
-    
+
     def open_roll(_):
         sql_params = params.SQL
         db = pymysql.connect(
@@ -76,7 +77,7 @@ def openroll_page(data: fs.Datasy):
             """
             cursor.execute(verify_sql, (sku.value, sku.value))
             filament = cursor.fetchone()
-            int(filament['idfilament'])
+            int(filament["idfilament"])
             try:
                 beep(1)
             except NameError:
@@ -88,13 +89,12 @@ def openroll_page(data: fs.Datasy):
                 pass
             show_banner_click(f"Invalid SKU {sku}")
 
-        
     text = ft.Container(
         content=ft.Text(
-        "Scan Filament SKU to move roll from Full to Partial",
-        text_align=ft.TextAlign.CENTER
-    ),
-        alignment=ft.alignment.center
+            "Scan Filament SKU to move roll from Full to Partial",
+            text_align=ft.TextAlign.CENTER,
+        ),
+        alignment=ft.alignment.center,
     )
     sku = ft.TextField(
         label="sku",
@@ -112,7 +112,7 @@ def openroll_page(data: fs.Datasy):
 
     menu_button = ft.Container(
         content=ft.FilledButton("Menu", on_click=show_drawer),
-        alignment=ft.alignment.top_right
+        alignment=ft.alignment.top_right,
     )
 
     return ft.View(
