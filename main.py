@@ -74,3 +74,5 @@ app.add_pages(
 )
 ConfigApp(app)
 
+# We run the application
+app.run()
