@@ -1,6 +1,5 @@
 """Add Roll"""
 
-import os
 import pymysql
 
 try:
@@ -8,17 +7,23 @@ try:
 except ImportError:
     pass
 import flet as ft
-from dotenv import load_dotenv
-from params import Params
-from menu import load_menu
+import flet_easy as fs
+from core.params import Params as params
 
-load_dotenv()
-userid = os.getenv(key="USERID", default="")
+addroll = fs.AddPagesy()
 
 
-def main(page: ft.Page, active: bool = True):
+@addroll.page(route="/add_roll", protected_route=True)
+def addroll_page(data: fs.Datasy):
     """Main Function for Add Roll"""
-    load_menu(page)
+    page = data.page
+    view = data.view
+
+    def show_drawer(_):
+        view.drawer.open = True
+        page.update()
+
+    page.title = "Add Filament Roll"
 
     def close_banner(_):
         """Close Banner"""
@@ -44,7 +49,7 @@ def main(page: ft.Page, active: bool = True):
 
     def add_roll(_):
         """Add's Roll to Stock"""
-        sql_params = Params.SQL
+        sql_params = params.SQL
         db = pymysql.connect(
             db=sql_params.database,
             user=sql_params.username,
@@ -92,8 +97,12 @@ def main(page: ft.Page, active: bool = True):
                 pass
             show_banner_click(f"Invalid SKU {sku.value}")
 
-    text = ft.Text(
-        "Scan/Enter Filament ID/Manufacture Barcode to add filament roll to stock"
+    text = ft.Container(
+        content=ft.Text(
+        "Scan/Enter Filament ID/Manufacture Barcode to add filament roll to stock",
+        text_align=ft.TextAlign.CENTER
+    ),
+        alignment=ft.alignment.center
     )
     sku = ft.TextField(
         label="sku",
@@ -108,9 +117,14 @@ def main(page: ft.Page, active: bool = True):
         content=ft.ElevatedButton(text="Submit", on_click=add_roll),
         alignment=ft.alignment.center,
     )
-    page.controls = [text, sku, submit_container]
-    text.visible = active
-    sku.visible = active
-    submit_container.visible = active
-    page.update()
-    sku.focus()
+
+    menu_button = ft.Container(
+        content=ft.FilledButton("Menu", on_click=show_drawer),
+        alignment=ft.alignment.top_right
+    )
+
+    return ft.View(
+        route="/add_roll",
+        controls=[menu_button, text, sku, submit_container],
+        drawer=view.drawer,
+    )

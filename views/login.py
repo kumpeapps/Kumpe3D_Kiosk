@@ -1,25 +1,35 @@
 """Home/Login Page"""
 
-import os
 import socket
 import requests
 import flet as ft
-from dotenv import load_dotenv
-# import logo  # pylint: disable=import-error
-from params import Params
-
-# from ip_host import get_ip
-from menu import load_menu
-
-load_dotenv()
-userid = os.getenv(key="USERID", default="")
+import flet_easy as fs
+import assets.logo as logo  # pylint: disable=import-error
+from core.params import Params as params
 
 
-def main(page: ft.Page, active: bool = True, login: bool = False):
-    """Main Function"""
-    # img_container = ft.Container(
-    #     content=ft.Image(src_base64=logo.logo_base64), alignment=ft.alignment.top_center
-    # )
+login = fs.AddPagesy()
+
+
+@login.page(route="/login")
+def login_page(data: fs.Datasy):
+    """Login Page"""
+    page = data.page
+    view = data.view
+
+    def show_drawer(_):
+        view.drawer.open = True
+        page.update()
+
+    if params.Access.basic:
+        page.title = "Home"
+    else:
+        page.title = "Login"
+
+    img_container = ft.Container(
+        content=ft.Image(src_base64=logo.logo_base64, height=page.height / 2),
+        alignment=ft.alignment.top_center,
+    )
 
     def did_login(_):
         send_request(username_field.value, password_field.value)
@@ -33,6 +43,7 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
         enable_suggestions=False,
         prefix_icon=ft.icons.PASSWORD,
         on_submit=did_login,
+        visible=not params.Access.basic,
     )
 
     def username_submit(_):
@@ -46,19 +57,20 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
         enable_suggestions=False,
         prefix_icon=ft.icons.PERSON,
         on_submit=username_submit,
+        visible=not params.Access.basic,
     )
 
     submit_container = ft.Container(
         content=ft.ElevatedButton(text="Login", on_click=did_login),
         alignment=ft.alignment.center,
+        visible=not params.Access.basic,
     )
-    page.controls = [username_field, password_field, submit_container]
-    # img_container.visible = active
-    username_field.visible = login
-    password_field.visible = login
-    submit_container.visible = login
 
-    page.update()
+    menu_button = ft.Container(
+        content=ft.FilledButton("Menu", on_click=show_drawer),
+        alignment=ft.alignment.top_right,
+        visible=params.Access.basic,
+    )
 
     def show_banner_click(
         message: str,
@@ -87,9 +99,9 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
 
         try:
             response = requests.get(
-                url=f"{Params.KumpeApps.api_url}/check-access/by-login-pass",
+                url=f"{params.KumpeApps.api_url}/check-access/by-login-pass",
                 params={
-                    "_key": Params.KumpeApps.api_key,
+                    "_key": params.KumpeApps.api_key,
                     "login": username,
                     "pass": password,
                 },
@@ -105,9 +117,9 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
                 user_id = data["user_id"]
                 email = data["email"]
                 name = data["name"]
-                Params.Access.user_id = user_id
-                Params.Access.email = email
-                Params.Access.name = name
+                params.Access.user_id = user_id
+                params.Access.email = email
+                params.Access.name = name
                 is_admin = "213" in subscriptions
                 is_basic = "214" in subscriptions
                 is_orderfiller = "215" in subscriptions
@@ -119,7 +131,7 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
                 elif is_basic:
                     access_granted(user_id, computername, "basic")
                 else:
-                    Params.Access.set_access_level("unauthenticated")
+                    params.Access.set_access_level("unauthenticated")
                     show_banner_click("Access Denied")
                     log_access(user_id, f"/{computername}/denied")
                     password_field.value = ""
@@ -132,14 +144,14 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
 
     def access_granted(user_id: str, computername: str, access_level: str):
         """Access Granted"""
-        Params.Access.set_access_level(access_level)
+        params.Access.set_access_level(access_level)
         log_access(user_id, f"/{computername}/granted/{access_level}")
-        load_menu(page)
-        page.bottom_appbar.visible = True
         username_field.visible = False
         password_field.visible = False
         submit_container.visible = False
         password_field.value = ""
+        menu_button.visible = True
+        page.title = "Home"
         page.update()
 
     def log_access(user_id: str, note: str):
@@ -149,12 +161,12 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
 
         try:
             _ = requests.post(
-                url=f"{Params.KumpeApps.api_url}/access-log",
+                url=f"{params.KumpeApps.api_url}/access-log",
                 headers={
                     "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
                 },
                 data={
-                    "_key": Params.KumpeApps.api_key,
+                    "_key": params.KumpeApps.api_key,
                     "user_id": user_id,
                     "referrer": "Kumpe3D Kiosk",
                     "url": note,
@@ -168,3 +180,15 @@ def main(page: ft.Page, active: bool = True, login: bool = False):
             )
         except requests.exceptions.RequestException:
             print("HTTP Request failed")
+
+    return ft.View(
+        route="/login",
+        controls=[
+            menu_button,
+            img_container,
+            username_field,
+            password_field,
+            submit_container,
+        ],
+        drawer=view.drawer,
+    )

@@ -1,34 +1,76 @@
-"""Kumpe3D Kiosk"""
+"""Main Function for Kumpe3D Kiosk"""
 
+import flet_easy as fs
 import flet as ft
-import home
-import addroll
-from params import Params
-from bottom_bar import bottom_bar
+from views.addroll import addroll
+from views.login import login
+from views.addstock import addstock
+from views.openroll import openroll
+from views.emptyroll import emptyroll
+from views.productionq import productionq
+from views.productlabel import printproductlabel
+from core.config import ConfigApp
+from core.params import Params
 
-def main(page: ft.Page):
-    """Main Function"""
-    page.title = "Kumpe3D Kiosk"
-    bottom_bar(page)
-
-    def change_page(_):
-        page.drawer.open = False
-        if page.route == "home":
-            addroll.main(page, False)
-            home.main(page)
-            page.update()
-        elif page.route == "addroll":
-            home.main(page, False)
-            addroll.main(page)
-            page.update()
-        elif page.route == "logout":
-            page.bottom_appbar.visible = False
-            Params.Access.set_access_level("unauthenticated")
-            home.main(page, True, True)
-            page.update()
-
-    page.on_route_change = change_page
-    page.go("logout")
+app = fs.FletEasy(route_init="/login", route_login="/login")
 
 
-ft.app(main)
+@app.login
+def login_x(page: ft.Page):
+    """Require Login Function"""
+    dlg = ft.AlertDialog(
+        title=ft.Text(
+            f"Access Denied!!!\nYou do not have access to {page.title}",
+            text_align=ft.TextAlign.CENTER,
+        ),
+        on_dismiss=lambda e: print("Dialog dismissed!"),
+        adaptive=False,
+        bgcolor=ft.colors.RED_300,
+    )
+
+    def open_dlg():
+        page.dialog = dlg
+        dlg.open = True
+        page.update()
+
+    if not Params.Access.basic:
+        open_dlg()
+        return False
+
+    match(
+        page.title,
+        Params.Access.basic,
+        Params.Access.production,
+        Params.Access.orders,
+        Params.Access.print_labels,
+        Params.Access.filament_stock,
+        Params.Access.admin,
+    ):
+        case (_, _, _, _, _, _, True):
+            return True
+        case ("Add Filament Roll", True, _, _, _, _, _):
+            return True
+        case ("Empty Filament Roll", True, _, _, _, True, _):
+            return True
+        case ("Open Filament Roll", True, _, _, _, True, _):
+            return True
+        case ("Add To Stock", True, True, _, _, _, _):
+            return True
+        case ("Production Queue", True, True, _, _, _, _):
+            return True
+        case ("Production Queue", True, _, True, _, _, _):
+            return True
+        case ("Add to Stock & Print Label", True, True, _, True, _, _):
+            return True
+        case ("Print Product Label", True, _, _, True, _, _):
+            return True
+        case ("Print Filament Colors Card", True, _, _, True, _, True):
+            return True
+    return False
+
+
+app.add_pages([login, addstock, addroll, openroll, emptyroll, productionq, printproductlabel])
+ConfigApp(app)
+
+# We run the application
+app.run()

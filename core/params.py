@@ -16,6 +16,14 @@ creds = infisical_api(
 class Params:
     """Parameters"""
 
+    class SHIPPO:
+        """Shippo Parameters"""
+
+        base_url = "https://api.goshippo.com"
+        api_key = creds.get_secret(  # pylint: disable=no-member
+            secret_name="APIKEY", environment="dev", path="/SHIPPO/"
+        ).secretValue
+
     class SQL:
         """SQL Parameters for Web_3d User"""
 
@@ -71,20 +79,6 @@ class Params:
         print_labels = False
         filament_stock = False
         admin = False
-        print_room = os.getenv(key="print_room", default="false").lower() in [
-            "true",
-            "yes",
-            "t",
-            "y",
-            "1",
-        ]
-        orders_desk = os.getenv(key="orders_desk", default="false").lower() in [
-            "true",
-            "yes",
-            "t",
-            "y",
-            "1",
-        ]
 
         @staticmethod
         def refresh():
@@ -97,6 +91,10 @@ class Params:
                 Params.Access.print_labels = False
                 Params.Access.filament_stock = False
                 Params.Access.admin = False
+                Params.Access.user_id = ""
+                Params.Access.username = ""
+                Params.Access.name = ""
+                Params.Access.email = ""
             elif Params.Access.access_level == "basic":
                 Params.Access.basic = True
                 Params.Access.production = True
