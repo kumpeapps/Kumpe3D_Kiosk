@@ -49,9 +49,9 @@ for:
   matrix:
     only:
     - image: macOS
-    - SERVICE_TOKEN: $(SERVICE_TOKEN)
-    - APPVEYOR_BUILD_VERSION: $(APPVEYOR_BUILD_VERSION)
-    - APPVEYOR_BUILD_NUMBER: $(APPVEYOR_BUILD_NUMBER)
+    - SERVICE_TOKEN: $SERVICE_TOKEN
+    - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
+    - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
   
   install:
   - gem install cocoapods
@@ -74,9 +74,9 @@ for:
   matrix:
     only:
     - image: Ubuntu
-    - SERVICE_TOKEN: $(SERVICE_TOKEN)
-    - APPVEYOR_BUILD_VERSION: $(APPVEYOR_BUILD_VERSION)
-    - APPVEYOR_BUILD_NUMBER: $(APPVEYOR_BUILD_NUMBER)
+    - SERVICE_TOKEN: $SERVICE_TOKEN
+    - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
+    - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
 
   build_script:
   - flet build linux --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version 1.0.0 --build-number 1 --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
