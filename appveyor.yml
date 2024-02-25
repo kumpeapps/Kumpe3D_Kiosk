@@ -12,9 +12,9 @@ install:
 
 before_build:
 - echo "APP_ENV=prod" > .env
-- echo "SERVICE_TOKEN=$(SERVICE_TOKEN)" >> .env
-- echo "VERSION=$(APPVEYOR_BUILD_VERSION)" >> .env
-- echo "VERSION=$(APPVEYOR_BUILD_NUMBER)" >> .env
+- echo "SERVICE_TOKEN=$SERVICE_TOKEN" >> .env
+- echo "VERSION=$APPVEYOR_BUILD_VERSION" >> .env
+- echo "VERSION=$APPVEYOR_BUILD_NUMBER" >> .env
 
 test: off
 
