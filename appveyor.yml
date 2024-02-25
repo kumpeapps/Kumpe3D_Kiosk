@@ -14,9 +14,9 @@ install:
 - pip install -r requirements.txt
 
 build_script:
-- flet build main.py macos --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
-- flet build main.py windows --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
-- flet build main.py linux --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+- flet build macos --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+- flet build windows --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+- flet build linux --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
 
 test: off
 
