@@ -12,7 +12,9 @@ install:
 
 before_build:
 - echo "APP_ENV=prod" > .env
-- echo "SERVICE_TOKEN=$(SERVICE_TOKEN)" >> .env
+- echo "SERVICE_TOKEN=$env:SERVICE_TOKEN" >> .env
+- echo "VERSION=$env:APPVEYOR_BUILD_VERSION" >> .env
+- echo "VERSION=$env:APPVEYOR_BUILD_NUMBER" >> .env
 
 test: off
 
@@ -57,7 +59,7 @@ for:
   - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --build-number 1 --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
 
   after_build:
-  - tar -czvf kumpe3dkiosk-macos.tar.gz -C build/macos kumpe3dkiosk.app
+  - tar -czvf kumpe3dkiosk-macos.tar.gz -C build/macos "Kumpe3D Kiosk.app"
 
   artifacts:
   - path: kumpe3dkiosk-macos.tar.gz
