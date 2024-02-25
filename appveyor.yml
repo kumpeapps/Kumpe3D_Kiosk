@@ -14,7 +14,9 @@ install:
 - pip install -r requirements.txt
 
 build_script:
-- flet build main.py --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+- flet build main.py macos --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+- flet build main.py windows --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+- flet build main.py linux --project "kumpe3dkiosk" --icon icon.png --product-name "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
 
 test: off
 
@@ -35,7 +37,7 @@ for:
     - image: Visual Studio 2019
 
   after_build:
-  - 7z a kumpe3dkiosk-windows.zip %CD%\dist\*.exe
+  - 7z a kumpe3dkiosk-windows.zip %CD%\build\windows\*.exe
 
   artifacts:
   - path: kumpe3dkiosk-windows.zip
@@ -49,7 +51,7 @@ for:
     - image: macOS
 
   after_build:
-  - tar -czvf kumpe3dkiosk-macos.tar.gz -C dist kumpe3dkiosk.app
+  - tar -czvf kumpe3dkiosk-macos.tar.gz -C build\macos kumpe3dkiosk.app
 
   artifacts:
   - path: kumpe3dkiosk-macos.tar.gz
@@ -63,7 +65,7 @@ for:
     - image: Ubuntu
 
   after_build:
-  - tar -czvf kumpe3dkiosk-linux.tar.gz -C dist kumpe3dkiosk
+  - tar -czvf kumpe3dkiosk-linux.tar.gz -C build\linux kumpe3dkiosk
 
   artifacts:
   - path: kumpe3dkiosk-linux.tar.gz
