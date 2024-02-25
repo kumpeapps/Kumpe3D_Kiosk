@@ -26,18 +26,18 @@ deploy:
 #   Windows package
 # 
 for:
--
-  matrix:
-    only:
-    - image: Visual Studio 2019
+# -
+#   matrix:
+#     only:
+#     - image: Visual Studio 2019
     
-  build_script:
-  - flet build windows --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
-  after_build:
-  - 7z a kumpe3dkiosk-windows.zip %CD%\build\windows\*.exe
+#   build_script:
+#   - flet build windows --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+#   after_build:
+#   - 7z a kumpe3dkiosk-windows.zip %CD%\build\windows\*.exe
 
-  artifacts:
-  - path: kumpe3dkiosk-windows.zip
+#   artifacts:
+#   - path: kumpe3dkiosk-windows.zip
 
 #
 #   macOS package
