@@ -7,8 +7,10 @@ skip_branch_with_pr: true
 stack: python 3.10
 
 environment:
-  GITHUB_TOKEN:
-    secure: Ti46nPnZgFh0nRteU6ma0EhJnCTW7PaMn9hnnewZl4gBFPyRQnXNCwGog02+MRLX
+  VERSION:
+    secure: 1.0.0
+  BUILD:
+    secure: 2
 
 install:
 - pip install -r requirements.txt
@@ -54,10 +56,10 @@ for:
   - flutter upgrade --force
 
   build_script:
-  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "$(VERSION)" --build-number "$(BUILD)" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
 
   after_build:
-  - tar -czvf kumpe3dkiosk-macos.tar.gz -C build\macos kumpe3dkiosk.app
+  - tar -czvf kumpe3dkiosk-macos.tar.gz -C build/macos kumpe3dkiosk.app
 
   artifacts:
   - path: kumpe3dkiosk-macos.tar.gz
@@ -71,10 +73,10 @@ for:
     - image: Ubuntu
 
   build_script:
-  - flet build linux --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+  - flet build linux --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "$(VERSION)" --build-number "$(BUILD)" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
 
   after_build:
-  - tar -czvf kumpe3dkiosk-linux.tar.gz -C build\linux kumpe3dkiosk
+  - tar -czvf kumpe3dkiosk-linux.tar.gz -C build/linux kumpe3dkiosk
 
   artifacts:
   - path: kumpe3dkiosk-linux.tar.gz
