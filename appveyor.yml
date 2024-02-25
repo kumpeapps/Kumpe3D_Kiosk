@@ -13,11 +13,6 @@ environment:
 install:
 - pip install -r requirements.txt
 
-build_script:
-- flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
-- flet build windows --project "kumpe3dkiosk" --produc "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
-- flet build linux --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
-
 test: off
 
 # Publish artifacts to GitHub Releases on "tag" builds
@@ -35,7 +30,9 @@ for:
   matrix:
     only:
     - image: Visual Studio 2019
-
+    
+    build_script:
+  - flet build windows --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
   after_build:
   - 7z a kumpe3dkiosk-windows.zip %CD%\build\windows\*.exe
 
@@ -49,6 +46,9 @@ for:
   matrix:
     only:
     - image: macOS
+  
+  build_script:
+  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
 
   after_build:
   - tar -czvf kumpe3dkiosk-macos.tar.gz -C build\macos kumpe3dkiosk.app
@@ -63,6 +63,9 @@ for:
   matrix:
     only:
     - image: Ubuntu
+
+  build_script:
+  - flet build linux --project "kumpe3dkiosk" --productt "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
 
   after_build:
   - tar -czvf kumpe3dkiosk-linux.tar.gz -C build\linux kumpe3dkiosk
