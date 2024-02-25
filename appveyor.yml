@@ -12,6 +12,7 @@ environment:
 
 install:
 - pip install -r requirements.txt
+- flutter upgrade --force
 
 test: off
 
@@ -49,6 +50,8 @@ for:
   
   install:
   - gem install cocoapods
+  - pip install -r requirements.txt
+  - flutter upgrade --force
 
   build_script:
   - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
