@@ -16,6 +16,10 @@ install:
 - pip install -r requirements.txt
 - flutter upgrade --force
 
+before_build:
+- echo "APP_ENV=prod" > .env
+- echo "SERVICE_TOKEN=$(SERVICE_TOKEN)" >> .env
+
 test: off
 
 # Publish artifacts to GitHub Releases on "tag" builds
