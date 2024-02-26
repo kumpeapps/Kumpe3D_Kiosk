@@ -153,6 +153,8 @@ def login_page(data: fs.Datasy):
 
     def access_granted(user_id: str, computername: str, access_level: str):
         """Access Granted"""
+        params.SHIPPO.get_values()
+        params.SQL.get_values()
         params.Access.set_access_level(access_level)
         log_access(user_id, f"/{computername}/granted/{access_level}")
         username_field.visible = False
