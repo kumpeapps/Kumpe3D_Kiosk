@@ -10,7 +10,7 @@ from views.emptyroll import emptyroll
 from views.productionq import productionq
 from views.productlabel import printproductlabel
 from core.config import ConfigApp
-from core.params import Params
+from core.params import Params as params
 
 app = fs.FletEasy(route_init="/login", route_login="/login")
 
@@ -33,18 +33,18 @@ def login_x(page: ft.Page):
         dlg.open = True
         page.update()
 
-    if not Params.Access.basic:
+    if not params.Access.basic:
         open_dlg()
         return False
 
     match (
         page.title,
-        Params.Access.basic,
-        Params.Access.production,
-        Params.Access.orders,
-        Params.Access.print_labels,
-        Params.Access.filament_stock,
-        Params.Access.admin,
+        params.Access.basic,
+        params.Access.production,
+        params.Access.orders,
+        params.Access.print_labels,
+        params.Access.filament_stock,
+        params.Access.admin,
     ):
         case (_, _, _, _, _, _, True):
             return True
@@ -73,6 +73,7 @@ app.add_pages(
     [login, addstock, addroll, openroll, emptyroll, productionq, printproductlabel]
 )
 ConfigApp(app)
+
 
 # We run the application
 app.run()

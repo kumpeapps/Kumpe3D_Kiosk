@@ -17,6 +17,11 @@ def login_page(data: fs.Datasy):
     page = data.page
     view = data.view
 
+    pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
+    pr_container = ft.Container(
+        content=pr,
+        alignment=ft.alignment.center,
+    )
     def show_drawer(_):
         view.drawer.open = True
         page.update()
@@ -32,6 +37,7 @@ def login_page(data: fs.Datasy):
     )
 
     def did_login(_):
+        logging_in()
         send_request(username_field.value, password_field.value)
         page.update()
 
@@ -96,7 +102,8 @@ def login_page(data: fs.Datasy):
         """KumpeApps SSO Login"""
         # Login
         # GET https://www.kumpeapps.com/api/check-access/by-login-pass
-
+        if params.KumpeApps.api_key == "":
+            params.KumpeApps.get_values()
         try:
             response = requests.get(
                 url=f"{params.KumpeApps.api_url}/check-access/by-login-pass",
@@ -112,6 +119,7 @@ def login_page(data: fs.Datasy):
             success = data["ok"]
             if not success:
                 show_banner_click(data["msg"])
+                logging_in(False)
             else:
                 subscriptions = data["subscriptions"]
                 user_id = data["user_id"]
@@ -135,6 +143,7 @@ def login_page(data: fs.Datasy):
                     show_banner_click("Access Denied")
                     log_access(user_id, f"/{computername}/denied")
                     password_field.value = ""
+                    logging_in(False)
                     page.update()
 
         except requests.exceptions.RequestException:
@@ -152,6 +161,14 @@ def login_page(data: fs.Datasy):
         password_field.value = ""
         menu_button.visible = True
         page.title = "Home"
+        logging_in(False)
+        page.update()
+
+    def logging_in(loggingin: bool = True):
+        pr.visible = loggingin
+        username_field.disabled = loggingin
+        password_field.disabled = loggingin
+        submit_container.disabled = loggingin
         page.update()
 
     def log_access(user_id: str, note: str):
@@ -189,6 +206,7 @@ def login_page(data: fs.Datasy):
             username_field,
             password_field,
             submit_container,
+            pr_container,
         ],
         drawer=view.drawer,
     )

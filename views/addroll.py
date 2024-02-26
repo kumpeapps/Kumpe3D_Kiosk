@@ -49,6 +49,8 @@ def addroll_page(data: fs.Datasy):
 
     def add_roll(_):
         """Add's Roll to Stock"""
+        if params.SQL.username == "":
+            params.SQL.get_values()
         sql_params = params.SQL
         db = pymysql.connect(
             db=sql_params.database,

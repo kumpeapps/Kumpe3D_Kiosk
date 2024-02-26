@@ -48,6 +48,8 @@ def openroll_page(data: fs.Datasy):
         page.update()
 
     def open_roll(_):
+        if params.SQL.username == "":
+            params.SQL.get_values()
         sql_params = params.SQL
         db = pymysql.connect(
             db=sql_params.database,
@@ -87,7 +89,7 @@ def openroll_page(data: fs.Datasy):
                 beep(3)
             except NameError:
                 pass
-            show_banner_click(f"Invalid SKU {sku}")
+            show_banner_click(f"Invalid SKU {sku.value}")
 
     text = ft.Container(
         content=ft.Text(

@@ -49,6 +49,8 @@ def emptyroll_page(data: fs.Datasy):
 
     def empty_roll(_):
         """Removes Roll From Partial Roll"""
+        if params.SQL.username == "":
+            params.SQL.get_values()
         sql_params = params.SQL
         db = pymysql.connect(
             db=sql_params.database,

@@ -20,6 +20,8 @@ def productionq_page(data: fs.Datasy):
 
     page.title = "Production Queue"
 
+    if params.SQL.username == "":
+        params.SQL.get_values()
     sql_params = params.SQL
     db = pymysql.connect(
         db=sql_params.database,

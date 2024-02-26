@@ -19,6 +19,7 @@ def printproductlabel_page(data: fs.Datasy):
     """Main Function for Add Roll"""
     page = data.page
     view = data.view
+    pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
 
     def show_drawer(_):
         view.drawer.open = True
@@ -62,6 +63,7 @@ def printproductlabel_page(data: fs.Datasy):
                 "paperWidth": 3.15,
             },
         )
+        print_label()
 
     # Run the function
     def generate_label(sku: str):
@@ -82,8 +84,15 @@ def printproductlabel_page(data: fs.Datasy):
     def print_product_label(_):
         """Prints Product Label"""
         try:
-            generate_label(sku)
-            print_label()
+            pr.visible = True
+            sku.disabled = True
+            submit_container.disabled = True
+            page.update()
+            generate_label(sku.value)
+            pr.visible = False
+            sku.disabled = False
+            submit_container.disabled = False
+            page.update()
             try:
                 beep(1)
             except NameError:
@@ -94,6 +103,9 @@ def printproductlabel_page(data: fs.Datasy):
             except NameError:
                 pass
             show_banner_click(f"Invalid SKU {sku.value}")
+            sku.disabled = False
+            submit_container.disabled = False
+            page.update()
 
     text = ft.Container(
         content=ft.Text(
@@ -121,8 +133,13 @@ def printproductlabel_page(data: fs.Datasy):
         alignment=ft.alignment.top_right,
     )
 
+    progress_ring = ft.Container(
+        content=pr,
+        alignment=ft.alignment.center,
+    )
+
     return ft.View(
         route="/print_product_label",
-        controls=[menu_button, text, sku, submit_container],
+        controls=[menu_button, text, sku, submit_container, progress_ring],
         drawer=view.drawer,
     )
