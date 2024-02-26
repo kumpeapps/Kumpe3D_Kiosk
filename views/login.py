@@ -22,6 +22,7 @@ def login_page(data: fs.Datasy):
         content=pr,
         alignment=ft.alignment.center,
     )
+
     def show_drawer(_):
         view.drawer.open = True
         page.update()
