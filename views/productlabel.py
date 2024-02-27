@@ -80,6 +80,8 @@ def printproductlabel_page(data: fs.Datasy):
             os.system(
                 "lp -d Product_Label_Printer -o media=50x80mm -o orientation-requested=4 label.pdf"
             )
+        else:
+            print(printer_selection.value)
 
     def print_product_label(_):
         """Prints Product Label"""
@@ -92,7 +94,9 @@ def printproductlabel_page(data: fs.Datasy):
             pr.visible = False
             sku.disabled = False
             submit_container.disabled = False
+            sku.value = ""
             page.update()
+            sku.focus()
             try:
                 beep(1)
             except NameError:
@@ -114,6 +118,29 @@ def printproductlabel_page(data: fs.Datasy):
         ),
         alignment=ft.alignment.center,
     )
+
+    printer_selection = ft.Dropdown(
+        label="Label Printer",
+        options=[
+            ft.dropdown.Option(
+                "Product_Label_Printer",
+                text="Product Label Printer (50x80mm)",
+            ),
+            ft.dropdown.Option(
+                "Barcode_Label_Printer",
+                text="Barcode Label Printer (40x30mm)",
+                disabled=True,
+            ),
+            ft.dropdown.Option(
+                "Shipping_Label_Printer",
+                text="Shipping Label Printer (4x6in)",
+                disabled=True,
+            ),
+        ],
+        value="Product_Label_Printer",
+        prefix_icon=ft.icons.PRINT_ROUNDED,
+    )
+
     sku = ft.TextField(
         label="sku",
         autofocus=True,
@@ -129,8 +156,8 @@ def printproductlabel_page(data: fs.Datasy):
     )
 
     menu_button = ft.Container(
-        content=ft.FilledButton("Menu", on_click=show_drawer),
-        alignment=ft.alignment.top_right,
+        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        alignment=ft.alignment.top_left,
     )
 
     progress_ring = ft.Container(
@@ -140,6 +167,13 @@ def printproductlabel_page(data: fs.Datasy):
 
     return ft.View(
         route="/print_product_label",
-        controls=[menu_button, text, sku, submit_container, progress_ring],
+        controls=[
+            menu_button,
+            text,
+            printer_selection,
+            sku,
+            submit_container,
+            progress_ring,
+        ],
         drawer=view.drawer,
     )

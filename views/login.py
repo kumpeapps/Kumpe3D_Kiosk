@@ -74,8 +74,8 @@ def login_page(data: fs.Datasy):
     )
 
     menu_button = ft.Container(
-        content=ft.FilledButton("Menu", on_click=show_drawer),
-        alignment=ft.alignment.top_right,
+        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        alignment=ft.alignment.top_left,
         visible=params.Access.basic,
     )
 

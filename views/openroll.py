@@ -80,6 +80,9 @@ def openroll_page(data: fs.Datasy):
             cursor.execute(verify_sql, (sku.value, sku.value))
             filament = cursor.fetchone()
             int(filament["idfilament"])
+            sku.value = ""
+            page.update()
+            sku.focus()
             try:
                 beep(1)
             except NameError:
@@ -113,8 +116,8 @@ def openroll_page(data: fs.Datasy):
     )
 
     menu_button = ft.Container(
-        content=ft.FilledButton("Menu", on_click=show_drawer),
-        alignment=ft.alignment.top_right,
+        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        alignment=ft.alignment.top_left,
     )
 
     return ft.View(
