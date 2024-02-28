@@ -9,6 +9,7 @@ except ImportError:
 import flet as ft
 import flet_easy as fs
 from core.params import Params as params
+import sounds.beeps as beeps
 
 addroll = fs.AddPagesy()
 
@@ -18,6 +19,7 @@ def addroll_page(data: fs.Datasy):
     """Main Function for Add Roll"""
     page = data.page
     view = data.view
+    pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
 
     def show_drawer(_):
         view.drawer.open = True
@@ -49,6 +51,7 @@ def addroll_page(data: fs.Datasy):
 
     def add_roll(_):
         """Add's Roll to Stock"""
+        updating()
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
@@ -88,23 +91,22 @@ def addroll_page(data: fs.Datasy):
             sku.value = ""
             page.update()
             sku.focus()
-            try:
-                beep(1)
-            except NameError:
-                pass
+            updating(False)
+            beeps.play_success(page)
         except (KeyError, TypeError):
             try:
                 beep(3)
             except NameError:
                 pass
             show_banner_click(f"Invalid SKU {sku.value}")
+            updating(False)
 
     text = ft.Container(
         content=ft.Text(
-        "Scan/Enter Filament ID/Manufacture Barcode to add filament roll to stock",
-        text_align=ft.TextAlign.CENTER
-    ),
-        alignment=ft.alignment.center
+            "Scan/Enter Filament ID/Manufacture Barcode to add filament roll to stock",
+            text_align=ft.TextAlign.CENTER,
+        ),
+        alignment=ft.alignment.center,
     )
     sku = ft.TextField(
         label="sku",
@@ -122,11 +124,22 @@ def addroll_page(data: fs.Datasy):
 
     menu_button = ft.Container(
         content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
-        alignment=ft.alignment.top_left
+        alignment=ft.alignment.top_left,
     )
+
+    progress_ring = ft.Container(
+        content=pr,
+        alignment=ft.alignment.center,
+    )
+
+    def updating(updating: bool = True):
+        sku.disabled = updating
+        submit_container.disabled = updating
+        progress_ring.visible = updating
+        page.update()
 
     return ft.View(
         route="/add_roll",
-        controls=[menu_button, text, sku, submit_container],
+        controls=[menu_button, text, sku, submit_container, progress_ring],
         drawer=view.drawer,
     )

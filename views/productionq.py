@@ -13,6 +13,7 @@ def productionq_page(data: fs.Datasy):
     """Main Function for Add Roll"""
     page = data.page
     view = data.view
+    pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
 
     def show_drawer(_):
         view.drawer.open = True
@@ -68,8 +69,17 @@ def productionq_page(data: fs.Datasy):
         alignment=ft.alignment.top_left,
     )
 
+    progress_ring = ft.Container(
+        content=pr,
+        alignment=ft.alignment.center,
+    )
+
+    def updating(updating: bool = True):
+        progress_ring.visible = updating
+        page.update()
+
     return ft.View(
         route="/production_queue",
-        controls=[menu_button, data_table],
+        controls=[progress_ring, menu_button, data_table],
         drawer=view.drawer,
     )

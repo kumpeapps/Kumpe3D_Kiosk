@@ -19,6 +19,7 @@ def addstock_page(data: fs.Datasy):
     """Increments SKU Stock Qty"""
     page = data.page
     view = data.view
+    pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
 
     page.title = "Add to Stock"
     if params.SQL.username == "":
@@ -60,6 +61,7 @@ def addstock_page(data: fs.Datasy):
         page.update()
 
     def add_stock(_):
+        updating()
         try:
             sku_array = get_sku_array(sku.value)
             sql = """INSERT INTO `Web_3dprints`.`stock`
@@ -73,6 +75,7 @@ def addstock_page(data: fs.Datasy):
             db.commit()
             sku.value = ""
             sku.focus()
+            updating(False)
             try:
                 beep(1)
             except NameError:
@@ -83,6 +86,7 @@ def addstock_page(data: fs.Datasy):
             except NameError:
                 pass
             show_banner_click(f"Invalid SKU {sku.value}")
+            updating(False)
 
     text = ft.Container(
         content=ft.Text(
@@ -109,8 +113,19 @@ def addstock_page(data: fs.Datasy):
         alignment=ft.alignment.top_left,
     )
 
+    progress_ring = ft.Container(
+        content=pr,
+        alignment=ft.alignment.center,
+    )
+
+    def updating(updating: bool = True):
+        sku.disabled = updating
+        submit_container.disabled = updating
+        progress_ring.visible = updating
+        page.update()
+
     return ft.View(
         route="/add_stock",
-        controls=[menu_button, text, sku, submit_container],
+        controls=[menu_button, text, sku, submit_container, progress_ring],
         drawer=view.drawer,
     )

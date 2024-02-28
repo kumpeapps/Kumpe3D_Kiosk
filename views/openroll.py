@@ -18,6 +18,7 @@ def openroll_page(data: fs.Datasy):
     """Main Function for Open Roll"""
     page = data.page
     view = data.view
+    pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
 
     def show_drawer(_):
         view.drawer.open = True
@@ -48,6 +49,7 @@ def openroll_page(data: fs.Datasy):
         page.update()
 
     def open_roll(_):
+        updating()
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
@@ -83,6 +85,7 @@ def openroll_page(data: fs.Datasy):
             sku.value = ""
             page.update()
             sku.focus()
+            updating(False)
             try:
                 beep(1)
             except NameError:
@@ -93,6 +96,7 @@ def openroll_page(data: fs.Datasy):
             except NameError:
                 pass
             show_banner_click(f"Invalid SKU {sku.value}")
+            updating(False)
 
     text = ft.Container(
         content=ft.Text(
@@ -120,8 +124,19 @@ def openroll_page(data: fs.Datasy):
         alignment=ft.alignment.top_left,
     )
 
+    progress_ring = ft.Container(
+        content=pr,
+        alignment=ft.alignment.center,
+    )
+
+    def updating(updating: bool = True):
+        sku.disabled = updating
+        submit_container.disabled = updating
+        progress_ring.visible = updating
+        page.update()
+
     return ft.View(
         route="/open_roll",
-        controls=[menu_button, text, sku, submit_container],
+        controls=[menu_button, text, sku, submit_container, progress_ring],
         drawer=view.drawer,
     )
