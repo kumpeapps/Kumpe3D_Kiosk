@@ -1,15 +1,11 @@
 """Print Product Label"""
 
 import os
-
-try:
-    from beepy import beep
-except ImportError:
-    pass
 import flet as ft
 import flet_easy as fs
 from pyhtml2pdf import converter
 import core.params as params
+import sounds.beep as beep
 
 printproductlabel = fs.AddPagesy()
 
@@ -97,15 +93,9 @@ def printproductlabel_page(data: fs.Datasy):
             sku.value = ""
             page.update()
             sku.focus()
-            try:
-                beep(1)
-            except NameError:
-                pass
+            beep.success(page)
         except KeyError:
-            try:
-                beep(3)
-            except NameError:
-                pass
+            beep.error(page)
             show_banner_click(f"Invalid SKU {sku.value}")
             sku.disabled = False
             submit_container.disabled = False

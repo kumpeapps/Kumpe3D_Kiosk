@@ -1,15 +1,10 @@
 """Add Roll"""
 
 import pymysql
-
-try:
-    from beepy import beep
-except ImportError:
-    pass
 import flet as ft
 import flet_easy as fs
 from core.params import Params as params
-import sounds.beeps as beeps
+import sounds.beep as beep
 
 addroll = fs.AddPagesy()
 
@@ -92,12 +87,9 @@ def addroll_page(data: fs.Datasy):
             page.update()
             sku.focus()
             updating(False)
-            beeps.play_success(page)
+            beep.success(page)
         except (KeyError, TypeError):
-            try:
-                beep(3)
-            except NameError:
-                pass
+            beep.error(page)
             show_banner_click(f"Invalid SKU {sku.value}")
             updating(False)
 

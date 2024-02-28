@@ -6,7 +6,7 @@ import flet as ft
 import flet_easy as fs
 import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
-
+import sounds.beep as beep
 
 login = fs.AddPagesy()
 
@@ -142,6 +142,7 @@ def login_page(data: fs.Datasy):
                 else:
                     params.Access.set_access_level("unauthenticated")
                     show_banner_click("Access Denied")
+                    beep.error(page)
                     log_access(user_id, f"/{computername}/denied")
                     password_field.value = ""
                     logging_in(False)

@@ -1,15 +1,11 @@
 """Add to Stock"""
 
 import pymysql
-
-try:
-    from beepy import beep
-except ImportError:
-    pass
 import flet as ft
 import flet_easy as fs
 from pluggins.helpers import get_sku_array
 from core.params import Params as params
+import sounds.beep as beep
 
 addstock = fs.AddPagesy()
 
@@ -76,15 +72,9 @@ def addstock_page(data: fs.Datasy):
             sku.value = ""
             sku.focus()
             updating(False)
-            try:
-                beep(1)
-            except NameError:
-                pass
+            beep.success(page)
         except KeyError:
-            try:
-                beep(3)
-            except NameError:
-                pass
+            beep.error(page)
             show_banner_click(f"Invalid SKU {sku.value}")
             updating(False)
 
