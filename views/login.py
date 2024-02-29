@@ -202,6 +202,8 @@ def login_page(data: fs.Datasy):
             )
         except requests.exceptions.RequestException:
             print("HTTP Request failed")
+        
+    beep.success(page)
 
     return ft.View(
         route="/login",
