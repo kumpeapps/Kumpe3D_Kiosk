@@ -19,3 +19,12 @@ def success(page: ft.Page):
         autoplay=True,
     )
     page.overlay.append(success_file)
+
+
+def login(page: ft.Page):
+    """Play Success Beep"""
+    success_file = ft.Audio(
+        src="https://github.com/kumpeapps/Kumpe3D_Kiosk/blob/41022c9e17c59c8bf410a87711effb65d3855617/sounds/login.aiff?raw=true",  # pylint: disable=line-too-long
+        autoplay=True,
+    )
+    page.overlay.append(success_file)
