@@ -120,6 +120,7 @@ def login_page(data: fs.Datasy):
             success = data["ok"]
             if not success:
                 show_banner_click(data["msg"])
+                beep.error(page)
                 logging_in(False)
             else:
                 subscriptions = data["subscriptions"]
