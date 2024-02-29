@@ -74,10 +74,6 @@ def productionq_page(data: fs.Datasy):
         alignment=ft.alignment.center,
     )
 
-    def updating(updating: bool = True):
-        progress_ring.visible = updating
-        page.update()
-
     return ft.View(
         route="/production_queue",
         controls=[progress_ring, menu_button, data_table],
