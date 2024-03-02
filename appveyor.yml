@@ -79,7 +79,7 @@ for:
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
 
   build_script:
-  - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version 1.0.4 --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --flutter-build-args=--release
+  - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version 1.0.4 --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
 
   after_build:
   - tar -czvf kumpe3dkiosk-linux.tar.gz -C build apk
