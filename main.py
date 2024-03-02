@@ -1,7 +1,7 @@
 """Main Function for Kumpe3D Kiosk"""
 
-import flet_easy as fs
 import flet as ft
+from flet_easy import FletEasy  # pylint: disable=import-error
 from views.addroll import addroll
 from views.login import login
 from views.addstock import addstock
@@ -10,9 +10,8 @@ from views.emptyroll import emptyroll
 from views.productionq import productionq
 from views.productlabel import printproductlabel
 from core.config import ConfigApp
-from core.params import Params as params
 
-app = fs.FletEasy(route_init="/login", route_login="/login")
+app = FletEasy(route_init="/login", route_login="/login")
 
 
 @app.login
@@ -20,7 +19,7 @@ def login_x(page: ft.Page):
     """Require Login Function"""
     dlg = ft.AlertDialog(
         title=ft.Text(
-            f"Access Denied!!!\nYou do not have access to {page.title}",
+            "Access Denied!!!",
             text_align=ft.TextAlign.CENTER,
         ),
         on_dismiss=lambda e: print("Dialog dismissed!"),
@@ -33,12 +32,14 @@ def login_x(page: ft.Page):
         dlg.open = True
         page.update()
 
+    from core.params import Params as params  # pylint: disable=import-outside-toplevel
+
     if not params.Access.basic:
         open_dlg()
         return False
 
     match (
-        page.title,
+        page.session.get("selected_page"),
         params.Access.basic,
         params.Access.production,
         params.Access.orders,
@@ -46,26 +47,26 @@ def login_x(page: ft.Page):
         params.Access.filament_stock,
         params.Access.admin,
     ):
-        case (_, _, _, _, _, _, True):
+
+        case ("productlabel", _, _, _, False, _, _):
+            open_dlg()
+            return False
+        case ("addroll", True, _, _, _, _, _):
             return True
-        case ("Add Filament Roll", True, _, _, _, _, _):
+        case ("emptyroll", True, _, _, _, True, _):
             return True
-        case ("Empty Filament Roll", True, _, _, _, True, _):
+        case ("openroll", True, _, _, _, True, _):
             return True
-        case ("Open Filament Roll", True, _, _, _, True, _):
+        case ("addstock", True, True, _, _, _, _):
             return True
-        case ("Add To Stock", True, True, _, _, _, _):
+        case ("productionq", True, True, _, _, _, _):
             return True
-        case ("Production Queue", True, True, _, _, _, _):
+        case ("productionq", True, _, True, _, _, _):
             return True
-        case ("Production Queue", True, _, True, _, _, _):
+        case ("productlabel", True, _, _, True, _, _):
             return True
-        case ("Add to Stock & Print Label", True, True, _, True, _, _):
-            return True
-        case ("Print Product Label", True, _, _, True, _, _):
-            return True
-        case ("Print Filament Colors Card", True, _, _, True, _, True):
-            return True
+
+    open_dlg()
     return False
 
 
@@ -76,4 +77,4 @@ ConfigApp(app)
 
 
 # We run the application
-app.run()
+app.run(assets_dir="assets")

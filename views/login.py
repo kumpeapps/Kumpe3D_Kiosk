@@ -3,7 +3,7 @@
 import socket
 import requests
 import flet as ft
-import flet_easy as fs
+import flet_easy as fs  # pylint: disable=import-error
 import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
 import sounds.beep as beep
@@ -16,7 +16,6 @@ def login_page(data: fs.Datasy):
     """Login Page"""
     page = data.page
     view = data.view
-
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
     pr_container = ft.Container(
         content=pr,
@@ -33,7 +32,7 @@ def login_page(data: fs.Datasy):
         page.title = "Login"
 
     img_container = ft.Container(
-        content=ft.Image(src_base64=logo.logo_base64, height=page.height / 2),
+        content=ft.Image(src_base64=logo.logo_base64, height=page.height / 5),
         alignment=ft.alignment.top_center,
     )
 
@@ -51,6 +50,7 @@ def login_page(data: fs.Datasy):
         prefix_icon=ft.icons.PASSWORD,
         on_submit=did_login,
         visible=not params.Access.basic,
+        text_align=ft.TextAlign.CENTER
     )
 
     def username_submit(_):
@@ -65,6 +65,7 @@ def login_page(data: fs.Datasy):
         prefix_icon=ft.icons.PERSON,
         on_submit=username_submit,
         visible=not params.Access.basic,
+        text_align=ft.TextAlign.CENTER
     )
 
     submit_container = ft.Container(
@@ -202,8 +203,6 @@ def login_page(data: fs.Datasy):
             )
         except requests.exceptions.RequestException:
             print("HTTP Request failed")
-
-    beep.login(page)
 
     return ft.View(
         route="/login",

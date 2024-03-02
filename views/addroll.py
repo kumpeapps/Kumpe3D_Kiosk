@@ -2,7 +2,7 @@
 
 import pymysql
 import flet as ft
-import flet_easy as fs
+import flet_easy as fs # pylint: disable=import-error
 from core.params import Params as params
 import sounds.beep as beep
 
@@ -85,7 +85,6 @@ def addroll_page(data: fs.Datasy):
             int(filament["idfilament"])
             sku.value = ""
             page.update()
-            sku.focus()
             updating(False)
             beep.success(page)
         except (KeyError, TypeError):
@@ -109,6 +108,7 @@ def addroll_page(data: fs.Datasy):
         on_submit=add_roll,
         text_align=ft.TextAlign.CENTER,
     )
+
     submit_container = ft.Container(
         content=ft.ElevatedButton(text="Submit", on_click=add_roll),
         alignment=ft.alignment.center,
@@ -129,6 +129,7 @@ def addroll_page(data: fs.Datasy):
         submit_container.disabled = updating
         progress_ring.visible = updating
         page.update()
+        sku.focus()
 
     return ft.View(
         route="/add_roll",

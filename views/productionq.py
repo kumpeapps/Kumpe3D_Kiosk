@@ -2,7 +2,7 @@
 
 import pymysql
 import flet as ft
-import flet_easy as fs
+import flet_easy as fs # pylint: disable=import-error
 from core.params import Params as params
 
 productionq = fs.AddPagesy()
@@ -43,9 +43,9 @@ def productionq_page(data: fs.Datasy):
     cursor.execute(sql)
     results = cursor.fetchall()
     data_table = ft.DataTable(
-        width=page.width,
         data_row_color={"hovered": "0x30FF0000"},
         show_checkbox_column=True,
+        width=page.window_width - 5
     )
     data_table.columns = [
         ft.DataColumn(ft.Text("QTY")),
@@ -59,7 +59,7 @@ def productionq_page(data: fs.Datasy):
                 ft.DataCell(ft.Text(int(result["qty"]))),
                 ft.DataCell(ft.Text(result["sku"])),
                 ft.DataCell(ft.Text(result["name"])),
-            ]
+            ],
         )
         data_rows.append(row)
     data_table.rows = data_rows
@@ -74,8 +74,14 @@ def productionq_page(data: fs.Datasy):
         alignment=ft.alignment.center,
     )
 
+    table_container = ft.Container(
+        content=data_table,
+        alignment=ft.alignment.top_center,
+        width=page.width
+    )
+
     return ft.View(
         route="/production_queue",
-        controls=[progress_ring, menu_button, data_table],
+        controls=[progress_ring, menu_button, table_container],
         drawer=view.drawer,
     )

@@ -1,7 +1,7 @@
 """Core Class"""
 
 import flet as ft
-import flet_easy as fs
+import flet_easy as fs # pylint: disable=import-error
 from core.params import Params as params
 
 
@@ -19,31 +19,39 @@ class ConfigApp:
         @self.app.view
         def view_config(page: ft.Page):
             def addroll_go(_):
+                page.page.session.set("selected_page", "addroll")
                 page.go("/add_roll")
 
             def home_go(_):
+                page.page.session.set("selected_page", "home")
                 page.go("/login")
 
             def logout(_):
                 params.Access.set_access_level("unauthenticated")
+                page.page.session.set("selected_page", "home")
                 page.go("/login")
 
             def addstock_go(_):
+                page.page.session.set("selected_page", "addstock")
                 page.go("/add_stock")
 
             def openroll_go(_):
+                page.page.session.set("selected_page", "openroll")
                 page.go("/open_roll")
 
             def emptyroll_go(_):
+                page.page.session.set("selected_page", "emptyroll")
                 page.go("/empty_roll")
 
             def productionq_go(_):
+                page.page.session.set("selected_page", "productionq")
                 page.go("/production_queue")
 
             # def addstockandprint_go(_):
             #     page.go("/add_stock_and_print_label")
 
             def productlabel_go(_):
+                page.page.session.set("selected_page", "productlabel")
                 page.go("/print_product_label")
 
             # def filamentcolorscard_go(_):
@@ -88,6 +96,7 @@ class ConfigApp:
                                 ft.FilledButton(
                                     text="Print Product Label",
                                     on_click=productlabel_go,
+                                    visible=False
                                 ),
                                 # ft.FilledButton(
                                 #     text="Print Filament Colors Card",
@@ -110,5 +119,5 @@ class ConfigApp:
             theme = ft.Theme()
             platforms = ["android", "ios", "macos", "linux", "windows"]
             for platform in platforms:  # Removing animation on route change.
-                setattr(theme.page_transitions, platform, ft.PageTransitionTheme.NONE)
+                setattr(theme.page_transitions, platform, ft.PageTransitionTheme.CUPERTINO)
             page.theme = theme

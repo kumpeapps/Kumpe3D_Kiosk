@@ -2,9 +2,12 @@
 
 import os
 import flet as ft
-import flet_easy as fs
-from pyhtml2pdf import converter
+import flet_easy as fs # pylint: disable=import-error
 import core.params as params
+try:
+    from pyhtml2pdf import converter
+except ImportError:
+    pass
 import sounds.beep as beep
 
 printproductlabel = fs.AddPagesy()
@@ -82,17 +85,11 @@ def printproductlabel_page(data: fs.Datasy):
     def print_product_label(_):
         """Prints Product Label"""
         try:
-            pr.visible = True
-            sku.disabled = True
-            submit_container.disabled = True
-            page.update()
+            updating()
             generate_label(sku.value)
-            pr.visible = False
-            sku.disabled = False
-            submit_container.disabled = False
+            updating(False)
             sku.value = ""
             page.update()
-            sku.focus()
             beep.success(page)
         except KeyError:
             beep.error(page)
@@ -100,6 +97,14 @@ def printproductlabel_page(data: fs.Datasy):
             sku.disabled = False
             submit_container.disabled = False
             page.update()
+
+    def updating(updating: bool = True):
+        pr.visible = updating
+        sku.disabled = updating
+        submit_container.disabled = updating
+        sku.value = ""
+        page.update()
+        sku.focus()
 
     text = ft.Container(
         content=ft.Text(

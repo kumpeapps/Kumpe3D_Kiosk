@@ -97,7 +97,7 @@ class Params:
         production = False
         orders = False
         product_stock = False
-        print_labels = False
+        print_labels = True
         filament_stock = False
         admin = False
 
@@ -109,7 +109,6 @@ class Params:
                 Params.Access.production = False
                 Params.Access.orders = False
                 Params.Access.product_stock = False
-                Params.Access.print_labels = False
                 Params.Access.filament_stock = False
                 Params.Access.admin = False
                 Params.Access.user_id = ""
@@ -121,7 +120,6 @@ class Params:
                 Params.Access.production = True
                 Params.Access.orders = False
                 Params.Access.product_stock = True
-                Params.Access.print_labels = True
                 Params.Access.filament_stock = True
                 Params.Access.admin = False
             elif Params.Access.access_level == "limited":
@@ -129,7 +127,6 @@ class Params:
                 Params.Access.production = True
                 Params.Access.orders = False
                 Params.Access.product_stock = False
-                Params.Access.print_labels = False
                 Params.Access.filament_stock = True
                 Params.Access.admin = False
             elif Params.Access.access_level == "admin":
@@ -137,7 +134,6 @@ class Params:
                 Params.Access.production = True
                 Params.Access.orders = True
                 Params.Access.product_stock = True
-                Params.Access.print_labels = True
                 Params.Access.filament_stock = True
                 Params.Access.admin = True
             elif Params.Access.access_level == "order_filler":
@@ -145,7 +141,6 @@ class Params:
                 Params.Access.production = False
                 Params.Access.orders = True
                 Params.Access.product_stock = True
-                Params.Access.print_labels = True
                 Params.Access.filament_stock = False
                 Params.Access.admin = False
 

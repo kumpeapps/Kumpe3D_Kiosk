@@ -2,7 +2,7 @@
 
 import pymysql
 import flet as ft
-import flet_easy as fs
+import flet_easy as fs # pylint: disable=import-error
 from pluggins.helpers import get_sku_array
 from core.params import Params as params
 import sounds.beep as beep
@@ -65,13 +65,14 @@ def addstock_page(data: fs.Datasy):
                         `swatch_id`,
                         `qty`)
                     VALUES
-                        (%s, %s, 1)
-                    ON DUPLICATE KEY UPDATE qty = qty + 1;"""
-            cursor.execute(sql, (sku_array["base_sku"], sku_array["color"]))
+                        (%s, %s, %s)
+                    ON DUPLICATE KEY UPDATE qty = qty + %s;"""
+            cursor.execute(sql, (sku_array["base_sku"], sku_array["color"], qty.value, qty.value))
             db.commit()
             sku.value = ""
-            sku.focus()
             updating(False)
+            sku.focus()
+            page.update()
             beep.success(page)
         except KeyError:
             beep.error(page)
@@ -83,6 +84,18 @@ def addstock_page(data: fs.Datasy):
             "Scan/Enter SKU to add to stock", text_align=ft.TextAlign.CENTER
         ),
         alignment=ft.alignment.center,
+    )
+    qty = ft.TextField(
+        label="Qty",
+        autofocus=False,
+        autocorrect=False,
+        enable_suggestions=False,
+        prefix_icon=ft.icons.NUMBERS_SHARP,
+        text_align=ft.TextAlign.LEFT,
+        input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9]", replacement_string=""),
+        width=100,
+        value=1,
+        keyboard_type=ft.KeyboardType.NUMBER,
     )
     sku = ft.TextField(
         label="sku",
@@ -112,10 +125,14 @@ def addstock_page(data: fs.Datasy):
         sku.disabled = updating
         submit_container.disabled = updating
         progress_ring.visible = updating
+        if not updating:
+            sku.value = ""
+            qty.value = 1
         page.update()
+        sku.focus()
 
     return ft.View(
         route="/add_stock",
-        controls=[menu_button, text, sku, submit_container, progress_ring],
+        controls=[menu_button, text, qty, sku, submit_container, progress_ring],
         drawer=view.drawer,
     )

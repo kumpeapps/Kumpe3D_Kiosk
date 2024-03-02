@@ -2,7 +2,7 @@
 
 import pymysql
 import flet as ft
-import flet_easy as fs
+import flet_easy as fs # pylint: disable=import-error
 from core.params import Params as params
 import sounds.beep as beep
 
@@ -80,7 +80,6 @@ def openroll_page(data: fs.Datasy):
             int(filament["idfilament"])
             sku.value = ""
             page.update()
-            sku.focus()
             updating(False)
             beep.success(page)
         except (KeyError, TypeError):
@@ -123,7 +122,9 @@ def openroll_page(data: fs.Datasy):
         sku.disabled = updating
         submit_container.disabled = updating
         progress_ring.visible = updating
+        sku.value = ""
         page.update()
+        sku.focus()
 
     return ft.View(
         route="/open_roll",

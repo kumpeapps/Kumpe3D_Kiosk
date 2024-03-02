@@ -1,7 +1,7 @@
 import shippo
-import params
+from core.params import Params as params
 
-shippo.config.api_key = params.Params.SHIPPO.api_key
+shippo.config.api_key = params.SHIPPO.api_key
 
 address_from = {
     "name": "Kumpe3D by KumpeApps LLC",

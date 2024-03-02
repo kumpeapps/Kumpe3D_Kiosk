@@ -25,4 +25,4 @@ def get_sku_array(sku):
         sku_array["size"] = sku_array["options"][2]
         return sku_array
     except IndexError:
-        return {"base_sku": "na"}
+        return {"base_sku": sku, "color": "NNN"}
