@@ -202,7 +202,7 @@ def login_page(data: fs.Datasy):
             )
         except requests.exceptions.RequestException:
             print("HTTP Request failed")
-        
+
     beep.login(page)
 
     return ft.View(

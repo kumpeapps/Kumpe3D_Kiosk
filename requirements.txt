@@ -3,6 +3,5 @@ libgravatar==1.0.4
 pyhtml2pdf==0.0.7
 PyMySQL==1.1.0
 python-dotenv==1.0.1
-selenium==4.17.2
 infisical_api==1.0.0
-flet_easy==0.1.1
+parse==1.20.1
