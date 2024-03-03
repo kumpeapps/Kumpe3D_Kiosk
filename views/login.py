@@ -44,13 +44,14 @@ def login_page(data: fs.Datasy):
     password_field = ft.TextField(
         label="Password",
         password=True,
-        can_reveal_password=True,
+        can_reveal_password=False,
         autocorrect=False,
         enable_suggestions=False,
         prefix_icon=ft.icons.PASSWORD,
         on_submit=did_login,
         visible=not params.Access.basic,
-        text_align=ft.TextAlign.CENTER
+        text_align=ft.TextAlign.CENTER,
+        value=page.client_storage.get("password"),
     )
 
     def username_submit(_):
@@ -65,7 +66,8 @@ def login_page(data: fs.Datasy):
         prefix_icon=ft.icons.PERSON,
         on_submit=username_submit,
         visible=not params.Access.basic,
-        text_align=ft.TextAlign.CENTER
+        text_align=ft.TextAlign.CENTER,
+        value=page.client_storage.get("username"),
     )
 
     submit_container = ft.Container(
@@ -157,6 +159,8 @@ def login_page(data: fs.Datasy):
 
     def access_granted(user_id: str, computername: str, access_level: str):
         """Access Granted"""
+        page.client_storage.set("username", username_field.value)
+        page.client_storage.set("password", password_field.value)
         params.SHIPPO.get_values()
         params.SQL.get_values()
         params.Access.set_access_level(access_level)

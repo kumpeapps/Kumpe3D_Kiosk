@@ -9,6 +9,8 @@ from views.openroll import openroll
 from views.emptyroll import emptyroll
 from views.productionq import productionq
 from views.productlabel import printproductlabel
+from views.pendingorders import pendingorders
+from views.orderitems import orderitems
 from core.config import ConfigApp
 
 app = FletEasy(route_init="/login", route_login="/login")
@@ -65,13 +67,15 @@ def login_x(page: ft.Page):
             return True
         case ("productlabel", True, _, _, True, _, _):
             return True
+        case ("pendingorders", _, _, True, _, _, _):
+            return True
 
     open_dlg()
     return False
 
 
 app.add_pages(
-    [login, addstock, addroll, openroll, emptyroll, productionq, printproductlabel]
+    [login, addstock, addroll, openroll, emptyroll, productionq, printproductlabel, pendingorders, orderitems]
 )
 ConfigApp(app)
 

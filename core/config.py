@@ -28,6 +28,7 @@ class ConfigApp:
 
             def logout(_):
                 params.Access.set_access_level("unauthenticated")
+                page.page.client_storage.clear()
                 page.page.session.set("selected_page", "home")
                 page.go("/login")
 
@@ -53,6 +54,10 @@ class ConfigApp:
             def productlabel_go(_):
                 page.page.session.set("selected_page", "productlabel")
                 page.go("/print_product_label")
+
+            def pendingorders_go(_):
+                page.page.session.set("selected_page", "pendingorders")
+                page.go("/pending_orders")
 
             # def filamentcolorscard_go(_):
             #     page.go("/print_filament_colors_card")
@@ -98,10 +103,10 @@ class ConfigApp:
                                     on_click=productlabel_go,
                                     visible=False
                                 ),
-                                # ft.FilledButton(
-                                #     text="Print Filament Colors Card",
-                                #     on_click=filamentcolorscard_go,
-                                # ),
+                                ft.FilledButton(
+                                    text="Pending Orders",
+                                    on_click=pendingorders_go
+                                ),
                                 ft.FilledButton(
                                     text="Logout",
                                     on_click=logout,
