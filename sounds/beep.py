@@ -1,0 +1,30 @@
+"""Beep Functions"""
+
+import flet as ft
+
+
+def error(page: ft.Page):
+    """Play Error Beep"""
+    error_file = ft.Audio(
+        src="/audio/error.wav",  # pylint: disable=line-too-long
+        autoplay=True,
+    )
+    page.overlay.append(error_file)
+
+
+def success(page: ft.Page):
+    """Play Success Beep"""
+    success_file = ft.Audio(
+        src="/audio/success.wav",  # pylint: disable=line-too-long
+        autoplay=True,
+    )
+    page.overlay.append(success_file)
+
+
+def login(page: ft.Page):
+    """Play Success Beep"""
+    success_file = ft.Audio(
+        src="/audio/login.aiff",  # pylint: disable=line-too-long
+        autoplay=True,
+    )
+    page.overlay.append(success_file)

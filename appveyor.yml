@@ -1,0 +1,88 @@
+image:
+# - Visual Studio 2019
+- macOS
+- Ubuntu
+
+skip_branch_with_pr: true
+stack: python 3.10
+
+install:
+- pip install -r requirements.txt
+- flutter upgrade --force
+
+before_build:
+- echo "APP_ENV=prod" > .env
+- echo "SERVICE_TOKEN=$SERVICE_TOKEN" >> .env
+- echo "VERSION=$APPVEYOR_BUILD_VERSION" >> .env
+- echo "BUILD=$APPVEYOR_BUILD_NUMBER" >> .env
+
+test: off
+
+# Publish artifacts to GitHub Releases on "tag" builds
+deploy:
+  provider: GitHub
+  auth_token: $(GITHUB_TOKEN)
+  on:
+    APPVEYOR_REPO_TAG: true
+
+#
+#   Windows package
+#
+for:
+# -
+#   matrix:
+#     only:
+#     - image: Visual Studio 2019
+    
+#   build_script:
+#   - flet build windows --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.0" --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC"
+#   after_build:
+#   - 7z a kumpe3dkiosk-windows.zip %CD%\build\windows\*.exe
+
+#   artifacts:
+#   - path: kumpe3dkiosk-windows.zip
+
+#
+#   macOS package
+# 
+-
+  matrix:
+    only:
+    - image: macOS
+    - SERVICE_TOKEN: $SERVICE_TOKEN
+    - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
+    - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
+  
+  install:
+  - gem install cocoapods
+  - pip install -r requirements.txt
+  - flutter upgrade --force
+
+  build_script:
+  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "1.0.4" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
+
+  after_build:
+  - tar -czvf kumpe3dkiosk-macos.tar.gz -C build/macos "Kumpe3D Kiosk.app"
+
+  artifacts:
+  - path: kumpe3dkiosk-macos.tar.gz
+
+#
+#   Linux package
+# 
+-
+  matrix:
+    only:
+    - image: Ubuntu
+    - SERVICE_TOKEN: $SERVICE_TOKEN
+    - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
+    - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
+
+  build_script:
+  - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version 1.0.4 --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
+
+  after_build:
+  - tar -czvf kumpe3dkiosk-linux.tar.gz -C build apk
+
+  artifacts:
+  - path: kumpe3dkiosk-linux.tar.gz
