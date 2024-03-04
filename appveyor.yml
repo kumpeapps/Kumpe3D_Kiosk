@@ -1,4 +1,4 @@
-version: '$APPVEYOR_REPO_TAG_NAME({build})'
+version: '2.0.1({build})'
 image:
 # - Visual Studio 2019
 - macOS
