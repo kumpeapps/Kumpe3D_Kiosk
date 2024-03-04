@@ -83,12 +83,9 @@ for:
 
   build_script:
   - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version $APPVEYOR_REPO_TAG_NAME --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
-  # - flet build linux --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version $APPVEYOR_REPO_TAG_NAME --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
 
   after_build:
   - tar -czvf kumpe3dkiosk-apk.tar.gz -C build apk
-  # - tar -czvf kumpe3dkiosk-linux.tar.gz -C build linux
 
   artifacts:
   - path: kumpe3dkiosk-apk.tar.gz
-  # - path: kumpe3dkiosk-linux.tar.gz
