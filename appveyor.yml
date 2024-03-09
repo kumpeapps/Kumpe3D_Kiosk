@@ -56,8 +56,8 @@ for:
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
     - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
-    on:
-      APPVEYOR_REPO_TAG: true
+    exclude:
+      APPVEYOR_REPO_TAG: false
   
   install:
   - gem install cocoapods
