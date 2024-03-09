@@ -52,16 +52,36 @@ for:
   matrix:
     only:
     - job_name: "build macOS"
-    - SERVICE_TOKEN: $SERVICE_TOKEN
-    - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
-    - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
-    - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
+      SERVICE_TOKEN: $SERVICE_TOKEN
+      APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
+      APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
+      APPLE_APP_STORE_API_KEY_ID: $APPLE_APP_STORE_API_KEY_ID
+      APPLE_APPSTORE_API_ISSUER_ID: $APPLE_APPSTORE_API_ISSUER_ID
+      APPLE_APP_STORE_API_KEY: $APPLE_APP_STORE_API_KEY
+      FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
+      FASTLANE_PASSWORD: $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
+      FASTLANE_USER: "jakumpe@justinkumpe.net"
+      MATCH_GIT_BASIC_AUTHORIZATION: $MATCH_GIT_BASIC_AUTHORIZATION
+      MATCH_PASSWORD: $MATCH_KEYCHAIN_PASSWORD
+      MATCH_KEYCHAIN_PASSWORD: $MATCH_KEYCHAIN_PASSWORD
+      MATCH_DEPLOY_KEY: $MATCH_DEPLOY_KEY
     - APPVEYOR_REPO_TAG: true
+      APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
+    - APPVEYOR_REPO_TAG: false
+      APPVEYOR_REPO_TAG_NAME: "2.0.2"
   
   install:
   - gem install cocoapods
   - pip install -r requirements.txt
   - flutter upgrade --force
+  - bundle install
+  - bundle exec fastlane match
+  - |
+        eval "$(ssh-agent -s)"
+        ssh-add - <<< $MATCH_DEPLOY_KEY
+        git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+        git clone git@github.com:kumpeapps/fastlane_certs.git
+        bundle exec fastlane matchget
 
   build_script:
   - echo "is_mobile=0" >> .env
@@ -80,10 +100,13 @@ for:
   matrix:
     only:
     - job_name: "build Android"
-    - SERVICE_TOKEN: $SERVICE_TOKEN
-    - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
-    - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
-    - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
+      SERVICE_TOKEN: $SERVICE_TOKEN
+      APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
+      APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
+    - APPVEYOR_REPO_TAG: true
+      APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
+    - APPVEYOR_REPO_TAG: false
+      APPVEYOR_REPO_TAG_NAME: "2.0.2"
 
   build_script:
   - echo "is_mobile=1" >> .env
