@@ -2,7 +2,9 @@ version: '2.0.2({build})'
 job_name:
 # - Visual Studio 2019
 - "build macOS"
+  appveyor_build_worker_image: macOS
 - "build Android"
+  appveyor_build_worker_image: Ubuntu
 
 #  skip_branch_with_pr: true
 stack: python 3.11
@@ -50,7 +52,6 @@ for:
   matrix:
     only:
     - job_name: "build macOS"
-      appveyor_build_worker_image: macOS
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
@@ -78,7 +79,6 @@ for:
   matrix:
     only:
     - job_name: "build Android"
-      appveyor_build_worker_image: Ubuntu
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
