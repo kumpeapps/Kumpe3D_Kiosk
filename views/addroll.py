@@ -133,6 +133,6 @@ def addroll_page(data: fs.Datasy):
 
     return ft.View(
         route="/add_roll",
-        controls=[menu_button, text, sku, submit_container, progress_ring],
+        controls=[ft.SafeArea(menu_button, bottom=False), text, sku, submit_container, progress_ring],
         drawer=view.drawer,
     )

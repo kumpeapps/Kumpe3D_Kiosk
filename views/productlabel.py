@@ -50,6 +50,7 @@ def printproductlabel_page(data: fs.Datasy):
 
     def generate_pdf(url, pdf_path):
         """Generate PDF from URL"""
+        print(url)
         converter.convert(
             url,
             pdf_path,
@@ -81,14 +82,14 @@ def printproductlabel_page(data: fs.Datasy):
             )
         else:
             print(printer_selection.value)
+        updating(False)
 
     def print_product_label(_):
         """Prints Product Label"""
         try:
+            print(sku.value)
             updating()
             generate_label(sku.value)
-            updating(False)
-            sku.value = ""
             page.update()
             beep.success(page)
         except KeyError:
@@ -102,7 +103,8 @@ def printproductlabel_page(data: fs.Datasy):
         pr.visible = updating
         sku.disabled = updating
         submit_container.disabled = updating
-        sku.value = ""
+        if not updating:
+            sku.value = ""
         page.update()
         sku.focus()
 

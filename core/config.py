@@ -101,7 +101,7 @@ class ConfigApp:
                                 ft.FilledButton(
                                     text="Print Product Label",
                                     on_click=productlabel_go,
-                                    visible=False
+                                    visible=not params.mobile
                                 ),
                                 ft.FilledButton(
                                     text="Pending Orders",

@@ -11,10 +11,12 @@ app_env = os.getenv("APP_ENV")
 creds = infisical_api(
     service_token=service_token, infisical_url="https://creds.kumpeapps.com"
 )
+is_mobile = os.getenv("is_mobile")
 
 
 class Params:
     """Parameters"""
+    mobile = bool(int(is_mobile))
 
     class SHIPPO:
         """Shippo Parameters"""

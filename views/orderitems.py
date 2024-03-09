@@ -109,7 +109,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             get_items()
             beep.success(page)
             scan_field.focus()
-        except: # pylint: disable=bare-except
+        except:  # pylint: disable=bare-except
             beep.error(page)
             show_banner_click(f"Invalid SKU: {scan_field.value}")
             scan_field.value = ""
@@ -126,12 +126,16 @@ def orderitems_page(data: fs.Datasy, order_id: int):
 
     scan_container = ft.Container(alignment=ft.alignment.top_center, content=scan_field)
 
-    top_row = ft.Row(
-        controls=[
-            ft.Column(controls=[menu_button]),
-            ft.Column(controls=[scan_container], alignment=ft.MainAxisAlignment.CENTER),
-        ],
-        spacing=60,
+    top_row = ft.SafeArea(
+        ft.Row(
+            controls=[
+                ft.Column(controls=[menu_button]),
+                ft.Column(
+                    controls=[scan_container], alignment=ft.MainAxisAlignment.CENTER
+                ),
+            ],
+            spacing=60,
+        ), bottom=False
     )
     tiles = []
 

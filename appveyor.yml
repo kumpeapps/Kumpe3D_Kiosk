@@ -1,11 +1,11 @@
-version: '2.0.1({build})'
+version: '2.0.2({build})'
 image:
 # - Visual Studio 2019
 - macOS
 - Ubuntu
 
 skip_branch_with_pr: true
-stack: python 3.10
+stack: python 3.11
 
 install:
 - pip install -r requirements.txt
@@ -61,6 +61,7 @@ for:
   - flutter upgrade --force
 
   build_script:
+  - echo "is_mobile=0" >> .env
   - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "$APPVEYOR_REPO_TAG_NAME" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
 
   after_build:
@@ -82,6 +83,7 @@ for:
     - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
 
   build_script:
+  - echo "is_mobile=1" >> .env
   - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version $APPVEYOR_REPO_TAG_NAME --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
 
   after_build:
@@ -89,3 +91,5 @@ for:
 
   artifacts:
   - path: kumpe3dkiosk-apk.tar.gz
+
+# xcodebuild -downloadPlatform iOS
