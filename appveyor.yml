@@ -76,7 +76,7 @@ for:
   - flutter upgrade --force
   - bundle install
   - eval "$(ssh-agent -s)"
-  - ssh-add - <<< $MATCH_DEPLOY_KEY
+  - ssh-add - <<< $(MATCH_DEPLOY_KEY)
   - git config --global --add url."git@github.com:".insteadOf "https://github.com/"
   - git clone git@github.com:kumpeapps/fastlane_certs.git
   - bundle exec fastlane matchget
