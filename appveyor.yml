@@ -51,12 +51,13 @@ for:
 -
   matrix:
     only:
-      APPVEYOR_REPO_TAG: true
     - job_name: "build macOS"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
     - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
+    on:
+      APPVEYOR_REPO_TAG: true
   
   install:
   - gem install cocoapods
