@@ -68,6 +68,8 @@ for:
     - MATCH_KEYCHAIN_PASSWORD: $MATCH_KEYCHAIN_PASSWORD
     - MATCH_DEPLOY_KEY: $MATCH_DEPLOY_KEY
     - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
+    - GITHUB_USER: justinkumpe
+    - GITHUB_TOKEN: $GITHUB_TOKEN
   
   install:
   - gem install cocoapods
@@ -75,11 +77,8 @@ for:
   - pip install -r requirements.txt
   - flutter upgrade --force
   - bundle install
-  # - echo $(MATCH_DEPLOY_KEY) > idrsa
-  # - eval "$(ssh-agent -s)"
-  # - ssh-add - <<< $(MATCH_DEPLOY_KEY)
   # - git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-  - git clone git@github.com:kumpeapps/fastlane_certs.git
+  - git clone https://$GITHUB_USER:$GITHUB_TOKEN@github.com:kumpeapps/fastlane_certs.git
   - bundle exec fastlane matchget
 
   build_script:
