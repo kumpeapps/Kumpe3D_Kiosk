@@ -92,7 +92,7 @@ for:
   - path: kumpe3dkiosk-macos.tar.gz
 
 #
-#   Linux package
+#   Linux package 
 # 
 -
   matrix:
