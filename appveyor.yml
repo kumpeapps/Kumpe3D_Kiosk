@@ -51,6 +51,7 @@ for:
 -
   matrix:
     only:
+      APPVEYOR_REPO_TAG: true
     - job_name: "build macOS"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
