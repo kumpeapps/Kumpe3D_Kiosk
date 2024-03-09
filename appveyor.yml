@@ -3,8 +3,10 @@ environment:
   matrix:
   - job_name: "build macOS"
     appveyor_build_worker_image: macOS
+    build: Script
   - job_name: "build Android"
     appveyor_build_worker_image: Ubuntu
+    build: Script
 
 #  skip_branch_with_pr: true
 stack: python 3.11
@@ -81,8 +83,6 @@ for:
         git config --global --add url."git@github.com:".insteadOf "https://github.com/"
         git clone git@github.com:kumpeapps/fastlane_certs.git
         bundle exec fastlane matchget
-
-  build: Script
 
   build_script:
   - echo "is_mobile=0" >> .env
