@@ -83,6 +83,8 @@ for:
         git clone git@github.com:kumpeapps/fastlane_certs.git
         bundle exec fastlane matchget
 
+  build: Script
+
   build_script:
   - echo "is_mobile=0" >> .env
   - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "$APPVEYOR_REPO_TAG_NAME" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
