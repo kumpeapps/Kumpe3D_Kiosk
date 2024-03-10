@@ -41,7 +41,7 @@ platform :ios do
   )
   match(
     api_key: api_key,
-    type: "development"
+    type: "appstore"
   )
   end
 
@@ -49,6 +49,6 @@ platform :ios do
 	if is_ci
 		setup_ci
 	end
-	match(type: "appstore", readonly: is_ci, app_identifier: "com.kumpeapps.flet.kumpe3dkiosk", force: true, force_for_new_devices: true, git_basic_authorization: ENV['MATCH_GIT_BASIC_AUTHORIZATION'], git_url: "https://github.com/kumpeapps/fastlane_certs.git")
+	match(type: "appstore", readonly: is_ci, app_identifier: "com.kumpeapps.flet.kumpe3dkiosk", git_basic_authorization: ENV['MATCH_GIT_BASIC_AUTHORIZATION'], git_url: "https://github.com/kumpeapps/fastlane_certs.git")
   end
 end
