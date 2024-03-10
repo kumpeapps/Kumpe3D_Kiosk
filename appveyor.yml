@@ -78,7 +78,7 @@ for:
   - flutter upgrade --force
   - bundle install
   # - git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-  - git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
+  - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
   - bundle exec fastlane matchget
 
   build_script:
