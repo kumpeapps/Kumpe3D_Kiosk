@@ -4,6 +4,9 @@ environment:
   - job_name: "build macOS"
     appveyor_build_worker_image: macOS
     build: Script
+  - job_name: "build iOS"
+    appveyor_build_worker_image: macOS
+    build: Script
   - job_name: "build Android"
     appveyor_build_worker_image: Ubuntu
     build: Script
@@ -76,20 +79,61 @@ for:
   - pip install -r requirements.txt
   - flutter upgrade --force
   - bundle install
-  # - git config --global --add url."git@github.com:".insteadOf "https://github.com/" 
   - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
-  - echo $MATCH_PASSWORD
   - bundle exec fastlane matchget
 
   build_script:
   - echo "is_mobile=0" >> .env
-  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "$APPVEYOR_REPO_TAG_NAME" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
+  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.0.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
 
   after_build:
   - tar -czvf kumpe3dkiosk-macos.tar.gz -C build/macos "Kumpe3D Kiosk.app"
 
   artifacts:
   - path: kumpe3dkiosk-macos.tar.gz
+
+#
+#   iOS package
+# 
+-
+  matrix:
+    only:
+    - job_name: "build iOS"
+    - SERVICE_TOKEN: $SERVICE_TOKEN
+    - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
+    - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
+    - APPLE_APP_STORE_API_KEY_ID: $APPLE_APP_STORE_API_KEY_ID
+    - APPLE_APPSTORE_API_ISSUER_ID: $APPLE_APPSTORE_API_ISSUER_ID
+    - APPLE_APP_STORE_API_KEY: $APPLE_APP_STORE_API_KEY
+    - FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
+    - FASTLANE_PASSWORD: $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
+    - FASTLANE_USER: "jakumpe@justinkumpe.net"
+    - MATCH_GIT_BASIC_AUTHORIZATION: $MATCH_GIT_BASIC_AUTHORIZATION
+    - MATCH_PASSWORD: $MATCH_KEYCHAIN_PASSWORD
+    - MATCH_KEYCHAIN_PASSWORD: $MATCH_KEYCHAIN_PASSWORD
+    - MATCH_DEPLOY_KEY: $MATCH_DEPLOY_KEY
+    - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
+    - GITHUB_TOKEN: $(GITHUB_TOKEN)
+  
+  install:
+  - gem install cocoapods
+  - gem install bundler
+  - pip install -r requirements.txt
+  - flutter upgrade --force
+  - bundle install
+  # - git config --global --add url."git@github.com:".insteadOf "https://github.com/" 
+  - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
+  - bundle exec fastlane matchget
+
+  build_script:
+  - echo "is_mobile=1" >> .env
+  - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.0.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --team 2T42Z3DM34 --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
+
+  after_build:
+  - tar -czvf kumpe3dkiosk-ios.tar.gz -C build/ipa "kumpe3dkiosk.ipa"
+
+  artifacts:
+  - path: kumpe3dkiosk-ios.tar.gz
 
 #
 #   Linux package 
@@ -105,7 +149,7 @@ for:
 
   build_script:
   - echo "is_mobile=1" >> .env
-  - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version $APPVEYOR_REPO_TAG_NAME --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
+  - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.0.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
 
   after_build:
   - tar -czvf kumpe3dkiosk-apk.tar.gz -C build apk
