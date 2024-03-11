@@ -133,6 +133,6 @@ def addstock_page(data: fs.Datasy):
 
     return ft.View(
         route="/add_stock",
-        controls=[menu_button, text, qty, sku, submit_container, progress_ring],
+        controls=[ft.SafeArea(menu_button, bottom=False), text, qty, sku, submit_container, progress_ring],
         drawer=view.drawer,
     )

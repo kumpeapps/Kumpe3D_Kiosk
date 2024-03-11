@@ -16,6 +16,7 @@ def login_page(data: fs.Datasy):
     """Login Page"""
     page = data.page
     view = data.view
+    print(page.padding)
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
     pr_container = ft.Container(
         content=pr,
@@ -79,7 +80,7 @@ def login_page(data: fs.Datasy):
     menu_button = ft.Container(
         content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
-        visible=params.Access.basic,
+        disabled=not params.Access.basic,
     )
 
     def show_banner_click(
@@ -169,7 +170,7 @@ def login_page(data: fs.Datasy):
         password_field.visible = False
         submit_container.visible = False
         password_field.value = ""
-        menu_button.visible = True
+        menu_button.disabled = False
         page.title = "Home"
         logging_in(False)
         page.update()
@@ -211,7 +212,7 @@ def login_page(data: fs.Datasy):
     return ft.View(
         route="/login",
         controls=[
-            menu_button,
+            ft.SafeArea(menu_button, bottom=False),
             img_container,
             username_field,
             password_field,

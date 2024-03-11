@@ -54,7 +54,7 @@ def pendingorders_page(data: fs.Datasy):
         content=pr,
         alignment=ft.alignment.center,
     )
-    tiles = [menu_button, progress_ring]
+    tiles = [ft.SafeArea(menu_button, bottom=False), progress_ring]
 
     def tile_clicked(order_id, _):
         page.go(f"/order_items/{order_id}")
