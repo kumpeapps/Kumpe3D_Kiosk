@@ -26,7 +26,7 @@ before_build:
 
 test: off
 
-# Publish artifacts to GitHub Releases on "tag" builds
+# Publish artifacts to GitHub Releases on "tag" builds 
 deploy:
   provider: GitHub
   auth_token: $(GITHUB_TOKEN)
