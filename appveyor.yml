@@ -24,7 +24,7 @@ before_build:
 - echo "VERSION=$APPVEYOR_BUILD_VERSION" >> .env
 - echo "BUILD=$APPVEYOR_BUILD_NUMBER" >> .env
 
-test: off
+test: on
 
 # Publish artifacts to GitHub Releases on "tag" builds
 deploy:
