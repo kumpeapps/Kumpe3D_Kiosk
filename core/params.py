@@ -28,7 +28,7 @@ class Params:
         def get_values():
             """Get Values"""
             Params.SHIPPO.base_url = "https://api.goshippo.com"
-            Params.SHIPPO.api_key = creds.get_secret(  # pylint: disable=no-member 
+            Params.SHIPPO.api_key = creds.get_secret(  # pylint: disable=no-member
                 secret_name="APIKEY", environment="dev", path="/SHIPPO/"
             ).secretValue
 
