@@ -1,15 +1,15 @@
 version: '2.0.2({build})'
 environment:
   matrix:
-  - job_name: "build macOS"
-    appveyor_build_worker_image: macOS
-    build: Script
+  # - job_name: "build macOS"
+  #   appveyor_build_worker_image: macOS
+  #   build: Script
   - job_name: "build iOS"
     appveyor_build_worker_image: macOS
     build: Script
-  - job_name: "build Android"
-    appveyor_build_worker_image: Ubuntu
-    build: Script
+  # - job_name: "build Android"
+  #   appveyor_build_worker_image: Ubuntu
+  #   build: Script
 
 #  skip_branch_with_pr: true
 stack: python 3.11
@@ -78,6 +78,7 @@ for:
   - pip install -r requirements.txt
   - flutter upgrade --force
   - bundle install
+  - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer
   - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
   - bundle exec fastlane update_match
   - bundle exec fastlane matchget
