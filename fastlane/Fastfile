@@ -39,18 +39,6 @@ platform :ios do
     api_key: api_key,
     type: "appstore"
     )
-    match(
-    api_key: api_key,
-    type: "adhoc"
-    )
-    match(
-    api_key: api_key,
-    type: "development"
-    )
-  match(
-    api_key: api_key,
-    type: "appstore"
-  )
   end
 
   lane :matchget do
