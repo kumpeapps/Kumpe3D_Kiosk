@@ -4,9 +4,9 @@ environment:
   - job_name: "build macOS"
     appveyor_build_worker_image: macOS
     build: Script
-  # - job_name: "build iOS"
-  #   appveyor_build_worker_image: macOS
-  #   build: Script
+  - job_name: "build iOS"
+    appveyor_build_worker_image: macOS
+    build: Script
   - job_name: "build Android"
     appveyor_build_worker_image: Ubuntu
     build: Script
