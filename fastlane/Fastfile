@@ -38,7 +38,7 @@ platform :ios do
     match(
       generate_apple_certs: true, 
       api_key: api_key,
-      type: "appstore"
+      type: "development"
     )
   end
 
