@@ -5,24 +5,32 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000207">
+      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="1.539022">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: is_ci" time="9.3e-05">
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000129">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: is_ci" time="0.000117">
+      <testcase classname="fastlane.lanes" name="2: is_ci" time="9.4e-05">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: match" time="3.431526">
+      <testcase classname="fastlane.lanes" name="3: is_ci" time="7.7e-05">
         
-          <failure message="/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/actions/actions_helper.rb:67:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/runner.rb:229:in `chdir'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'&#10;Fastfile:60:in `block (2 levels) in parsing_binding'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/lane.rb:41:in `call'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/commands_generator.rb:354:in `run'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/fastlane-2.219.0/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/usr/local/lib/ruby/gems/2.7.0/bin/fastlane:25:in `load'&#10;/usr/local/lib/ruby/gems/2.7.0/bin/fastlane:25:in `&lt;top (required)&gt;'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/cli/exec.rb:58:in `load'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/cli/exec.rb:58:in `kernel_load'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/cli/exec.rb:23:in `run'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/cli.rb:492:in `exec'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/vendor/thor/lib/thor/command.rb:28:in `run'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in `invoke_command'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/vendor/thor/lib/thor.rb:527:in `dispatch'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/cli.rb:34:in `dispatch'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/vendor/thor/lib/thor/base.rb:584:in `start'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/cli.rb:28:in `start'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/exe/bundle:37:in `block in &lt;top (required)&gt;'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/lib/bundler/friendly_errors.rb:117:in `with_friendly_errors'&#10;/usr/local/lib/ruby/gems/2.7.0/gems/bundler-2.4.22/exe/bundle:29:in `&lt;top (required)&gt;'&#10;/usr/local/opt/ruby@2.7/bin/bundle:23:in `load'&#10;/usr/local/opt/ruby@2.7/bin/bundle:23:in `&lt;main&gt;'&#10;&#10;Although response from Apple indicated activated Two-step Verification or Two-factor Authentication, spaceship didn't know how to handle this response: {&quot;cancelled&quot;=&gt;false, &quot;accountName&quot;=&gt;&quot;jakumpe@justinkumpe.net&quot;, &quot;keyNames&quot;=&gt;[&quot;YubiKey 5 Series laptop&quot;, &quot;YubiKey 5 Series with NFC&quot;], &quot;passkeyAutofill&quot;=&gt;false, &quot;fsaChallenge&quot;=&gt;{&quot;challenge&quot;=&gt;&quot;g9SenbNsO1YUs+uELmZ0BsVZu7VdJmG2zDSe5hxIVEg&quot;, &quot;keyHandles&quot;=&gt;[&quot;Mj7tfEwhmabQYnHyxXpY4TnJ32O2w2ygtk1dLpijFHE8u0s5msI+evjiH+NDSVjz&quot;, &quot;L9tmKEWgTmK1XFybbmyzWvazrxStLXtGObaZcx/edZP38HPn/ku2GPaOksZjw+h7&quot;], &quot;rpId&quot;=&gt;&quot;apple.com&quot;, &quot;allowedCredentials&quot;=&gt;&quot;Mj7tfEwhmabQYnHyxXpY4TnJ32O2w2ygtk1dLpijFHE8u0s5msI+evjiH+NDSVjz,L9tmKEWgTmK1XFybbmyzWvazrxStLXtGObaZcx/edZP38HPn/ku2GPaOksZjw+h7&quot;}}" />
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: app_store_connect_api_key" time="0.002966">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: match" time="6.151417">
         
       </testcase>
     
