@@ -5,7 +5,7 @@ environment:
   #   appveyor_build_worker_image: macOS
   #   build: Script
   - job_name: "build iOS"
-    appveyor_build_worker_image: macOS Sonoma
+    appveyor_build_worker_image: macOS-Sonoma
     build: Script
   # - job_name: "build Android"
   #   appveyor_build_worker_image: Ubuntu
