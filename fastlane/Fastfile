@@ -40,6 +40,11 @@ platform :ios do
       api_key: api_key,
       type: "appstore"
     )
+    match(
+      generate_apple_certs: true, 
+      api_key: api_key,
+      type: "development"
+    )
   end
 
   lane :matchget do

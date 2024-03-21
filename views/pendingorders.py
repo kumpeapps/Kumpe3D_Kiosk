@@ -54,7 +54,8 @@ def pendingorders_page(data: fs.Datasy):
         content=pr,
         alignment=ft.alignment.center,
     )
-    tiles = [ft.SafeArea(menu_button, bottom=False), progress_ring]
+    tiles = ft.Row(wrap=True, scroll="always", expand=True)
+    canvas = [ft.SafeArea(menu_button, bottom=False), progress_ring]
 
     def tile_clicked(order_id, _):
         page.go(f"/order_items/{order_id}")
@@ -132,16 +133,16 @@ def pendingorders_page(data: fs.Datasy):
                     trailing=ft.Icon(name=ft.cupertino_icons.ARROW_RIGHT),
                     on_click=partial(tile_clicked, idorders), # pylint: disable=cell-var-from-loop
                 )
-                tiles.append(tile)
+                tiles.controls.append(tile)
             page.update()
         except (KeyError, TypeError):
             beep.error(page)
             show_banner_click("Unknown Error")
 
     get_pending_orders()
-
+    canvas.append(tiles)
     return ft.View(
         route="/add_roll",
-        controls=tiles,
+        controls=canvas,
         drawer=view.drawer,
     )

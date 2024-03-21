@@ -188,7 +188,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
 
     get_items()
 
-    list_view = ft.ListView(controls=tiles)
+    list_view = ft.Row(wrap=True, scroll="always", expand=True, controls=tiles)
 
     return ft.View(
         route="/add_roll",
