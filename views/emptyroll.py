@@ -123,7 +123,8 @@ def emptyroll_page(data: fs.Datasy):
         sku.disabled = updating
         submit_container.disabled = updating
         progress_ring.visible = updating
-        sku.value = ""
+        if not updating:
+            sku.value = ""
         page.update()
         sku.focus()
 

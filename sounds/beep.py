@@ -10,6 +10,7 @@ def error(page: ft.Page):
         autoplay=True,
     )
     page.overlay.append(error_file)
+    page.update()
 
 
 def success(page: ft.Page):
@@ -19,6 +20,7 @@ def success(page: ft.Page):
         autoplay=True,
     )
     page.overlay.append(success_file)
+    page.update()
 
 
 def login(page: ft.Page):
@@ -28,3 +30,4 @@ def login(page: ft.Page):
         autoplay=True,
     )
     page.overlay.append(success_file)
+    page.update()
