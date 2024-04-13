@@ -5,6 +5,7 @@ import flet as ft
 import flet_easy as fs  # pylint: disable=import-error
 from core.params import Params as params
 import sounds.beep as beep
+import pluggins.scan_list_builder as slb
 
 orderitems = fs.AddPagesy()
 
@@ -56,6 +57,8 @@ def orderitems_page(data: fs.Datasy, order_id: int):
 
     def scanned(_):
         """Add Item as Picked"""
+        success = True
+        scanned_list = slb.build_k3d_item_dict(scan_field.value)
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
@@ -85,35 +88,42 @@ def orderitems_page(data: fs.Datasy, order_id: int):
                 (SELECT title from Web_3dprints.products where sku = %s OR sku = CONCAT(LEFT(%s,11),"-000")),
                 %s,
                 0,
-                1,
+                %s,
                 '',
                 0,
                 %s
             )
-            ON DUPLICATE KEY UPDATE qty_filled=qty_filled + 1;
+            ON DUPLICATE KEY UPDATE qty_filled=qty_filled + %s;
         """
-
-        values = (
-            order_id,
-            scan_field.value,
-            scan_field.value,
-            scan_field.value,
-            page.client_storage.get("username"),
-        )
-        try:
-            cursor.execute(sql, values)
+        for item in scanned_list:
+            sku = item["sku"]
+            qty = item["qty"]
+            values = (
+                order_id,
+                sku,
+                sku,
+                sku,
+                qty,
+                page.client_storage.get("username"),
+                qty,
+            )
+            try:
+                cursor.execute(sql, values)
+            except:  # pylint: disable=bare-except
+                success = False
+                show_banner_click(f"Invalid SKU: {sku}")
+                break
+        scan_field.value = ""
+        if success:
+            beep.success(page)
             db.commit()
             db.close()
-            scan_field.value = ""
-            tiles.clear()
-            get_items()
-            beep.success(page)
-            scan_field.focus()
-        except:  # pylint: disable=bare-except
+        else:
             beep.error(page)
-            show_banner_click(f"Invalid SKU: {scan_field.value}")
-            scan_field.value = ""
-            scan_field.focus()
+            db.close()
+        tiles.clear()
+        get_items()
+        scan_field.focus()
 
     scan_field = ft.TextField(
         autocorrect=False,
@@ -140,6 +150,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
     tiles = []
 
     def tile_clicked(order_id):
+        """Clicked Tile"""
         page.go(f"/order/{order_id}")
 
     def get_items():
