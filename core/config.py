@@ -94,14 +94,9 @@ class ConfigApp:
                                     text="Production Queue",
                                     on_click=productionq_go,
                                 ),
-                                # ft.FilledButton(
-                                #     text="Add to Stock & Print Label",
-                                #     on_click=addstockandprint_go,
-                                # ),
                                 ft.FilledButton(
                                     text="Print Product Label",
                                     on_click=productlabel_go,
-                                    visible=not params.mobile
                                 ),
                                 ft.FilledButton(
                                     text="Pending Orders",
