@@ -231,7 +231,7 @@ def printproductlabel_page(data: fs.Datasy):
         enable_suggestions=False,
         autofocus=True,
         on_submit=scanned,
-        width=page.width / 4,
+        width=page.width / 2,
         height=30,
         capitalization=ft.TextCapitalization.CHARACTERS,
         label="Scan SKU",
