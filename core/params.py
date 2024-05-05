@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from infisical_api import infisical_api
 
 
-load_dotenv()
+load_dotenv(override=True)
 service_token = os.getenv("SERVICE_TOKEN")
 app_env = os.getenv("APP_ENV")
 creds = infisical_api(
@@ -40,6 +40,7 @@ class Params:
         server = ""
         port = ""
         database = ""
+        ro_server = ""
 
         @staticmethod
         def get_values():
@@ -58,6 +59,9 @@ class Params:
             ).secretValue
             Params.SQL.database = creds.get_secret(  # pylint: disable=no-member
                 secret_name="DATABASE", environment=app_env, path="/MYSQL/"
+            ).secretValue
+            Params.SQL.ro_server = creds.get_secret(  # pylint: disable=no-member
+                secret_name="RO_SERVER", environment=app_env, path="/MYSQL/"
             ).secretValue
 
         @staticmethod

@@ -57,8 +57,11 @@ def pendingorders_page(data: fs.Datasy):
     tiles = ft.Row(wrap=True, scroll="always", expand=True)
     canvas = [ft.SafeArea(menu_button, bottom=False), progress_ring]
 
-    def tile_clicked(order_id, _):
+    def view_order_clicked(order_id, _):
         page.go(f"/order_items/{order_id}")
+
+    def update_status_clicked(order_id, _):
+        page.go(f"/order_status_update/{order_id}")
 
     def get_pending_orders():
         """Add's Roll to Stock"""
@@ -121,7 +124,7 @@ def pendingorders_page(data: fs.Datasy):
             cursor.execute(sql)
             orders = cursor.fetchall()
             for order in orders:
-                idorders = order['idorders']
+                idorders = order["idorders"]
                 tile = ft.CupertinoListTile(
                     additional_info=ft.Text(order["status"]),
                     bgcolor_activated=ft.colors.AMBER_ACCENT,
@@ -130,8 +133,19 @@ def pendingorders_page(data: fs.Datasy):
                         f"{order['idorders']}: {order['first_name']} {order['last_name']} ({order['country']})"
                     ),
                     subtitle=ft.Text(f"{order['email']}"),
-                    trailing=ft.Icon(name=ft.cupertino_icons.ARROW_RIGHT),
-                    on_click=partial(tile_clicked, idorders), # pylint: disable=cell-var-from-loop
+                    trailing=ft.PopupMenuButton(
+                        icon=ft.icons.MORE_VERT,
+                        items=[
+                            ft.PopupMenuItem(
+                                text="View Order",
+                                on_click=partial(view_order_clicked, idorders),
+                            ),  # pylint: disable=cell-var-from-loop),
+                            ft.PopupMenuItem(
+                                text="Change Status",
+                                on_click=partial(update_status_clicked, idorders),
+                            ),
+                        ],
+                    ),
                 )
                 tiles.controls.append(tile)
             page.update()

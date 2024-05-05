@@ -154,7 +154,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
         page.go(f"/order/{order_id}")
 
     def get_items():
-        """Add's Roll to Stock"""
+        """Populates Order Items"""
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
@@ -202,7 +202,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
     list_view = ft.Row(wrap=True, scroll="always", expand=True, controls=tiles)
 
     return ft.View(
-        route="/add_roll",
+        route="/order",
         controls=[top_row, progress_ring, list_view],
         drawer=view.drawer,
     )
