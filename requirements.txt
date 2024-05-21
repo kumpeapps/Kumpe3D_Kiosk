@@ -1,5 +1,5 @@
 flet==0.21.2
-PyMySQL==1.1.0
+PyMySQL==1.1.1
 python-dotenv==1.0.1
 infisical_api==1.0.0
 parse==1.20.1
