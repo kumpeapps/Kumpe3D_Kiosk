@@ -8,7 +8,7 @@ import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 
 printproductlabel = fs.AddPagesy()
-items_list = ""
+items_list = "" # pylint: disable=invalid-name
 
 
 @printproductlabel.page(route="/print_product_label", protected_route=True)
@@ -379,7 +379,7 @@ def printproductlabel_page(data: fs.Datasy):
                     LEFT JOIN `upc_codes` `upc` ON (`upc`.`sku` = `label`.`sku`))
                     LEFT JOIN `distributor_skus` `skus` ON (`skus`.`sku` = `label`.`sku`
                         AND `skus`.`iddistributors` = %s)
-					left join products on products.sku = label.sku or products.sku = concat(left(label.sku,12),'000'))
+                    LEFT JOIN products ON products.sku = label.sku OR products.sku = concat(left(label.sku,12),'000'))
                 WHERE 1=1
                     AND username = %s
                 ORDER BY idtemp__build_label;
