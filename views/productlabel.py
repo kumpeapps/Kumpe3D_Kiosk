@@ -103,7 +103,7 @@ def printproductlabel_page(data: fs.Datasy):
             "Print Job Sent. May take a couple of min to print",
             ft.colors.GREEN_200,
             ft.icons.CHECK_BOX_ROUNDED,
-            ft.colors.GREEN_900
+            ft.colors.GREEN_900,
         )
         beep.success(page)
         get_items()
