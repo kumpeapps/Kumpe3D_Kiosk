@@ -360,7 +360,7 @@ def printproductlabel_page(data: fs.Datasy):
             sql = """
                 SELECT 
                     `label`.`idtemp__build_label` AS `idtemp__build_label`,
-                    products.title,
+                    products.title as `title`,
                     `label`.`sku` AS `sku`,
                     `label`.`qty` AS `qty`,
                     `label`.`username` AS `username`,
@@ -412,7 +412,7 @@ def printproductlabel_page(data: fs.Datasy):
                     leading=ft.Image(
                         src=f"https://images.kumpeapps.com/filament?sku={item['sku']}"
                     ),
-                    title=ft.Text(item["sku"]),
+                    title=ft.Text(item["title"]),
                     subtitle=ft.Text(f"{item['sku']}\nQty: {item['qty']}"),
                     is_three_line=True,
                     trailing=integrity_icon,
