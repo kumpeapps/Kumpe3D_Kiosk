@@ -8,7 +8,7 @@ import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 
 printproductlabel = fs.AddPagesy()
-items_list = ""
+items_list = "" # pylint: disable=invalid-name
 
 
 @printproductlabel.page(route="/print_product_label", protected_route=True)
@@ -103,7 +103,7 @@ def printproductlabel_page(data: fs.Datasy):
             "Print Job Sent. May take a couple of min to print",
             ft.colors.GREEN_200,
             ft.icons.CHECK_BOX_ROUNDED,
-            ft.colors.GREEN_900
+            ft.colors.GREEN_900,
         )
         beep.success(page)
         get_items()
@@ -231,7 +231,7 @@ def printproductlabel_page(data: fs.Datasy):
         enable_suggestions=False,
         autofocus=True,
         on_submit=scanned,
-        width=page.width / 4,
+        width=page.width / 2,
         height=30,
         capitalization=ft.TextCapitalization.CHARACTERS,
         label="Scan SKU",
@@ -360,6 +360,7 @@ def printproductlabel_page(data: fs.Datasy):
             sql = """
                 SELECT 
                     `label`.`idtemp__build_label` AS `idtemp__build_label`,
+                    products.title as `title`,
                     `label`.`sku` AS `sku`,
                     `label`.`qty` AS `qty`,
                     `label`.`username` AS `username`,
@@ -377,7 +378,8 @@ def printproductlabel_page(data: fs.Datasy):
                     ((`temp__build_label` `label`
                     LEFT JOIN `upc_codes` `upc` ON (`upc`.`sku` = `label`.`sku`))
                     LEFT JOIN `distributor_skus` `skus` ON (`skus`.`sku` = `label`.`sku`
-                        AND `skus`.`iddistributors` = %s))
+                        AND `skus`.`iddistributors` = %s)
+                    LEFT JOIN products ON products.sku = label.sku OR products.sku = concat(left(label.sku,12),'000'))
                 WHERE 1=1
                     AND username = %s
                 ORDER BY idtemp__build_label;
@@ -410,7 +412,7 @@ def printproductlabel_page(data: fs.Datasy):
                     leading=ft.Image(
                         src=f"https://images.kumpeapps.com/filament?sku={item['sku']}"
                     ),
-                    title=ft.Text(item["sku"]),
+                    title=ft.Text(item["title"]),
                     subtitle=ft.Text(f"{item['sku']}\nQty: {item['qty']}"),
                     is_three_line=True,
                     trailing=integrity_icon,
@@ -433,7 +435,6 @@ def printproductlabel_page(data: fs.Datasy):
         cursor.close()
         db.close()
         progress_ring.visible = False
-        print(items_list)
 
     get_items()
 
