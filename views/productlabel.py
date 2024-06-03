@@ -360,6 +360,7 @@ def printproductlabel_page(data: fs.Datasy):
             sql = """
                 SELECT 
                     `label`.`idtemp__build_label` AS `idtemp__build_label`,
+                    products.title,
                     `label`.`sku` AS `sku`,
                     `label`.`qty` AS `qty`,
                     `label`.`username` AS `username`,
@@ -377,7 +378,8 @@ def printproductlabel_page(data: fs.Datasy):
                     ((`temp__build_label` `label`
                     LEFT JOIN `upc_codes` `upc` ON (`upc`.`sku` = `label`.`sku`))
                     LEFT JOIN `distributor_skus` `skus` ON (`skus`.`sku` = `label`.`sku`
-                        AND `skus`.`iddistributors` = %s))
+                        AND `skus`.`iddistributors` = %s)
+					left join products on products.sku = label.sku or products.sku = concat(left(label.sku,12),'000'))
                 WHERE 1=1
                     AND username = %s
                 ORDER BY idtemp__build_label;
@@ -433,7 +435,6 @@ def printproductlabel_page(data: fs.Datasy):
         cursor.close()
         db.close()
         progress_ring.visible = False
-        print(items_list)
 
     get_items()
 
