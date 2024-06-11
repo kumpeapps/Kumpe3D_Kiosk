@@ -143,6 +143,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
                 ft.Column(
                     controls=[scan_container], alignment=ft.MainAxisAlignment.CENTER
                 ),
+                ft.Text(order_id, size=10, weight=ft.FontWeight.BOLD),
             ],
             spacing=60,
         ), bottom=False
