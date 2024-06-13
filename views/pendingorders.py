@@ -130,7 +130,7 @@ def pendingorders_page(data: fs.Datasy):
                     bgcolor_activated=ft.colors.AMBER_ACCENT,
                     leading=ft.Icon(name=ft.cupertino_icons.SHOPPING_CART),
                     title=ft.Text(
-                        f"{order['idorders']}: {order['first_name']} {order['last_name']} ({order['country']})"
+                        f"{order['idorders']}: {order['company_name']} {order['first_name']} {order['last_name']} ({order['country']})"
                     ),
                     subtitle=ft.Text(f"{order['email']}"),
                     trailing=ft.PopupMenuButton(
