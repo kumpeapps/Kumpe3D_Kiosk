@@ -65,6 +65,8 @@ def printproductlabel_page(data: fs.Datasy):
                 add_label_to_printq(sku, qr_data, "square_product_label")
             if barcode_label_check.value:
                 add_label_to_printq(sku, sku, "barcode_label")
+            if wide_barcode_label_check.value:
+                add_label_to_printq(sku, sku, "wide_barcode_label")
 
     def add_label_to_printq(sku: str, qr_data: str, label_type: str):
         print("PrintQ")
@@ -300,6 +302,7 @@ def printproductlabel_page(data: fs.Datasy):
 
     product_label_check = ft.Checkbox(label="Product Label", value=True)
     barcode_label_check = ft.Checkbox(label="Barcode Label")
+    wide_barcode_label_check = ft.Checkbox(label="Wide Barcode Label")
     shelf_label_check = ft.Checkbox(label="Shelf Label")
 
     def distributor_dropdown_change(_):
@@ -332,6 +335,7 @@ def printproductlabel_page(data: fs.Datasy):
             distributor_dropdown,
             product_label_check,
             barcode_label_check,
+            wide_barcode_label_check,
             shelf_label_check,
         ],
     )
