@@ -305,10 +305,6 @@ def printproductlabel_page(data: fs.Datasy):
 
     def distributor_dropdown_change(_):
         """Distributor Dropdown onchange"""
-        require_barcode = bool(
-            distributor_list[int(distributor_dropdown.value)]["requires_upc"]
-        )
-        barcode_label_check.value = require_barcode
         get_items()
 
     distributor_dropdown = ft.Dropdown(
