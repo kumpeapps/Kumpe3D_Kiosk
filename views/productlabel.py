@@ -8,7 +8,7 @@ import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 
 printproductlabel = fs.AddPagesy()
-items_list = "" # pylint: disable=invalid-name
+items_list = ""  # pylint: disable=invalid-name
 
 
 @printproductlabel.page(route="/print_product_label", protected_route=True)
@@ -48,7 +48,6 @@ def printproductlabel_page(data: fs.Datasy):
         page.update()
 
     def print_clicked(_):
-        print("Print")
         if distributor_dropdown.value is None:
             show_banner_click("Please Select Distributor")
             beep.error(page)
@@ -69,7 +68,6 @@ def printproductlabel_page(data: fs.Datasy):
                 add_label_to_printq(sku, sku, "wide_barcode_label")
 
     def add_label_to_printq(sku: str, qr_data: str, label_type: str):
-        print("PrintQ")
         distributor_id = distributor_dropdown.value
         qty = qty_field.value
         if params.SQL.username == "":
@@ -111,7 +109,7 @@ def printproductlabel_page(data: fs.Datasy):
         get_items()
 
     def clear_clicked(_):
-        print("Clear")
+
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
@@ -307,10 +305,6 @@ def printproductlabel_page(data: fs.Datasy):
 
     def distributor_dropdown_change(_):
         """Distributor Dropdown onchange"""
-        require_barcode = bool(
-            distributor_list[int(distributor_dropdown.value)]["requires_upc"]
-        )
-        barcode_label_check.value = require_barcode
         get_items()
 
     distributor_dropdown = ft.Dropdown(
@@ -334,11 +328,60 @@ def printproductlabel_page(data: fs.Datasy):
             qty_field,
             distributor_dropdown,
             product_label_check,
-            barcode_label_check,
             wide_barcode_label_check,
             shelf_label_check,
         ],
     )
+
+    def assign_upc(item: dict) -> bool:
+        if item["L3"] == "K3D":
+            try:
+                if params.SQL.username == "":
+                    params.SQL.get_values()
+                sql_params = params.SQL
+                db = pymysql.connect(
+                    db=sql_params.database,
+                    user=sql_params.username,
+                    passwd=sql_params.password,
+                    host=sql_params.server,
+                    port=3306,
+                )
+                cursor = db.cursor(pymysql.cursors.DictCursor)
+
+                sku = item["sku"]
+                short_sku_base = item["short_sku"]
+                short_sku = short_sku_base.replace("000", item["R3"])
+                psd_sku = f"K3D {short_sku.replace('-','')}"
+                upc_sql = """
+                        SELECT 
+                            upc,
+                            ean
+                        FROM
+                            Web_3dprints.upc_codes
+                        WHERE
+                            sku IS NULL
+                        LIMIT 1;
+                """
+                cursor.execute(upc_sql)
+                upc_data = cursor.fetchone()
+                upc = upc_data["upc"]
+                assign_upc_sql = """
+                    UPDATE Web_3dprints.upc_codes
+                    SET
+                        sku = %s,
+                        short_sku = %s,
+                        psd_sku = %s
+                    WHERE 1=1
+                        AND upc = %s;
+                """
+                cursor.execute(assign_upc_sql, (sku, short_sku, psd_sku, upc))
+                db.commit()
+                db.close()
+                return True
+            except:  # pylint: disable=bare-except
+                return False
+        else:
+            return False
 
     def get_items():
         """Populates existing items for label"""
@@ -364,44 +407,37 @@ def printproductlabel_page(data: fs.Datasy):
             sql = """
                 SELECT 
                     `label`.`idtemp__build_label` AS `idtemp__build_label`,
-                    products.title as `title`,
+                    products.title AS `title`,
                     `label`.`sku` AS `sku`,
+                    left(`label`.`sku`, 3) AS 'L3',
+                    right(`label`.`sku`, 3) AS 'R3',
                     `label`.`qty` AS `qty`,
                     `label`.`username` AS `username`,
+                    `products`.`short_sku` AS `short_sku`,
                     IFNULL(`upc`.`upc`, '') AS `upc`,
-                    IFNULL(`skus`.`dist_sku`, '') AS `dist_sku`,
                     CASE
                         WHEN `upc`.`upc` IS NULL THEN 0
                         ELSE 1
-                    END AS `has_upc`,
-                    CASE
-                        WHEN `skus`.`dist_sku` IS NULL THEN 0
-                        ELSE 1
-                    END AS `has_dist_sku`
+                    END AS `has_upc`
                 FROM
                     ((`temp__build_label` `label`
                     LEFT JOIN `upc_codes` `upc` ON (`upc`.`sku` = `label`.`sku`))
-                    LEFT JOIN `distributor_skus` `skus` ON (`skus`.`sku` = `label`.`sku`
-                        AND `skus`.`iddistributors` = %s)
                     LEFT JOIN products ON products.sku = label.sku OR products.sku = concat(left(label.sku,12),'000'))
                 WHERE 1=1
                     AND username = %s
                 ORDER BY idtemp__build_label;
             """
-            cursor.execute(sql, (dist_id, page.client_storage.get("username")))
+            cursor.execute(sql, (page.client_storage.get("username")))
             items = cursor.fetchall()
             global items_list  # pylint: disable=global-statement
             items_list = ""
             for item in items:
                 has_upc = bool(item["has_upc"])
-                has_dist_sku = bool(item["has_dist_sku"])
-                if has_upc and has_dist_sku:
+                if not has_upc:
+                    has_upc = assign_upc(item)
+                if has_upc:
                     integrity_icon = ft.Icon(
                         name=ft.icons.CHECK_CIRCLE_ROUNDED, color=ft.colors.GREEN_300
-                    )
-                elif has_upc:
-                    integrity_icon = ft.Icon(
-                        name=ft.icons.WARNING_ROUNDED, color=ft.colors.AMBER_300
                     )
                 else:
                     integrity_icon = ft.Icon(
@@ -423,7 +459,6 @@ def printproductlabel_page(data: fs.Datasy):
                     # on_click=lambda orderid: tile_clicked(idorders), # pylint: disable=cell-var-from-loop
                 )
                 tiles.append(tile)
-                print(f"Items Count: {len(items)}")
             if len(items) == 0:
                 print_button.disabled = True
                 clear_button.disabled = True
