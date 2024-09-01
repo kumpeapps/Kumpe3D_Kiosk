@@ -8,7 +8,7 @@ import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 
 printproductlabel = fs.AddPagesy()
-items_list = "" # pylint: disable=invalid-name
+items_list = ""  # pylint: disable=invalid-name
 
 
 @printproductlabel.page(route="/print_product_label", protected_route=True)
@@ -109,7 +109,7 @@ def printproductlabel_page(data: fs.Datasy):
         get_items()
 
     def clear_clicked(_):
-        
+
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
@@ -334,7 +334,7 @@ def printproductlabel_page(data: fs.Datasy):
     )
 
     def assign_upc(item: dict) -> bool:
-        if item['L3'] == 'K3D':
+        if item["L3"] == "K3D":
             try:
                 if params.SQL.username == "":
                     params.SQL.get_values()
@@ -348,9 +348,9 @@ def printproductlabel_page(data: fs.Datasy):
                 )
                 cursor = db.cursor(pymysql.cursors.DictCursor)
 
-                sku = item['sku']
-                short_sku_base = item['short_sku']
-                short_sku = short_sku_base.replace('000',item['R3'])
+                sku = item["sku"]
+                short_sku_base = item["short_sku"]
+                short_sku = short_sku_base.replace("000", item["R3"])
                 psd_sku = f"K3D {short_sku.replace('-','')}"
                 upc_sql = """
                         SELECT 
@@ -364,7 +364,7 @@ def printproductlabel_page(data: fs.Datasy):
                 """
                 cursor.execute(upc_sql)
                 upc_data = cursor.fetchone()
-                upc = upc_data['upc']
+                upc = upc_data["upc"]
                 assign_upc_sql = """
                     UPDATE Web_3dprints.upc_codes
                     SET
@@ -378,7 +378,7 @@ def printproductlabel_page(data: fs.Datasy):
                 db.commit()
                 db.close()
                 return True
-            except: # pylint: disable=bare-except
+            except:  # pylint: disable=bare-except
                 return False
         else:
             return False
