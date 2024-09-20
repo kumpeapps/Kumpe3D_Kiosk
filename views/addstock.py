@@ -2,10 +2,11 @@
 
 import pymysql
 import flet as ft
-import flet_easy as fs # pylint: disable=import-error
+import flet_easy as fs  # pylint: disable=import-error
 from pluggins.helpers import get_sku_array
 from core.params import Params as params
 import sounds.beep as beep
+import pluggins.scan_list_builder as slb
 
 addstock = fs.AddPagesy()
 
@@ -21,14 +22,6 @@ def addstock_page(data: fs.Datasy):
     if params.SQL.username == "":
         params.SQL.get_values()
     sql_params = params.SQL
-    db = pymysql.connect(
-        db=sql_params.database,
-        user=sql_params.username,
-        passwd=sql_params.password,
-        host=sql_params.server,
-        port=3306,
-    )
-    cursor = db.cursor(pymysql.cursors.DictCursor)
 
     def show_drawer(_):
         view.drawer.open = True
@@ -58,16 +51,32 @@ def addstock_page(data: fs.Datasy):
 
     def add_stock(_):
         updating()
+        db = pymysql.connect(
+            db=sql_params.database,
+            user=sql_params.username,
+            passwd=sql_params.password,
+            host=sql_params.server,
+            port=3306,
+        )
+        cursor = db.cursor(pymysql.cursors.DictCursor)
+        scanned_list = slb.build_k3d_item_dict(sku.value, "to_stock_translation", cursor)
+        quantity = qty.value
         try:
-            sku_array = get_sku_array(sku.value)
-            sql = """INSERT INTO `Web_3dprints`.`stock`
-                        (`sku`,
-                        `swatch_id`,
-                        `qty`)
-                    VALUES
-                        (%s, %s, %s)
-                    ON DUPLICATE KEY UPDATE qty = qty + %s;"""
-            cursor.execute(sql, (sku_array["base_sku"], sku_array["color"], qty.value, qty.value))
+            while quantity > 0:
+                for item in scanned_list:
+                    sku_array = get_sku_array(item["sku"])
+                    sql = """INSERT INTO `Web_3dprints`.`stock`
+                                (`sku`,
+                                `swatch_id`,
+                                `qty`)
+                            VALUES
+                                (%s, %s, %s)
+                            ON DUPLICATE KEY UPDATE qty = qty + %s;"""
+                    cursor.execute(
+                        sql,
+                        (sku_array["base_sku"], sku_array["color"], item["qty"], item["qty"]),
+                    )
+                quantity -= 1
             db.commit()
             sku.value = ""
             updating(False)
@@ -76,8 +85,11 @@ def addstock_page(data: fs.Datasy):
             beep.success(page)
         except KeyError:
             beep.error(page)
-            show_banner_click(f"Invalid SKU {sku.value}")
+            show_banner_click(f"Invalid SKU in List {sku.value}")
             updating(False)
+        finally:
+            cursor.close()
+            db.close()
 
     text = ft.Container(
         content=ft.Text(
@@ -92,7 +104,9 @@ def addstock_page(data: fs.Datasy):
         enable_suggestions=False,
         prefix_icon=ft.icons.NUMBERS_SHARP,
         text_align=ft.TextAlign.LEFT,
-        input_filter=ft.InputFilter(allow=True, regex_string=r"[0-9]", replacement_string=""),
+        input_filter=ft.InputFilter(
+            allow=True, regex_string=r"[0-9]", replacement_string=""
+        ),
         width=100,
         value=1,
         keyboard_type=ft.KeyboardType.NUMBER,
@@ -133,6 +147,13 @@ def addstock_page(data: fs.Datasy):
 
     return ft.View(
         route="/add_stock",
-        controls=[ft.SafeArea(menu_button, bottom=False), text, qty, sku, submit_container, progress_ring],
+        controls=[
+            ft.SafeArea(menu_button, bottom=False),
+            text,
+            qty,
+            sku,
+            submit_container,
+            progress_ring,
+        ],
         drawer=view.drawer,
     )
