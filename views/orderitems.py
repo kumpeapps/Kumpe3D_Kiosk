@@ -8,7 +8,8 @@ import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 
 orderitems = fs.AddPagesy()
-
+company_use_order = 163
+defective_order = 169
 
 @orderitems.page(route="/order_items/{order_id:d}", protected_route=True)
 def orderitems_page(data: fs.Datasy, order_id: int):
@@ -58,7 +59,6 @@ def orderitems_page(data: fs.Datasy, order_id: int):
     def scanned(_):
         """Add Item as Picked"""
         success = True
-        scanned_list = slb.build_k3d_item_dict(scan_field.value)
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
@@ -70,6 +70,13 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             port=3306,
         )
         cursor = db.cursor(pymysql.cursors.DictCursor)
+        if order_id == company_use_order:
+            translation = "company_use_translation"
+        elif order_id == defective_order:
+            translation = "defective_translation"
+        else:
+            translation = "to_order_translation"
+        scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, cursor)
         sql = """
             INSERT INTO Web_3dprints.orders__items
             (
