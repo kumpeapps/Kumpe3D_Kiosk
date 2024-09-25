@@ -60,7 +60,7 @@ def addstock_page(data: fs.Datasy):
         )
         cursor = db.cursor(pymysql.cursors.DictCursor)
         scanned_list = slb.build_k3d_item_dict(sku.value, "to_stock_translation", cursor)
-        quantity = qty.value
+        quantity = int(qty.value)
         try:
             while quantity > 0:
                 for item in scanned_list:
