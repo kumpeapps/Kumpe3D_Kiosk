@@ -83,9 +83,9 @@ def addstock_page(data: fs.Datasy):
             sku.focus()
             page.update()
             beep.success(page)
-        except KeyError:
+        except (KeyError, pymysql.IntegrityError):
             beep.error(page)
-            show_banner_click(f"Invalid SKU in List {sku.value}")
+            show_banner_click(f"Invalid SKU in [{sku.value}]")
             updating(False)
         finally:
             cursor.close()
