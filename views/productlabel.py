@@ -48,27 +48,22 @@ def printproductlabel_page(data: fs.Datasy):
         page.update()
 
     def print_clicked(_):
-        if distributor_dropdown.value is None:
-            show_banner_click("Please Select Distributor")
-            beep.error(page)
-        else:
-            progress_ring.visible = True
-            print_button.disabled = True
-            page.update()
-            qr_data = items_list
-            items = slb.build_k3d_item_dict(qr_data)
-            sku = items[0]["sku"]
-            if shelf_label_check.value:
-                add_label_to_printq(sku, sku, "product_label")
-            if product_label_check.value:
-                add_label_to_printq(sku, qr_data, "square_product_label")
-            if barcode_label_check.value:
-                add_label_to_printq(sku, sku, "barcode_label")
-            if wide_barcode_label_check.value:
-                add_label_to_printq(sku, sku, "wide_barcode_label")
+        progress_ring.visible = True
+        print_button.disabled = True
+        page.update()
+        qr_data = items_list
+        items = slb.build_k3d_item_dict(qr_data)
+        sku = items[0]["sku"]
+        if shelf_label_check.value:
+            add_label_to_printq(sku, sku, "product_label")
+        if product_label_check.value:
+            add_label_to_printq(sku, qr_data, "square_product_label")
+        if case_label_check.value:
+            add_label_to_printq(sku, sku, "case_label")
+        if wide_barcode_label_check.value:
+            add_label_to_printq(sku, sku, "wide_barcode_label")
 
     def add_label_to_printq(sku: str, qr_data: str, label_type: str):
-        distributor_id = distributor_dropdown.value
         qty = qty_field.value
         if params.SQL.username == "":
             params.SQL.get_values()
@@ -95,7 +90,7 @@ def printproductlabel_page(data: fs.Datasy):
                 %s,
                 %s);
         """
-        cursor.execute(sql, (sku, qr_data, label_type, distributor_id, qty))
+        cursor.execute(sql, (sku, qr_data, label_type, qty))
         db.commit()
         cursor.close()
         db.close()
@@ -252,67 +247,12 @@ def printproductlabel_page(data: fs.Datasy):
         ),
         bottom=False,
     )
-    tiles = []
-    distributor_list = {}
-
-    def get_distributors() -> list:
-        """Populates Distributor Dropdown"""
-
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.ro_server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-        distributor_options = []
-
-        try:
-            sql = """
-                SELECT 
-                    *
-                FROM
-                    Web_3dprints.distributors
-                WHERE 1=1
-                    AND active = 1;
-            """
-            cursor.execute(sql)
-            distributors = cursor.fetchall()
-            for distributor in distributors:
-                distributor_list[distributor["iddistributors"]] = distributor
-                option = ft.dropdown.Option(
-                    distributor["iddistributors"], distributor["name"]
-                )
-                distributor_options.append(option)
-            cursor.close()
-            db.close()
-            return distributor_options
-        except (KeyError, TypeError):
-            beep.error(page)
-            show_banner_click("Unknown Error getting distributor list")
-            cursor.close()
-            db.close()
-            return [ft.dropdown.Option(0, "Kumpe3D")]
+    tiles: list = []
 
     product_label_check = ft.Checkbox(label="Product Label", value=True)
-    barcode_label_check = ft.Checkbox(label="Barcode Label")
     wide_barcode_label_check = ft.Checkbox(label="Wide Barcode Label")
     shelf_label_check = ft.Checkbox(label="Shelf Label")
-
-    def distributor_dropdown_change(_):
-        """Distributor Dropdown onchange"""
-        get_items()
-
-    distributor_dropdown = ft.Dropdown(
-        width=200,
-        options=get_distributors(),
-        label="Distributor",
-        on_change=distributor_dropdown_change,
-    )
+    case_label_check = ft.Checkbox(label="Case Label")
 
     qty_field = ft.TextField(
         label="Qty",
@@ -326,10 +266,10 @@ def printproductlabel_page(data: fs.Datasy):
         wrap=True,
         controls=[
             qty_field,
-            distributor_dropdown,
             product_label_check,
             wide_barcode_label_check,
             shelf_label_check,
+            case_label_check,
         ],
     )
 
@@ -387,10 +327,6 @@ def printproductlabel_page(data: fs.Datasy):
         """Populates existing items for label"""
         progress_ring.visible = True
         tiles.clear()
-        if distributor_dropdown.value is None:
-            dist_id = 0
-        else:
-            dist_id = distributor_dropdown.value
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
