@@ -1,7 +1,7 @@
 """Core Class"""
 
-import flet as ft
-import flet_easy as fs # pylint: disable=import-error
+import flet as ft # type: ignore
+import flet_easy as fs # type: ignore
 from core.params import Params as params
 
 
@@ -18,10 +18,6 @@ class ConfigApp:
 
         @self.app.view
         def view_config(page: ft.Page):
-            def addroll_go(_):
-                page.page.session.set("selected_page", "addroll")
-                page.go("/add_roll")
-
             def home_go(_):
                 page.page.session.set("selected_page", "home")
                 page.go("/login")
@@ -35,14 +31,6 @@ class ConfigApp:
             def addstock_go(_):
                 page.page.session.set("selected_page", "addstock")
                 page.go("/add_stock")
-
-            def openroll_go(_):
-                page.page.session.set("selected_page", "openroll")
-                page.go("/open_roll")
-
-            def emptyroll_go(_):
-                page.page.session.set("selected_page", "emptyroll")
-                page.go("/empty_roll")
 
             def productionq_go(_):
                 page.page.session.set("selected_page", "productionq")
@@ -77,18 +65,6 @@ class ConfigApp:
                                 ft.FilledButton(
                                     text="Add to Stock",
                                     on_click=addstock_go,
-                                ),
-                                ft.FilledButton(
-                                    text="Add Filament Roll",
-                                    on_click=addroll_go,
-                                ),
-                                ft.FilledButton(
-                                    text="Open Filament Roll",
-                                    on_click=openroll_go,
-                                ),
-                                ft.FilledButton(
-                                    text="Empty Filament Roll",
-                                    on_click=emptyroll_go,
                                 ),
                                 ft.FilledButton(
                                     text="Production Queue",

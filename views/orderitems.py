@@ -1,15 +1,15 @@
 """Order Items"""
 
 import pymysql
-import flet as ft
-import flet_easy as fs  # pylint: disable=import-error
+import flet as ft # type: ignore
+import flet_easy as fs # type: ignore
 from core.params import Params as params
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 
 orderitems = fs.AddPagesy()
-company_use_order = 163
-defective_order = 169
+COMPANY_USE_ORDER = 163
+DEFECTIVE_ORDER = 169
 
 @orderitems.page(route="/order_items/{order_id:d}", protected_route=True)
 def orderitems_page(data: fs.Datasy, order_id: int):
@@ -70,9 +70,9 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             port=3306,
         )
         cursor = db.cursor(pymysql.cursors.DictCursor)
-        if order_id == company_use_order:
+        if order_id == COMPANY_USE_ORDER:
             translation = "company_use_translation"
-        elif order_id == defective_order:
+        elif order_id == DEFECTIVE_ORDER:
             translation = "defective_translation"
         else:
             translation = "to_order_translation"
@@ -156,10 +156,6 @@ def orderitems_page(data: fs.Datasy, order_id: int):
         ), bottom=False
     )
     tiles = []
-
-    def tile_clicked(order_id):
-        """Clicked Tile"""
-        page.go(f"/order/{order_id}")
 
     def get_items():
         """Populates Order Items"""
