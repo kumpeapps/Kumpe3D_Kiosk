@@ -1,4 +1,4 @@
-version: '2.1.3({build})'
+version: '2.1.4({build})'
 environment:
   matrix:
   - job_name: "build Android"
@@ -24,7 +24,7 @@ before_build:
 - echo "VERSION=$APPVEYOR_BUILD_VERSION" >> .env
 - echo "BUILD=$APPVEYOR_BUILD_NUMBER" >> .env
 
-test: off
+test: false
 
 # Publish artifacts to GitHub Releases on "tag" builds 
 deploy:
