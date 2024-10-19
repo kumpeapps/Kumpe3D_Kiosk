@@ -31,6 +31,7 @@ class ConfigApp:
             def addstock_go(_):
                 page.page.session.set("selected_page", "addstock")
                 page.go("/add_stock")
+                print("add_stock")
 
             def productionq_go(_):
                 page.page.session.set("selected_page", "productionq")

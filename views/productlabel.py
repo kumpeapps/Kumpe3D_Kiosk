@@ -178,7 +178,18 @@ def printproductlabel_page(data: fs.Datasy):
     def scanned(_):
         """Add Item to Label"""
         success = True
-        scanned_list = slb.build_k3d_item_dict(scan_field.value)
+        if params.SQL.username == "":
+            params.SQL.get_values()
+        sql_params = params.SQL
+        db = pymysql.connect(
+            db=sql_params.database,
+            user=sql_params.username,
+            passwd=sql_params.password,
+            host=sql_params.server,
+            port=3306,
+        )
+        cursor = db.cursor(pymysql.cursors.DictCursor)
+        scanned_list = slb.build_k3d_item_dict(scan_field.value, "to_order_translation", cursor)
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
