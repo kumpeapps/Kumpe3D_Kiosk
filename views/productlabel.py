@@ -98,7 +98,7 @@ def printproductlabel_page(data: fs.Datasy):
                 (%s,
                 %s,
                 %s,
-                %s,
+                0,
                 %s);
         """
         cursor.execute(sql, (sku, qr_data, label_type, qty))
