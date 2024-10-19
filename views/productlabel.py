@@ -70,7 +70,7 @@ def printproductlabel_page(data: fs.Datasy):
         if product_label_check.value:
             add_label_to_printq(sku, qr_data, "square_product_label")
         if case_label_check.value:
-            add_label_to_printq(sku, sku, "case_label")
+            add_label_to_printq(sku, qr_data, "case_label")
         if wide_barcode_label_check.value:
             add_label_to_printq(sku, sku, "wide_barcode_label")
 
@@ -87,6 +87,7 @@ def printproductlabel_page(data: fs.Datasy):
             port=3306,
         )
         cursor = db.cursor(pymysql.cursors.DictCursor)
+        qr_data = slb.
         sql = """
             INSERT INTO `Automation_PrintQueue`.`kumpe3d_labels`
                 (`sku`,
