@@ -87,7 +87,6 @@ def printproductlabel_page(data: fs.Datasy):
             port=3306,
         )
         cursor = db.cursor(pymysql.cursors.DictCursor)
-        qr_data = slb.
         sql = """
             INSERT INTO `Automation_PrintQueue`.`kumpe3d_labels`
                 (`sku`,
