@@ -1,12 +1,9 @@
 """Main Function for Kumpe3D Kiosk"""
 
-import flet as ft
-from flet_easy import FletEasy  # pylint: disable=import-error
-from views.addroll import addroll
+import flet as ft # type: ignore
+from flet_easy import FletEasy # type: ignore
 from views.login import login
 from views.addstock import addstock
-from views.openroll import openroll
-from views.emptyroll import emptyroll
 from views.productionq import productionq
 from views.productlabel import printproductlabel
 from views.pendingorders import pendingorders
@@ -75,7 +72,7 @@ def login_x(page: ft.Page):
 
 
 app.add_pages(
-    [login, addstock, addroll, openroll, emptyroll, productionq, printproductlabel, pendingorders, orderitems]
+    [login, addstock, productionq, printproductlabel, pendingorders, orderitems]
 )
 ConfigApp(app)
 

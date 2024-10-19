@@ -1,8 +1,8 @@
 """Print Product Labels"""
 
 import pymysql
-import flet as ft
-import flet_easy as fs  # pylint: disable=import-error
+import flet as ft # type: ignore
+import flet_easy as fs # type: ignore
 from core.params import Params as params
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
@@ -52,7 +52,18 @@ def printproductlabel_page(data: fs.Datasy):
         print_button.disabled = True
         page.update()
         qr_data = items_list
-        items = slb.build_k3d_item_dict(qr_data)
+        if params.SQL.username == "":
+            params.SQL.get_values()
+        sql_params = params.SQL
+        db = pymysql.connect(
+            db=sql_params.database,
+            user=sql_params.username,
+            passwd=sql_params.password,
+            host=sql_params.server,
+            port=3306,
+        )
+        cursor = db.cursor(pymysql.cursors.DictCursor)
+        items = slb.build_k3d_item_dict(qr_data, "to_order_translation", cursor)
         sku = items[0]["sku"]
         if shelf_label_check.value:
             add_label_to_printq(sku, sku, "product_label")
@@ -87,7 +98,7 @@ def printproductlabel_page(data: fs.Datasy):
                 (%s,
                 %s,
                 %s,
-                %s,
+                0,
                 %s);
         """
         cursor.execute(sql, (sku, qr_data, label_type, qty))
@@ -304,7 +315,7 @@ def printproductlabel_page(data: fs.Datasy):
                 """
                 cursor.execute(upc_sql)
                 upc_data = cursor.fetchone()
-                upc = upc_data["upc"]
+                upc = upc_data["upc"] # type: ignore
                 assign_upc_sql = """
                     UPDATE Web_3dprints.upc_codes
                     SET
