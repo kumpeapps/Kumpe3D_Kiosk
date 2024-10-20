@@ -14,6 +14,7 @@ addstock = fs.AddPagesy()
 @addstock.page(route="/add_stock", protected_route=True)
 def addstock_page(data: fs.Datasy):
     """Increments SKU Stock Qty"""
+    print("add stock page")
     page = data.page
     view = data.view
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
