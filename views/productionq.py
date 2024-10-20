@@ -1,8 +1,8 @@
 """Production Queue"""
 
 import pymysql
-import flet as ft
-import flet_easy as fs  # pylint: disable=import-error
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
 from core.params import Params as params
 
 productionq = fs.AddPagesy()
@@ -82,6 +82,10 @@ def productionq_page(data: fs.Datasy):
 
     return ft.View(
         route="/production_queue",
-        controls=[progress_ring, ft.SafeArea(menu_button, bottom=False), table_container],
+        controls=[
+            progress_ring,
+            ft.SafeArea(menu_button, bottom=False),
+            table_container,
+        ],
         drawer=view.drawer,
     )

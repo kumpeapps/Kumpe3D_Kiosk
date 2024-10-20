@@ -1,11 +1,12 @@
 """Pending Orders"""
 
+
+from functools import partial
 import pymysql
-import flet as ft
-import flet_easy as fs  # pylint: disable=import-error
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
 from core.params import Params as params
 import sounds.beep as beep
-from functools import partial
 
 pendingorders = fs.AddPagesy()
 

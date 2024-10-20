@@ -1,8 +1,8 @@
 """Add Roll"""
 
 import pymysql
-import flet as ft
-import flet_easy as fs # pylint: disable=import-error
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
 from core.params import Params as params
 import sounds.beep as beep
 
@@ -133,6 +133,12 @@ def addroll_page(data: fs.Datasy):
 
     return ft.View(
         route="/add_roll",
-        controls=[ft.SafeArea(menu_button, bottom=False), text, sku, submit_container, progress_ring],
+        controls=[
+            ft.SafeArea(menu_button, bottom=False),
+            text,
+            sku,
+            submit_container,
+            progress_ring,
+        ],
         drawer=view.drawer,
     )

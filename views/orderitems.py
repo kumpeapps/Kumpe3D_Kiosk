@@ -1,8 +1,8 @@
 """Order Items"""
 
 import pymysql
-import flet as ft # type: ignore
-import flet_easy as fs # type: ignore
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
 from core.params import Params as params
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
@@ -10,6 +10,7 @@ import pluggins.scan_list_builder as slb
 orderitems = fs.AddPagesy()
 COMPANY_USE_ORDER = 163
 DEFECTIVE_ORDER = 169
+
 
 @orderitems.page(route="/order_items/{order_id:d}", protected_route=True)
 def orderitems_page(data: fs.Datasy, order_id: int):
@@ -153,7 +154,8 @@ def orderitems_page(data: fs.Datasy, order_id: int):
                 ft.Text(order_id, size=10, weight=ft.FontWeight.BOLD),
             ],
             spacing=60,
-        ), bottom=False
+        ),
+        bottom=False,
     )
     tiles = []
 
