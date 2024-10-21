@@ -2,13 +2,9 @@
 
 import socket
 from pathlib import Path
-import requests  # type: ignore
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from core.params import Params as params
-import sounds.beep as beep
-import assets.logo as logo  # pylint: disable=import-error
-import views.login as login_view
+from core.params import Params as sparams
 
 app = fs.FletEasy(
     route_init="/login",
@@ -20,6 +16,8 @@ app = fs.FletEasy(
 @app.login
 def login_x(data: fs.Datasy):
     """Require Login Function"""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_down = sock.connect_ex((sparams.SQL.server, 8022))
     page = data.page
     dlg = ft.AlertDialog(
         title=ft.Text(
@@ -31,25 +29,38 @@ def login_x(data: fs.Datasy):
         bgcolor=ft.colors.RED_300,
     )
 
+    dlg_nointernet = ft.AlertDialog(
+        title=ft.Text(
+            "Server Unreachable. Please confirm VPN is connected!",
+            text_align=ft.TextAlign.CENTER,
+        ),
+        on_dismiss=lambda e: print("Dialog dismissed!"),
+        adaptive=False,
+        bgcolor=ft.colors.RED_300,
+    )
+
+    if server_down != 0:
+        page.dialog = dlg_nointernet
+        dlg.open = True
+        page.update()
+
     def open_dlg():
         page.dialog = dlg
         dlg.open = True
         page.update()
 
-    from core.params import Params as params  # pylint: disable=import-outside-toplevel
-
-    if not params.Access.basic:
+    if not sparams.Access.basic:
         open_dlg()
         return False
 
     match (
         page.session.get("selected_page"),
-        params.Access.basic,
-        params.Access.production,
-        params.Access.orders,
-        params.Access.print_labels,
-        params.Access.filament_stock,
-        params.Access.admin,
+        sparams.Access.basic,
+        sparams.Access.production,
+        sparams.Access.orders,
+        sparams.Access.print_labels,
+        sparams.Access.filament_stock,
+        sparams.Access.admin,
     ):
 
         case ("productlabel", _, _, _, False, _, _):
@@ -76,46 +87,6 @@ def login_x(data: fs.Datasy):
     return False
 
 
-@app.page(route="/dashboard", title="Dashboard", protected_route=True)
-def dashboard_page(data: fs.Datasy):
-    return ft.View(
-        controls=[
-            ft.Text("Dash", size=30),
-            # We delete the key that we have previously registered
-            ft.ElevatedButton("Logaut", on_click=data.logout("login")),
-            ft.ElevatedButton("Home", on_click=data.go("/login")),
-        ],
-        vertical_alignment="center",
-        horizontal_alignment="center",
-        appbar=data.view.appbar,
-    )
-
-
-# @app.page(route="/login", title="Login")
-# def login_page(data: fs.Datasy):
-#     # create login stored user
-#     username = ft.TextField(label="Username")
-
-#     def store_login(e):
-#         # db.append(username.value)  # We add to the simulated database
-
-#         """First the values must be stored in the browser, then in the login
-#         decorator the value must be retrieved through the key used and then
-#         validations must be used."""
-#         data.login(key="login", value=username.value, next_route="/dashboard")
-
-#     return ft.View(
-#         controls=[
-#             ft.Text("login", size=30),
-#             username,
-#             ft.ElevatedButton("store login in browser", on_click=store_login),
-#             ft.ElevatedButton("go Dasboard", on_click=data.go("/dashboard")),
-#         ],
-#         vertical_alignment="center",
-#         horizontal_alignment="center",
-#     )
-
-
 @app.view
 def view(data: fs.Datasy):
     """View"""
@@ -126,7 +97,7 @@ def view(data: fs.Datasy):
         page.go("/home")
 
     def logout(_):
-        params.Access.set_access_level("unauthenticated")
+        sparams.Access.set_access_level("unauthenticated")
         page.client_storage.clear()
         page.session.set("selected_page", "login")
         page.go("/login")
@@ -173,8 +144,7 @@ def view(data: fs.Datasy):
                             on_click=productlabel_go,
                         ),
                         ft.FilledButton(
-                            text="Pending Orders",
-                            on_click=pendingorders_go
+                            text="Pending Orders", on_click=pendingorders_go
                         ),
                         ft.FilledButton(
                             text="Logout",
