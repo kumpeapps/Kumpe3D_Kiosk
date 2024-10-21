@@ -1,21 +1,23 @@
-"""Main Function for Kumpe3D Kiosk"""
+"""Kumpe3D Main"""
 
-import flet as ft # type: ignore
-from flet_easy import FletEasy # type: ignore
-from views.login import login
-from views.addstock import addstock
-from views.productionq import productionq
-from views.productlabel import printproductlabel
-from views.pendingorders import pendingorders
-from views.orderitems import orderitems
-from core.config import ConfigApp
+import os
+from pathlib import Path
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
+from core.params import Params as sparams
 
-app = FletEasy(route_init="/login", route_login="/login")
+app = fs.FletEasy(
+    route_init="/login",
+    route_login="/login",
+    path_views=Path(__file__).parent / "views",
+)
 
 
 @app.login
-def login_x(page: ft.Page):
+def login_x(data: fs.Datasy):
     """Require Login Function"""
+    server_up = os.system("ping -c 1 rw.sql.pvt.kumpedns.us") == 0
+    page = data.page
     dlg = ft.AlertDialog(
         title=ft.Text(
             "Access Denied!!!",
@@ -26,25 +28,39 @@ def login_x(page: ft.Page):
         bgcolor=ft.colors.RED_300,
     )
 
+    dlg_nointernet = ft.AlertDialog(
+        title=ft.Text(
+            "Server Unreachable. Please confirm VPN is connected!",
+            text_align=ft.TextAlign.CENTER,
+        ),
+        on_dismiss=lambda e: print("Dialog dismissed!"),
+        adaptive=False,
+        bgcolor=ft.colors.RED_300,
+    )
+
+    if not server_up:
+        page.dialog = dlg_nointernet
+        dlg_nointernet.open = True
+        page.update()
+        return False
+
     def open_dlg():
         page.dialog = dlg
         dlg.open = True
         page.update()
 
-    from core.params import Params as params  # pylint: disable=import-outside-toplevel
-
-    if not params.Access.basic:
+    if not sparams.Access.basic:
         open_dlg()
         return False
 
     match (
         page.session.get("selected_page"),
-        params.Access.basic,
-        params.Access.production,
-        params.Access.orders,
-        params.Access.print_labels,
-        params.Access.filament_stock,
-        params.Access.admin,
+        sparams.Access.basic,
+        sparams.Access.production,
+        sparams.Access.orders,
+        sparams.Access.print_labels,
+        sparams.Access.filament_stock,
+        sparams.Access.admin,
     ):
 
         case ("productlabel", _, _, _, False, _, _):
@@ -71,11 +87,78 @@ def login_x(page: ft.Page):
     return False
 
 
-app.add_pages(
-    [login, addstock, productionq, printproductlabel, pendingorders, orderitems]
-)
-ConfigApp(app)
+@app.view
+def view(data: fs.Datasy):
+    """View"""
+    page = data.page
+
+    def home_go(_):
+        page.session.set("selected_page", "home")
+        page.go("/home")
+
+    def logout(_):
+        sparams.Access.set_access_level("unauthenticated")
+        page.client_storage.clear()
+        page.session.set("selected_page", "login")
+        page.go("/login")
+
+    def addstock_go(_):
+        page.session.set("selected_page", "addstock")
+        page.go("/add_stock")
+        print("add_stock")
+
+    def productionq_go(_):
+        page.session.set("selected_page", "productionq")
+        page.go("/production_queue")
+
+    def productlabel_go(_):
+        page.session.set("selected_page", "productlabel")
+        page.go("/print_product_label")
+
+    def pendingorders_go(_):
+        page.session.set("selected_page", "pendingorders")
+        page.go("/orders/pending")
+
+    return fs.Viewsy(
+        drawer=ft.NavigationDrawer(
+            controls=[
+                ft.Container(height=12),
+                ft.Column(
+                    controls=[
+                        ft.Text("Navigation", size=25),
+                        ft.Divider(thickness=2),
+                        ft.FilledButton(
+                            text="Home",
+                            on_click=home_go,
+                        ),
+                        ft.FilledButton(
+                            text="Add to Stock",
+                            on_click=addstock_go,
+                        ),
+                        ft.FilledButton(
+                            text="Production Queue",
+                            on_click=productionq_go,
+                        ),
+                        ft.FilledButton(
+                            text="Print Product Label",
+                            on_click=productlabel_go,
+                        ),
+                        ft.FilledButton(
+                            text="Pending Orders", on_click=pendingorders_go
+                        ),
+                        ft.FilledButton(
+                            text="Logout",
+                            on_click=logout,
+                        ),
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+            ],
+        ),
+        vertical_alignment="center",
+        horizontal_alignment="center",
+    )
 
 
-# We run the application
-app.run(assets_dir="assets")
+app.run()

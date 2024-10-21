@@ -1,8 +1,8 @@
 """Print Product Labels"""
 
 import pymysql
-import flet as ft # type: ignore
-import flet_easy as fs # type: ignore
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
 from core.params import Params as params
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
@@ -189,7 +189,9 @@ def printproductlabel_page(data: fs.Datasy):
             port=3306,
         )
         cursor = db.cursor(pymysql.cursors.DictCursor)
-        scanned_list = slb.build_k3d_item_dict(scan_field.value, "to_order_translation", cursor)
+        scanned_list = slb.build_k3d_item_dict(
+            scan_field.value, "to_order_translation", cursor
+        )
         if params.SQL.username == "":
             params.SQL.get_values()
         sql_params = params.SQL
@@ -326,7 +328,7 @@ def printproductlabel_page(data: fs.Datasy):
                 """
                 cursor.execute(upc_sql)
                 upc_data = cursor.fetchone()
-                upc = upc_data["upc"] # type: ignore
+                upc = upc_data["upc"]  # type: ignore
                 assign_upc_sql = """
                     UPDATE Web_3dprints.upc_codes
                     SET

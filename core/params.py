@@ -2,7 +2,7 @@
 
 import os
 from dotenv import load_dotenv
-from infisical_api import infisical_api
+from infisical_api import infisical_api  # type: ignore
 
 
 load_dotenv(override=True)
@@ -16,7 +16,7 @@ is_mobile = os.getenv("is_mobile")
 
 class Params:
     """Parameters"""
-    mobile = bool(int(is_mobile))
+    mobile = bool(int(is_mobile))  # type: ignore
 
     class SHIPPO:
         """Shippo Parameters"""

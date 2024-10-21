@@ -18,8 +18,8 @@ def get_scan_translations(cursor: pymysql.cursors.DictCursor) -> tuple:
 
 def build_k3d_item_dict(
     string: str,
-    translation_type: str = None, # type: ignore
-    cursor: pymysql.cursors.DictCursor = None # type: ignore
+    translation_type: str = None,  # type: ignore
+    cursor: pymysql.cursors.DictCursor = None,  # type: ignore
 ) -> list:
     """Build Kumpe3D Item Dict"""
     k3d_dict_list = []

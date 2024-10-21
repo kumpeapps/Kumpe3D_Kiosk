@@ -1,8 +1,8 @@
 """Add to Stock"""
 
 import pymysql
-import flet as ft # type: ignore
-import flet_easy as fs # type: ignore
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
 from pluggins.helpers import get_sku_array
 from core.params import Params as params
 import sounds.beep as beep
@@ -60,7 +60,9 @@ def addstock_page(data: fs.Datasy):
             port=3306,
         )
         cursor = db.cursor(pymysql.cursors.DictCursor)
-        scanned_list = slb.build_k3d_item_dict(sku.value, "to_stock_translation", cursor)
+        scanned_list = slb.build_k3d_item_dict(
+            sku.value, "to_stock_translation", cursor
+        )
         quantity = int(qty.value)
         try:
             while quantity > 0:
@@ -75,7 +77,12 @@ def addstock_page(data: fs.Datasy):
                             ON DUPLICATE KEY UPDATE qty = qty + %s;"""
                     cursor.execute(
                         sql,
-                        (sku_array["base_sku"], sku_array["color"], item["qty"], item["qty"]),
+                        (
+                            sku_array["base_sku"],
+                            sku_array["color"],
+                            item["qty"],
+                            item["qty"],
+                        ),
                     )
                 quantity -= 1
             db.commit()
