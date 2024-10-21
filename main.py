@@ -1,6 +1,5 @@
 """Kumpe3D Main"""
 
-import socket
 import os
 from pathlib import Path
 import flet as ft  # type: ignore
