@@ -1,17 +1,14 @@
 """Home/Login Page"""
 
-import socket
-import requests  # type: ignore
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
-import sounds.beep as beep
 
 home = fs.AddPagesy()
 
 
-@home.page(route="/home", title="Home", protected_route= True)
+@home.page(route="/home", title="Home", protected_route=True)
 def home_page(data: fs.Datasy):
     """Login Page"""
     page = data.page
@@ -32,26 +29,6 @@ def home_page(data: fs.Datasy):
         alignment=ft.alignment.top_left,
         disabled=not params.Access.basic,
     )
-
-    def show_banner_click(
-        message: str,
-        color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
-    ):
-        page.banner = ft.Banner(
-            bgcolor=color,
-            leading=ft.Icon(icon, color=ft.colors.RED_900, size=40),
-            content=ft.Text(message),
-            actions=[
-                ft.TextButton("Dismiss", on_click=close_banner),
-            ],
-        )
-        page.banner.open = True
-        page.update()
-
-    def close_banner(_):
-        page.banner.open = False
-        page.update()
 
     return ft.View(
         controls=[
