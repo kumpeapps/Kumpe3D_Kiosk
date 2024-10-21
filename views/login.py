@@ -1,9 +1,9 @@
 """Home/Login Page"""
 
 import socket
-import requests
-import flet as ft
-import flet_easy as fs  # pylint: disable=import-error
+import requests  # type: ignore
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
 import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
 import sounds.beep as beep

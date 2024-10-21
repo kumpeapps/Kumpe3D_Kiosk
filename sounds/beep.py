@@ -1,6 +1,6 @@
 """Beep Functions"""
 
-import flet as ft
+import flet as ft  # type: ignore
 
 
 def error(page: ft.Page):
