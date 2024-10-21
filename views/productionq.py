@@ -46,12 +46,12 @@ def productionq_page(data: fs.Datasy):
         data_row_color={"hovered": "0x30FF0000"},
         show_checkbox_column=True,
         width=page.window_width - 5,
+        columns=[
+            ft.DataColumn(ft.Text("QTY")),
+            ft.DataColumn(ft.Text("SKU")),
+            ft.DataColumn(ft.Text("Description")),
+        ],
     )
-    data_table.columns = [
-        ft.DataColumn(ft.Text("QTY")),
-        ft.DataColumn(ft.Text("SKU")),
-        ft.DataColumn(ft.Text("Description")),
-    ]
     data_rows = []
     for result in results:
         row = ft.DataRow(

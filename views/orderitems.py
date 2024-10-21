@@ -12,7 +12,7 @@ COMPANY_USE_ORDER = 163
 DEFECTIVE_ORDER = 169
 
 
-@orderitems.page(route="/order_items/{order_id:d}", protected_route=True)
+@orderitems.page(route="/orders/pending/order_items/{order_id}", protected_route=True)
 def orderitems_page(data: fs.Datasy, order_id: int):
     """Main Function for Pending Orders"""
     page = data.page

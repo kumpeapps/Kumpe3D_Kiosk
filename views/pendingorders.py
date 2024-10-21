@@ -11,7 +11,7 @@ import sounds.beep as beep
 pendingorders = fs.AddPagesy()
 
 
-@pendingorders.page(route="/pending_orders", protected_route=True)
+@pendingorders.page(route="/orders/pending", protected_route=True)
 def pendingorders_page(data: fs.Datasy):
     """Main Function for Pending Orders"""
     page = data.page
@@ -59,7 +59,7 @@ def pendingorders_page(data: fs.Datasy):
     canvas = [ft.SafeArea(menu_button, bottom=False), progress_ring]
 
     def view_order_clicked(order_id, _):
-        page.go(f"/order_items/{order_id}")
+        page.go(f"/orders/pending/order_items/{order_id}")
 
     def update_status_clicked(order_id, _):
         page.go(f"/order_status_update/{order_id}")
