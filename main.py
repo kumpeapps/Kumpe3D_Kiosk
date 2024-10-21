@@ -1,6 +1,7 @@
 """Kumpe3D Main"""
 
 import socket
+import os
 from pathlib import Path
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
@@ -16,8 +17,7 @@ app = fs.FletEasy(
 @app.login
 def login_x(data: fs.Datasy):
     """Require Login Function"""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_down = sock.connect_ex((sparams.SQL.server, 8022))
+    server_up = os.system("ping -c 1 rw.sql.pvt.kumpedns.us") == 0
     page = data.page
     dlg = ft.AlertDialog(
         title=ft.Text(
@@ -39,10 +39,11 @@ def login_x(data: fs.Datasy):
         bgcolor=ft.colors.RED_300,
     )
 
-    if server_down != 0:
+    if not server_up:
         page.dialog = dlg_nointernet
-        dlg.open = True
+        dlg_nointernet.open = True
         page.update()
+        return False
 
     def open_dlg():
         page.dialog = dlg

@@ -1,6 +1,7 @@
 """Home/Login Page"""
 
 import socket
+import os
 import requests  # type: ignore
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
@@ -38,8 +39,13 @@ def login_page(data: fs.Datasy):
     )
 
     def did_login(_):
+        server_up = os.system("ping -c 1 rw.sql.pvt.kumpedns.us") == 0
         logging_in()
-        send_request(username_field.value, password_field.value)
+        if server_up:
+            send_request(username_field.value, password_field.value)
+        else:
+            show_banner_click("Server Unreachable. Please check internet and VPN connection.")
+            logging_in(False)
         page.update()
 
     password_field = ft.TextField(
