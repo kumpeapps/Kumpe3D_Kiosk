@@ -147,9 +147,7 @@ def login_page(data: fs.Datasy):
                     page.update()
 
         except requests.exceptions.RequestException:
-            show_banner_click(
-                message="Unknown Error. This COULD mean you do not have an internet connection."
-            )
+            logger.exception("KumpeApps SSO Login Failed")
 
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
