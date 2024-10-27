@@ -58,7 +58,7 @@ def login_page(data: fs.Datasy):
         on_submit=did_login,
         visible=not params.Access.basic,
         text_align=ft.TextAlign.CENTER,
-        value=page.client_storage.get("password"),
+        value=page.session.get("password"),
     )
 
     def username_submit(_):
@@ -74,7 +74,7 @@ def login_page(data: fs.Datasy):
         on_submit=username_submit,
         visible=not params.Access.basic,
         text_align=ft.TextAlign.CENTER,
-        value=page.client_storage.get("username"),
+        value=page.session.get("username"),
     )
 
     submit_container = ft.Container(
@@ -166,8 +166,8 @@ def login_page(data: fs.Datasy):
 
     def access_granted(user_id: str, computername: str, access_level: str):
         """Access Granted"""
-        page.client_storage.set("username", username_field.value)
-        page.client_storage.set("password", password_field.value)
+        page.session.set("username", username_field.value)
+        page.session.set("password", password_field.value)
         params.SHIPPO.get_values()
         params.SQL.get_values()
         params.Access.set_access_level(access_level)
