@@ -53,6 +53,7 @@ def login_page(data: fs.Datasy):
         on_submit=did_login,
         visible=True,
         text_align=ft.TextAlign.CENTER,
+        width=250,
     )
 
     def username_submit(_):
@@ -68,6 +69,7 @@ def login_page(data: fs.Datasy):
         on_submit=username_submit,
         visible=True,
         text_align=ft.TextAlign.CENTER,
+        width=250,
     )
 
     submit_container = ft.Container(
@@ -202,4 +204,5 @@ def login_page(data: fs.Datasy):
             pr_container,
         ],
         drawer=view.drawer,
+        horizontal_alignment="center"
     )
