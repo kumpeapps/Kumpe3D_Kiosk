@@ -3,15 +3,13 @@
 import socket
 
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-
 def rw_sql() -> bool:
     """Is mySQL port open for rw.sql.pvt.kumpedns.us
 
     Returns:
         bool: Server Is Up
     """
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex(("rw.sql.pvt.kumpedns.us", 3306))
     sock.close()
     return result == 0
