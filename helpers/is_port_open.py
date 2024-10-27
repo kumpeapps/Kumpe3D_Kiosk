@@ -1,4 +1,5 @@
 """Server Monitor"""
+
 import socket
 
 
@@ -10,7 +11,7 @@ def rw_sql() -> bool:
 
     Returns:
         bool: Server Is Up
-    """    
+    """
     result = sock.connect_ex(("rw.sql.pvt.kumpedns.us", 3306))
     sock.close()
     return result == 0
