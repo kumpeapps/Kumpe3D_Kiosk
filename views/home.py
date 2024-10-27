@@ -3,7 +3,6 @@
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 import assets.logo as logo  # pylint: disable=import-error
-from core.params import Params as params
 
 home = fs.AddPagesy()
 
@@ -27,7 +26,7 @@ def home_page(data: fs.Datasy):
     menu_button = ft.Container(
         content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
-        disabled=not params.Access.basic,
+        disabled=False,
     )
 
     return ft.View(

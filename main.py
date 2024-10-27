@@ -3,8 +3,8 @@
 from pathlib import Path
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from core.params import Params as sparams
 from helpers.is_port_open import rw_sql
+from models.user import User
 
 app = fs.FletEasy(
     route_init="/login",
@@ -18,6 +18,10 @@ def login_x(data: fs.Datasy):
     """Require Login Function"""
     server_up = rw_sql()
     page = data.page
+    if page.session.contains_key("user"):
+        user: User = page.session.get("user")
+    else:
+        return False
     dlg = ft.AlertDialog(
         title=ft.Text(
             "Access Denied!!!",
@@ -49,34 +53,35 @@ def login_x(data: fs.Datasy):
         dlg.open = True
         page.update()
 
-    if not sparams.Access.basic:
+    if not user.Access.basic:
         open_dlg()
         return False
-    
+
     match (
         page.session.get("selected_page"),
-        sparams.Access.basic,
-        sparams.Access.production,
-        sparams.Access.orders,
-        sparams.Access.print_labels,
-        sparams.Access.filament_stock,
-        sparams.Access.admin,
+        user.Access.basic,
+        user.Access.admin,
+        user.Access.production,
+        user.Access.order_filler,
+        user.Access.cashier,
     ):
 
-        case ("productlabel", _, _, _, False, _, _):
+        case ("productlabel", False, _, _, _, _):
             open_dlg()
             return False
         case ("home", True, _, _, _, _, _):
             return True
-        case ("addstock", True, True, _, _, _, _):
+        case ("addstock", True, _, True, _, _):
             return True
-        case ("productionq", True, True, _, _, _, _):
+        case ("productionq", True, True, _, _, _):
             return True
-        case ("productionq", True, _, True, _, _, _):
+        case ("productionq", True, _, True, _, _):
             return True
-        case ("productlabel", True, _, _, True, _, _):
+        case ("productlabel", True, _, True, _, _):
             return True
-        case ("pendingorders", _, _, True, _, _, _):
+        case ("pendingorders", True, _, _, True, _):
+            return True
+        case ("register", True, _, _, _, True):
             return True
 
     open_dlg()
@@ -93,7 +98,6 @@ def view(data: fs.Datasy):
         page.go("/home")
 
     def logout(_):
-        sparams.Access.set_access_level("unauthenticated")
         page.session.clear()
         page.session.set("selected_page", "login")
         page.go("/login")

@@ -8,6 +8,7 @@ import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
 import sounds.beep as beep
 from helpers.is_port_open import rw_sql
+from models.user import User
 
 login = fs.AddPagesy()
 
@@ -26,11 +27,6 @@ def login_page(data: fs.Datasy):
     def show_drawer(_):
         view.drawer.open = True
         page.update()
-
-    if params.Access.basic:
-        page.title = "Home"
-    else:
-        page.title = "Login"
 
     img_container = ft.Container(
         content=ft.Image(src_base64=logo.logo_base64, height=page.height / 5),
@@ -55,9 +51,8 @@ def login_page(data: fs.Datasy):
         enable_suggestions=False,
         prefix_icon=ft.icons.PASSWORD,
         on_submit=did_login,
-        visible=not params.Access.basic,
+        visible=True,
         text_align=ft.TextAlign.CENTER,
-        value=page.session.get("password"),
     )
 
     def username_submit(_):
@@ -71,21 +66,20 @@ def login_page(data: fs.Datasy):
         enable_suggestions=False,
         prefix_icon=ft.icons.PERSON,
         on_submit=username_submit,
-        visible=not params.Access.basic,
+        visible=True,
         text_align=ft.TextAlign.CENTER,
-        value=page.session.get("username"),
     )
 
     submit_container = ft.Container(
         content=ft.ElevatedButton(text="Login", on_click=did_login),
         alignment=ft.alignment.center,
-        visible=not params.Access.basic,
+        visible=True,
     )
 
     menu_button = ft.Container(
         content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
-        disabled=not params.Access.basic,
+        disabled=True,
     )
 
     def show_banner_click(
@@ -132,28 +126,18 @@ def login_page(data: fs.Datasy):
                 beep.error(page)
                 logging_in(False)
             else:
-                subscriptions = data["subscriptions"]
-                user_id = data["user_id"]
-                email = data["email"]
-                name = data["name"]
-                params.Access.user_id = user_id
-                params.Access.email = email
-                params.Access.name = name
-                is_admin = "213" in subscriptions
-                is_basic = "214" in subscriptions
-                is_orderfiller = "215" in subscriptions
+                user = User(**data)
                 computername = socket.gethostname()
-                if is_admin:
-                    access_granted(user_id, computername, "admin")
-                elif is_orderfiller:
-                    access_granted(user_id, computername, "order_filler")
-                elif is_basic:
-                    access_granted(user_id, computername, "basic")
+                if user.Access.admin:
+                    access_granted(user, computername, "admin")
+                elif user.Access.order_filler:
+                    access_granted(user, computername, "order_filler")
+                elif user.Access.basic:
+                    access_granted(user, computername, "basic")
                 else:
-                    params.Access.set_access_level("unauthenticated")
                     show_banner_click("Access Denied")
                     beep.error(page)
-                    log_access(user_id, f"/{computername}/denied")
+                    log_access(user.user_id, f"/{computername}/denied")
                     password_field.value = ""
                     logging_in(False)
                     page.update()
@@ -163,20 +147,13 @@ def login_page(data: fs.Datasy):
                 message="Unknown Error. This COULD mean you do not have an internet connection."
             )
 
-    def access_granted(user_id: str, computername: str, access_level: str):
+    def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
         page.session.set("username", username_field.value)
-        page.session.set("password", password_field.value)
+        page.session.set("user", user)
         params.SHIPPO.get_values()
         params.SQL.get_values()
-        params.Access.set_access_level(access_level)
-        log_access(user_id, f"/{computername}/granted/{access_level}")
-        username_field.visible = False
-        password_field.visible = False
-        submit_container.visible = False
-        password_field.value = ""
-        menu_button.disabled = False
-        page.title = "Home"
+        log_access(user.user_id, f"/{computername}/granted/{access_level}")
         logging_in(False)
         page.update()
 

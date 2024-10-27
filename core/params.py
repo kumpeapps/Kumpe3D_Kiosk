@@ -16,6 +16,7 @@ is_mobile = os.getenv("is_mobile")
 
 class Params:
     """Parameters"""
+
     mobile = bool(int(is_mobile))  # type: ignore
 
     class SHIPPO:
@@ -90,70 +91,3 @@ class Params:
             Params.KumpeApps.api_key = creds.get_secret(  # pylint: disable=no-member
                 secret_name="KA_SSO_APIKEY", environment=app_env, path="/KUMPEAPPS/"
             ).secretValue
-
-    class Access:
-        """Access Permissions"""
-
-        access_level = "unauthenticated"
-        user_id = ""
-        username = ""
-        email = ""
-        name = ""
-        basic = False
-        production = False
-        orders = False
-        product_stock = False
-        print_labels = True
-        filament_stock = False
-        admin = False
-
-        @staticmethod
-        def refresh():
-            """Refresh Permissions"""
-            if Params.Access.access_level == "unauthenticated":
-                Params.Access.basic = False
-                Params.Access.production = False
-                Params.Access.orders = False
-                Params.Access.product_stock = False
-                Params.Access.filament_stock = False
-                Params.Access.admin = False
-                Params.Access.user_id = ""
-                Params.Access.username = ""
-                Params.Access.name = ""
-                Params.Access.email = ""
-            elif Params.Access.access_level == "basic":
-                Params.Access.basic = True
-                Params.Access.production = True
-                Params.Access.orders = False
-                Params.Access.product_stock = True
-                Params.Access.filament_stock = True
-                Params.Access.admin = False
-            elif Params.Access.access_level == "limited":
-                Params.Access.basic = True
-                Params.Access.production = True
-                Params.Access.orders = False
-                Params.Access.product_stock = False
-                Params.Access.filament_stock = True
-                Params.Access.admin = False
-            elif Params.Access.access_level == "admin":
-                Params.Access.basic = True
-                Params.Access.production = True
-                Params.Access.orders = True
-                Params.Access.product_stock = True
-                Params.Access.filament_stock = True
-                Params.Access.admin = True
-            elif Params.Access.access_level == "order_filler":
-                Params.Access.basic = True
-                Params.Access.production = False
-                Params.Access.orders = True
-                Params.Access.product_stock = True
-                Params.Access.filament_stock = False
-                Params.Access.admin = False
-
-        @staticmethod
-        def set_access_level(
-            access_level: str,
-        ):
-            """set access level and refresh"""
-            Params.Access.access_level = access_level
-            Params.Access.refresh()

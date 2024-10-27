@@ -88,6 +88,7 @@ for:
 
   build_script:
   - echo "is_mobile=0" >> .env
+  - sudo xcode-select -switch /Applications/Xcode15.2/Xcode.app
   - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
 
   after_build:
@@ -132,6 +133,7 @@ for:
 
   build_script:
   - echo "is_mobile=1" >> .env
+  - sudo xcode-select -switch /Applications/Xcode15.2/Xcode.app
   - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk --flutter-build-args=--release 
   # --team 2T42Z3DM34
 
