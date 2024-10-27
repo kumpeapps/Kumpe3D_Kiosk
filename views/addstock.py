@@ -5,6 +5,7 @@ import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 from pluggins.helpers import get_sku_array
 from core.params import Params as params
+from core.params import logger
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 
@@ -14,7 +15,7 @@ addstock = fs.AddPagesy()
 @addstock.page(route="/add_stock", protected_route=True)
 def addstock_page(data: fs.Datasy):
     """Increments SKU Stock Qty"""
-    print("add stock page")
+    logger.trace("addstock_page")
     page = data.page
     view = data.view
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)

@@ -47,7 +47,6 @@ def printproductlabel_page(data: fs.Datasy):
         page.banner.open = True
         page.update()
 
-    show_banner_click(page.session.get("username"))
     def print_clicked(_):
         progress_ring.visible = True
         print_button.disabled = True

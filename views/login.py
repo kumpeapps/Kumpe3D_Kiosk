@@ -6,6 +6,7 @@ import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
+from core.params import logger
 import sounds.beep as beep
 from helpers.is_port_open import rw_sql
 from models.user import User
@@ -106,6 +107,7 @@ def login_page(data: fs.Datasy):
 
     def send_request(username: str, password: str):
         """KumpeApps SSO Login"""
+        logger.debug(f"Sending Login Request for {username}")
         # Login
         # GET https://www.kumpeapps.com/api/check-access/by-login-pass
         if params.KumpeApps.api_key == "":
@@ -151,6 +153,7 @@ def login_page(data: fs.Datasy):
 
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
+        logger.success("Access Granted!")
         page.session.set("username", username_field.value)
         page.session.set("user", user)
         params.SHIPPO.get_values()
@@ -158,6 +161,8 @@ def login_page(data: fs.Datasy):
         log_access(user.user_id, f"/{computername}/granted/{access_level}")
         logging_in(False)
         page.update()
+        page.session.set("selected_page", "home")
+        page.go("/home")
 
     def logging_in(loggingin: bool = True):
         pr.visible = loggingin

@@ -5,6 +5,7 @@ import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 from helpers.is_port_open import rw_sql
 from models.user import User
+from core.params import logger
 
 app = fs.FletEasy(
     route_init="/login",
@@ -16,6 +17,7 @@ app = fs.FletEasy(
 @app.login
 def login_x(data: fs.Datasy):
     """Require Login Function"""
+    logger.trace("Starting login_x")
     server_up = rw_sql()
     page = data.page
     if page.session.contains_key("user"):
@@ -57,33 +59,26 @@ def login_x(data: fs.Datasy):
         open_dlg()
         return False
 
-    match (
-        page.session.get("selected_page"),
-        user.Access.basic,
-        user.Access.admin,
-        user.Access.production,
-        user.Access.order_filler,
-        user.Access.cashier,
-    ):
+    access = user.Access
+    logger.trace("Start Selected Page check access")
+    match page.session.get("selected_page"):
 
-        case ("productlabel", False, _, _, _, _):
-            open_dlg()
-            return False
-        case ("home", True, _, _, _, _, _):
-            return True
-        case ("addstock", True, _, True, _, _):
-            return True
-        case ("productionq", True, True, _, _, _):
-            return True
-        case ("productionq", True, _, True, _, _):
-            return True
-        case ("productlabel", True, _, True, _, _):
-            return True
-        case ("pendingorders", True, _, _, True, _):
-            return True
-        case ("register", True, _, _, _, True):
-            return True
+        case "productlabel" | "addstock" | "productionq":
+            logger.trace("checking access production")
+            return access.production
+        case "home":
+            logger.trace("checking access basic")
+            return access.basic
+        case "pendingorders":
+            logger.trace("checking access order_filler")
+            return access.order_filler
+        case "register":
+            logger.trace("checking access cashier")
+            return access.cashier
 
+    selected_page = page.session.get("selected_page")
+    logger.warning(f"Access Denied! {selected_page}")
+    logger.debug(f"Basic Access: {user.Access.basic}")
     open_dlg()
     return False
 

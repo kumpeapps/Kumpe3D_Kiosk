@@ -1,8 +1,10 @@
 """Parameters file for Kumpe3D-Python"""
 
 import os
+import sys
 from dotenv import load_dotenv
 from infisical_api import infisical_api  # type: ignore
+import loguru
 
 
 load_dotenv(override=True)
@@ -12,7 +14,10 @@ creds = infisical_api(
     service_token=service_token, infisical_url="https://creds.kumpeapps.com"
 )
 is_mobile = os.getenv("is_mobile")
-
+log_level = os.getenv("LOG_LEVEL", "INFO")
+logger = loguru.logger
+logger.remove()
+logger.add(sys.stderr, level=log_level)
 
 class Params:
     """Parameters"""
