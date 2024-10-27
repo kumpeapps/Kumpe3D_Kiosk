@@ -7,7 +7,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
 def rw_sql() -> bool:
-    """Is mySQL port open for rw.sql.pv
+    """Is mySQL port open for rw.sql.pvt.kumpedns.us
 
     Returns:
         bool: Server Is Up
