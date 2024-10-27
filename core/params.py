@@ -18,6 +18,7 @@ log_level = os.getenv("LOG_LEVEL", "INFO")
 logger = loguru.logger
 logger.remove()
 logger.add(sys.stderr, level=log_level)
+logger.add("flet-kumpe3dkiosk.log", retention="2 days")
 
 class Params:
     """Parameters"""
