@@ -17,7 +17,6 @@ def login_page(data: fs.Datasy):
     """Login Page"""
     page = data.page
     view = data.view
-    print(page.padding)
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
     pr_container = ft.Container(
         content=pr,

@@ -47,6 +47,7 @@ def printproductlabel_page(data: fs.Datasy):
         page.banner.open = True
         page.update()
 
+    show_banner_click(page.session.get("username"))
     def print_clicked(_):
         progress_ring.visible = True
         print_button.disabled = True
@@ -135,7 +136,7 @@ def printproductlabel_page(data: fs.Datasy):
             WHERE 1=1
                 AND username = %s;
         """
-        cursor.execute(sql, page.client_storage.get("username"))
+        cursor.execute(sql, page.session.get("username"))
         db.commit()
         cursor.close()
         db.close()
@@ -224,7 +225,7 @@ def printproductlabel_page(data: fs.Datasy):
             values = (
                 sku,
                 qty,
-                page.client_storage.get("username"),
+                page.session.get("username"),
                 qty,
             )
             try:
@@ -387,7 +388,7 @@ def printproductlabel_page(data: fs.Datasy):
                     AND username = %s
                 ORDER BY idtemp__build_label;
             """
-            cursor.execute(sql, (page.client_storage.get("username")))
+            cursor.execute(sql, (page.session.get("username")))
             items = cursor.fetchall()
             global items_list  # pylint: disable=global-statement
             items_list = ""

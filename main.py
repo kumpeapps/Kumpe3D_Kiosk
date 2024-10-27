@@ -16,7 +16,7 @@ app = fs.FletEasy(
 @app.login
 def login_x(data: fs.Datasy):
     """Require Login Function"""
-    server_up = rw_sql() == 0
+    server_up = rw_sql()
     page = data.page
     dlg = ft.AlertDialog(
         title=ft.Text(
@@ -52,7 +52,7 @@ def login_x(data: fs.Datasy):
     if not sparams.Access.basic:
         open_dlg()
         return False
-
+    
     match (
         page.session.get("selected_page"),
         sparams.Access.basic,
@@ -66,11 +66,7 @@ def login_x(data: fs.Datasy):
         case ("productlabel", _, _, _, False, _, _):
             open_dlg()
             return False
-        case ("addroll", True, _, _, _, _, _):
-            return True
-        case ("emptyroll", True, _, _, _, True, _):
-            return True
-        case ("openroll", True, _, _, _, True, _):
+        case ("home", True, _, _, _, _, _):
             return True
         case ("addstock", True, True, _, _, _, _):
             return True
@@ -98,7 +94,7 @@ def view(data: fs.Datasy):
 
     def logout(_):
         sparams.Access.set_access_level("unauthenticated")
-        page.client_storage.clear()
+        page.session.clear()
         page.session.set("selected_page", "login")
         page.go("/login")
 
