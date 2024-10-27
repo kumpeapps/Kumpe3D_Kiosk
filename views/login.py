@@ -1,13 +1,13 @@
 """Home/Login Page"""
 
 import socket
-import os
 import requests  # type: ignore
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
 import sounds.beep as beep
+from helpers.is_port_open import rw_sql
 
 login = fs.AddPagesy()
 
@@ -39,7 +39,7 @@ def login_page(data: fs.Datasy):
     )
 
     def did_login(_):
-        server_up = os.system("ping -c 1 rw.sql.pvt.kumpedns.us") == 0
+        server_up = rw_sql()
         logging_in()
         if server_up:
             send_request(username_field.value, password_field.value)

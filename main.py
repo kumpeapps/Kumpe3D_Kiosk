@@ -1,10 +1,10 @@
 """Kumpe3D Main"""
 
-import os
 from pathlib import Path
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 from core.params import Params as sparams
+from helpers.is_port_open import rw_sql
 
 app = fs.FletEasy(
     route_init="/login",
@@ -16,7 +16,7 @@ app = fs.FletEasy(
 @app.login
 def login_x(data: fs.Datasy):
     """Require Login Function"""
-    server_up = os.system("ping -c 1 rw.sql.pvt.kumpedns.us") == 0
+    server_up = rw_sql() == 0
     page = data.page
     dlg = ft.AlertDialog(
         title=ft.Text(
