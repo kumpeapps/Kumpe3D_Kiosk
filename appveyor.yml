@@ -1,8 +1,8 @@
 version: '2.2.2({build})'
 environment:
   matrix:
-  - job_name: "build Android"
-    appveyor_build_worker_image: Ubuntu
+  - job_name: "build iOS"
+    appveyor_build_worker_image: macOS-Sonoma
     build: Script
   - job_name: "build Android AAB"
     appveyor_build_worker_image: Ubuntu
@@ -10,8 +10,8 @@ environment:
   - job_name: "build macOS"
     appveyor_build_worker_image: macOS
     build: Script
-  - job_name: "build iOS"
-    appveyor_build_worker_image: macOS-Sonoma
+  - job_name: "build Android"
+    appveyor_build_worker_image: Ubuntu
     build: Script
 
 #  skip_branch_with_pr: true
@@ -88,7 +88,7 @@ for:
 
   build_script:
   - echo "is_mobile=0" >> .env
-  - sudo xcode-select -switch /Applications/Xcode15.2/Xcode.app
+  - sudo xcode-select -switch /Applications/Xcode-15.2/Xcode.app
   - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
 
   after_build:
@@ -133,7 +133,7 @@ for:
 
   build_script:
   - echo "is_mobile=1" >> .env
-  - sudo xcode-select -switch /Applications/Xcode15.2/Xcode.app
+  - sudo xcode-select -switch /Applications/Xcode-15.2/Xcode.app
   - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk --flutter-build-args=--release 
   # --team 2T42Z3DM34
 
