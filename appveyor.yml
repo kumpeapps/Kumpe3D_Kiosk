@@ -1,4 +1,4 @@
-version: '2.2.1({build})'
+version: '2.2.2({build})'
 environment:
   matrix:
   - job_name: "build Android"
@@ -88,7 +88,7 @@ for:
 
   build_script:
   - echo "is_mobile=0" >> .env
-  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.1"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
+  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
 
   after_build:
   - tar -czvf kumpe3dkiosk-macos.tar.gz -C build/macos "Kumpe3D Kiosk.app"
@@ -132,7 +132,7 @@ for:
 
   build_script:
   - echo "is_mobile=1" >> .env
-  - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.1"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk --flutter-build-args=--release 
+  - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk --flutter-build-args=--release 
   # --team 2T42Z3DM34
 
   after_build:
@@ -157,7 +157,7 @@ for:
   build_script:
   - echo "is_mobile=1" >> .env
   - curl https://$MATCH_DEPLOY_KEY@raw.githubusercontent.com/kumpeapps/android_certs/main/kumpe3dkiosk -o /tmp/kumpe3dkiosk
-  - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.1"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
+  - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
 
   after_build:
   - tar -czvf kumpe3dkiosk-apk.tar.gz -C build apk
@@ -180,7 +180,7 @@ for:
   build_script:
   - echo "is_mobile=1" >> .env
   - curl https://$MATCH_DEPLOY_KEY@raw.githubusercontent.com/kumpeapps/android_certs/main/kumpe3dkiosk -o /tmp/kumpe3dkiosk
-  - flet build aab --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.1"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
+  - flet build aab --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
 
   after_build:
   - tar -czvf kumpe3dkiosk-aab.tar.gz -C build aab
