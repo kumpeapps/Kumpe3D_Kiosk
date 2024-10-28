@@ -81,14 +81,14 @@ for:
   - pip install -r requirements.txt
   - flutter upgrade --force
   - bundle install
-  # - bundle update fastlane
+  - bundle update fastlane
   - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer
   - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
-  # - bundle exec fastlane matchget
+  - bundle exec fastlane matchget
 
   build_script:
   - echo "is_mobile=0" >> .env
-  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
+  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
 
   after_build:
   - tar -czvf kumpe3dkiosk-macos.tar.gz -C build/macos "Kumpe3D Kiosk.app"
@@ -125,14 +125,14 @@ for:
   - pip install -r requirements.txt
   - flutter upgrade --force
   - bundle install
-  # - bundle update fastlane
+  - bundle update fastlane
   - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer
   - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
-  # - bundle exec fastlane matchget
+  - bundle exec fastlane matchget
 
   build_script:
   - echo "is_mobile=1" >> .env
-  - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk --flutter-build-args=--release 
+  - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.2"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --flutter-build-args=--release 
   # --team 2T42Z3DM34
 
   after_build:

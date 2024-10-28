@@ -112,7 +112,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
                 sku,
                 sku,
                 qty,
-                page.client_storage.get("username"),
+                page.session.get("username"),
                 qty,
             )
             try:

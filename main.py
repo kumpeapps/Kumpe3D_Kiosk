@@ -3,8 +3,9 @@
 from pathlib import Path
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from core.params import Params as sparams
 from helpers.is_port_open import rw_sql
+from models.user import User
+from core.params import logger
 
 app = fs.FletEasy(
     route_init="/login",
@@ -16,8 +17,13 @@ app = fs.FletEasy(
 @app.login
 def login_x(data: fs.Datasy):
     """Require Login Function"""
-    server_up = rw_sql() == 0
+    logger.trace("Starting login_x")
+    server_up = rw_sql()
     page = data.page
+    if page.session.contains_key("user"):
+        user: User = page.session.get("user")
+    else:
+        return False
     dlg = ft.AlertDialog(
         title=ft.Text(
             "Access Denied!!!",
@@ -49,40 +55,30 @@ def login_x(data: fs.Datasy):
         dlg.open = True
         page.update()
 
-    if not sparams.Access.basic:
+    if not user.Access.basic:
         open_dlg()
         return False
 
-    match (
-        page.session.get("selected_page"),
-        sparams.Access.basic,
-        sparams.Access.production,
-        sparams.Access.orders,
-        sparams.Access.print_labels,
-        sparams.Access.filament_stock,
-        sparams.Access.admin,
-    ):
+    access = user.Access
+    logger.trace("Start Selected Page check access")
+    match page.session.get("selected_page"):
 
-        case ("productlabel", _, _, _, False, _, _):
-            open_dlg()
-            return False
-        case ("addroll", True, _, _, _, _, _):
-            return True
-        case ("emptyroll", True, _, _, _, True, _):
-            return True
-        case ("openroll", True, _, _, _, True, _):
-            return True
-        case ("addstock", True, True, _, _, _, _):
-            return True
-        case ("productionq", True, True, _, _, _, _):
-            return True
-        case ("productionq", True, _, True, _, _, _):
-            return True
-        case ("productlabel", True, _, _, True, _, _):
-            return True
-        case ("pendingorders", _, _, True, _, _, _):
-            return True
+        case "productlabel" | "addstock" | "productionq":
+            logger.trace("checking access production")
+            return access.production
+        case "home":
+            logger.trace("checking access basic")
+            return access.basic
+        case "pendingorders":
+            logger.trace("checking access order_filler")
+            return access.order_filler
+        case "register":
+            logger.trace("checking access cashier")
+            return access.cashier
 
+    selected_page = page.session.get("selected_page")
+    logger.warning(f"Access Denied! {selected_page}")
+    logger.debug(f"Basic Access: {user.Access.basic}")
     open_dlg()
     return False
 
@@ -97,8 +93,7 @@ def view(data: fs.Datasy):
         page.go("/home")
 
     def logout(_):
-        sparams.Access.set_access_level("unauthenticated")
-        page.client_storage.clear()
+        page.session.clear()
         page.session.set("selected_page", "login")
         page.go("/login")
 
