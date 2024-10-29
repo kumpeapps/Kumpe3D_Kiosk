@@ -28,8 +28,9 @@ platform :ios do
     end
     if !is_ci
       api_key = app_store_connect_api_key(
-        key_id: "OK4PLSIUW9C6",
-        key_filepath: "/Users/justinkumpe/Documents/ApiKey_OK4PLSIUW9C6.p8",
+        key_id: "V63U6LFWBL",
+        issuer_id: "69a6de74-e8dd-47e3-e053-5b8c7c11a4d1",
+        key_filepath: "/Users/justinkumpe/Documents/AuthKey_V63U6LFWBL.p8",
     )
     end
     match(
@@ -37,26 +38,7 @@ platform :ios do
       api_key: api_key,
       type: "appstore"
     )
-    match(
-      generate_apple_certs: true, 
-      api_key: api_key,
-      type: "development"
-    )
-    match(
-      generate_apple_certs: true, 
-      api_key: api_key,
-      type: "developer_id"
-    )
-    match(
-      generate_apple_certs: true, 
-      api_key: api_key,
-      type: "developer_id_installer"
-    )
-    match(
-      generate_apple_certs: true, 
-      api_key: api_key,
-      type: "mac_installer_distribution"
-    )
+
   end
 
   lane :matchget do
@@ -65,5 +47,33 @@ platform :ios do
 	end
   match(generate_apple_certs: true, type: "development", readonly: is_ci, app_identifier: "com.kumpeapps.flet.kumpe3dkiosk", git_basic_authorization: ENV['MATCH_GIT_BASIC_AUTHORIZATION'], git_url: "https://github.com/kumpeapps/fastlane_certs.git")
   match(generate_apple_certs: true, type: "appstore", readonly: is_ci, app_identifier: "com.kumpeapps.flet.kumpe3dkiosk", git_basic_authorization: ENV['MATCH_GIT_BASIC_AUTHORIZATION'], git_url: "https://github.com/kumpeapps/fastlane_certs.git")
+  end
+
+  desc "Upload to App Store"
+  lane :upload_appstore do
+
+    match(type: "development", readonly: true)
+    match(type: "appstore", readonly: true)
+
+    gym(
+      export_method: "app-store",
+      output_directory: "../build",
+      output_name: "kumpe3dkiosk.ipa",
+      xcargs: "-allowProvisioningUpdates",
+      export_options: {
+        provisioningProfiles: { 
+          "com.kumpeapps.flet.kumpe3dkiosk" => "match AppStore com.kumpeapps.flet.kumpe3dkiosk"
+        }
+      }
+    )
+
+    
+    deliver(
+      skip_screenshots: true,
+      skip_metadata: true,
+      run_precheck_before_submit: false,
+      submit_for_review: false,
+      force: true
+    )    
   end
 end
