@@ -52,7 +52,7 @@ platform :ios do
   desc "Upload to App Store"
   lane :upload_appstore do
     update_match
-    matchget
+    
 
     gym(
       export_method: "app-store",
