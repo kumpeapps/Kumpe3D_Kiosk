@@ -57,7 +57,7 @@ platform :ios do
       export_method: "app-store",
       output_directory: "../build",
       skip_build_archive: true,
-      archive_path: "../build/ipa",
+      archive_path: "../build/ipa/Runner.xcarchive",
       output_name: "kumpe3dkiosk.ipa",
       xcargs: "-allowProvisioningUpdates",
       export_options: {
