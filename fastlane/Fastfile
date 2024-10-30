@@ -57,6 +57,8 @@ platform :ios do
     gym(
       export_method: "app-store",
       output_directory: "../build",
+      skip_build_archive: True,
+      archive_path: "../build/ipa"
       output_name: "kumpe3dkiosk.ipa",
       xcargs: "-allowProvisioningUpdates",
       export_options: {
