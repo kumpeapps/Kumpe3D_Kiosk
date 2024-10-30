@@ -134,7 +134,7 @@ for:
   - echo "is_mobile=1" >> .env
   - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.3"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --flutter-build-args=--release --flutter-build-args=--no-codesign
   # --team 2T42Z3DM34
-  - bundle exec fastlane upload_appstore
+  - bundle exec fastlane sign_xcarchive_and_publish
 
   after_build:
   - tar -czvf kumpe3dkiosk-ios.tar.gz -C build ipa
