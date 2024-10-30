@@ -2,9 +2,11 @@
 
 import flet as ft  # type: ignore
 
+hf = ft.HapticFeedback()
 
 def error(page: ft.Page):
     """Play Error Beep"""
+    hf.heavy_impact()
     error_file = ft.Audio(
         src="/audio/error.wav",  # pylint: disable=line-too-long
         autoplay=True,
@@ -15,6 +17,8 @@ def error(page: ft.Page):
 
 def success(page: ft.Page):
     """Play Success Beep"""
+    page.overlay.append(hf)
+    hf.light_impact()
     success_file = ft.Audio(
         src="/audio/success.wav",  # pylint: disable=line-too-long
         autoplay=True,
