@@ -87,9 +87,6 @@ platform :ios do
 
   lane :sign_xcarchive_and_publish do
     default_platform(:ios)
-    sync_code_signing(
-      type: "appstore"
-    )
   
     # You must create a fake xcodeproj to pass in.
     # This is needed to work around this issue in fastlane: https://github.com/fastlane/fastlane/issues/13528

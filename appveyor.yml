@@ -125,7 +125,6 @@ for:
   - pip install -r requirements.txt
   - flutter upgrade --force
   - bundle install
-  - bundle update fastlane
   - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer
   - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
   - bundle exec fastlane matchget
