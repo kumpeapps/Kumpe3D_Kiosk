@@ -50,8 +50,16 @@ platform :ios do
     match(generate_apple_certs: true, type: "appstore", readonly: is_ci, app_identifier: "com.kumpeapps.flet.kumpe3dkiosk", git_basic_authorization: ENV['MATCH_GIT_BASIC_AUTHORIZATION'], git_url: "https://github.com/kumpeapps/fastlane_certs.git")
   end
 
+  desc "Configure Flutter project without building it"
+  lane :config_flutter do
+
+    Dir.chdir "../.." do
+      sh("flutter", "build", "ios", "--release", "--no-codesign", "--config-only")
+    end
+  end
+
   desc "Upload to App Store"
-  lane :upload_appstore do
+  lane :upload_appstore_old do
 
     gym(
       export_method: "app-store",
@@ -67,6 +75,33 @@ platform :ios do
       }
     )
 
+    
+    deliver(
+      skip_screenshots: true,
+      skip_metadata: true,
+      run_precheck_before_submit: false,
+      submit_for_review: false,
+      force: true
+    )    
+  end
+
+  desc "Upload to App Store"
+  lane :upload_appstore do
+
+
+    gym(
+      export_method: "app-store",
+      output_directory: "../build",
+      output_name: "kumpe3dkiosk.ipa",
+      xcargs: "-allowProvisioningUpdates",
+      export_options: {
+        provisioningProfiles: { 
+          "com.kumpeapps.flet.kumpe3dkiosk" => "match AppStore com.kumpeapps.flet.kumpe3dkiosk"
+        }
+      }
+    )
+
+    app_store_connect_api_key(is_key_content_base64: true)
     
     deliver(
       skip_screenshots: true,
