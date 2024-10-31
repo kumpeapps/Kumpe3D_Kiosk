@@ -132,7 +132,7 @@ for:
 
   build_script:
   - echo "is_mobile=1" >> .env
-  - bundle exec fastlane badge --shield "V${APPVEYOR_REPO_TAG_NAME:-"2.2.3"}-${APPVEYOR_BUILD_NUMBER}-blue" --shield_geometry "+0+25%" --shield_scale 0.75 --glob "/assets/icon.png"
+  - bundle exec badge --shield "V${APPVEYOR_REPO_TAG_NAME:-"2.2.3"}-${APPVEYOR_BUILD_NUMBER}-blue" --shield_geometry "+0+25%" --shield_scale 0.75 --glob "/assets/icon.png"
   - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.2.3"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --flutter-build-args=--release --flutter-build-args=--no-codesign --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
   # --team 2T42Z3DM34
   - bundle exec fastlane upload_testflight
