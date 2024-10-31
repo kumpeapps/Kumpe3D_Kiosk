@@ -124,7 +124,8 @@ for:
   - gem install cocoapods
   - gem install bundler
   - pip install -r requirements.txt
-  - flutter upgrade --force
+  - flutter upgrade
+  - brew install imagemagick
   - bundle install
   - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer
   - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
