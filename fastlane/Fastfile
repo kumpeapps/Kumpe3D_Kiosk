@@ -121,11 +121,13 @@ platform :ios do
    )
   
     deliver(
+      build: ENV['APPVEYOR_BUILD_NUMBER'],
       force: true,
       api_key: api_key,
       submit_for_review: false,
       automatic_release: true,
       precheck_include_in_app_purchases: false,
+      skip_metadata: true,
     )
   end
 end
