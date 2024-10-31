@@ -103,7 +103,12 @@ platform :ios do
       export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id), # This requires the team_id to be set in the fastlane `Appfile`
       skip_build_archive: true,
       skip_package_dependencies_resolution: true,
-      archive_path: "/Users/appveyor/projects/kumpe3d-kiosk/build/ipa/Runner.xcarchive"
+      archive_path: "/Users/appveyor/projects/kumpe3d-kiosk/build/ipa/Runner.xcarchive",
+      export_options: {
+        provisioningProfiles: { 
+          "com.kumpeapps.flet.kumpe3dkiosk" => "match AppStore com.kumpeapps.flet.kumpe3dkiosk"
+        }
+      }
    )
   
     upload_to_testflight(
