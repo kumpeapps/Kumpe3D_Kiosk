@@ -40,7 +40,9 @@ def login_page(data: fs.Datasy):
         if server_up:
             send_request(username_field.value, password_field.value)
         else:
-            show_banner_click("Server Unreachable. Please check internet and VPN connection.")
+            show_banner_click(
+                "Server Unreachable. Please check internet and VPN connection."
+            )
             logging_in(False)
         page.update()
 
@@ -55,6 +57,7 @@ def login_page(data: fs.Datasy):
         visible=True,
         text_align=ft.TextAlign.CENTER,
         width=250,
+        autofill_hints=ft.AutofillHint.PASSWORD,
     )
 
     def username_submit(_):
@@ -71,7 +74,9 @@ def login_page(data: fs.Datasy):
         visible=True,
         text_align=ft.TextAlign.CENTER,
         width=250,
+        autofill_hints=ft.AutofillHint.USERNAME,
     )
+    fields = ft.AutofillGroup(ft.Column(controls=[username_field, password_field]))
 
     submit_container = ft.Container(
         content=ft.ElevatedButton(text="Login", on_click=did_login),
@@ -201,11 +206,10 @@ def login_page(data: fs.Datasy):
         controls=[
             ft.SafeArea(menu_button, bottom=False),
             img_container,
-            username_field,
-            password_field,
+            fields,
             submit_container,
             pr_container,
         ],
         drawer=view.drawer,
-        horizontal_alignment="center"
+        horizontal_alignment="center",
     )
