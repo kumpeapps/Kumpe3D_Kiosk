@@ -6,6 +6,7 @@ hf = ft.HapticFeedback()
 
 def error(page: ft.Page):
     """Play Error Beep"""
+    page.overlay.append(hf)
     hf.heavy_impact()
     error_file = ft.Audio(
         src="/audio/error.wav",  # pylint: disable=line-too-long
