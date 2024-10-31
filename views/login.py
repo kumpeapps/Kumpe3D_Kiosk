@@ -50,8 +50,9 @@ def login_page(data: fs.Datasy):
         label="Password",
         password=True,
         can_reveal_password=False,
-        autocorrect=False,
-        enable_suggestions=False,
+        adaptive=True,
+        autocorrect=True,
+        enable_suggestions=True,
         prefix_icon=ft.icons.PASSWORD,
         on_submit=did_login,
         visible=True,
@@ -67,16 +68,16 @@ def login_page(data: fs.Datasy):
     username_field = ft.TextField(
         label="Username",
         autofocus=True,
-        autocorrect=False,
-        enable_suggestions=False,
+        autocorrect=True,
+        enable_suggestions=True,
         prefix_icon=ft.icons.PERSON,
+        adaptive=True,
         on_submit=username_submit,
         visible=True,
         text_align=ft.TextAlign.CENTER,
         width=250,
         autofill_hints=ft.AutofillHint.USERNAME,
     )
-    fields = ft.AutofillGroup(ft.Column(controls=[username_field, password_field]))
 
     submit_container = ft.Container(
         content=ft.ElevatedButton(text="Login", on_click=did_login),
@@ -206,7 +207,8 @@ def login_page(data: fs.Datasy):
         controls=[
             ft.SafeArea(menu_button, bottom=False),
             img_container,
-            fields,
+            username_field,
+            password_field,
             submit_container,
             pr_container,
         ],
