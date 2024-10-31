@@ -143,10 +143,6 @@ platform :ios do
       skip_waiting_for_build_processing: true,
       api_key: api_key,
       submit_beta_review: false,
-      automatic_release: true,
-      precheck_include_in_app_purchases: false,
-      skip_metadata: true,
-      skip_screenshots: true,
       changelog: "Bug Fixes and New Features",
     )
   end
