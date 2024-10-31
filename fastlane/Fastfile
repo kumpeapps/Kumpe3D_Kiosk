@@ -93,7 +93,7 @@ platform :ios do
      		"key_id": ENV['APPLE_APP_STORE_API_KEY_ID'],
      		"issuer_id": ENV['APPLE_APPSTORE_API_ISSUER_ID'],
      		"key_content": ENV['APPLE_APP_STORE_API_KEY'],
-         is_key_content_base64: True,
+         is_key_content_base64: true,
    		)
     end
   
