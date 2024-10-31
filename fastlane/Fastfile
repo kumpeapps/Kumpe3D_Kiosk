@@ -58,33 +58,6 @@ platform :ios do
     end
   end
 
-  desc "Upload to App Store"
-  lane :upload_appstore_old do
-
-    gym(
-      export_method: "app-store",
-      output_directory: "../build",
-      skip_build_archive: true,
-      archive_path: "../build/ipa/Runner.xcarchive",
-      output_name: "kumpe3dkiosk.ipa",
-      xcargs: "-allowProvisioningUpdates",
-      export_options: {
-        provisioningProfiles: { 
-          "com.kumpeapps.flet.kumpe3dkiosk" => "match AppStore com.kumpeapps.flet.kumpe3dkiosk"
-        }
-      }
-    )
-
-    
-    deliver(
-      skip_screenshots: true,
-      skip_metadata: true,
-      run_precheck_before_submit: false,
-      submit_for_review: false,
-      force: true
-    )    
-  end
-
   lane :sign_xcarchive_and_publish do
     default_platform(:ios)
     if is_ci
@@ -128,6 +101,53 @@ platform :ios do
       precheck_include_in_app_purchases: false,
       skip_metadata: true,
       skip_screenshots: true,
+    )
+  end
+
+  lane :upload_testflight do
+    default_platform(:ios)
+    if is_ci
+		  setup_ci
+  		api_key = app_store_connect_api_key(
+     		"key_id": ENV['APPLE_APP_STORE_API_KEY_ID'],
+     		"issuer_id": ENV['APPLE_APPSTORE_API_ISSUER_ID'],
+     		"key_content": ENV['APPLE_APP_STORE_API_KEY'],
+         is_key_content_base64: true,
+   		)
+    end
+  
+    # You must create a fake xcodeproj to pass in.
+    # This is needed to work around this issue in fastlane: https://github.com/fastlane/fastlane/issues/13528
+    # See also: https://github.com/fastlane/fastlane/issues/11402 and https://github.com/fastlane/fastlane/issues/15876
+    xcodeproj_path = File.expand_path("../build/ipa/fake.xcodeproj")
+    Xcodeproj::Project.new(xcodeproj_path).save
+  
+    build_app(
+      configuration: "Release",
+      project: xcodeproj_path,
+      output_name: "kumpe3dkiosk.ipa",
+      export_method: "app-store",
+      export_options: { iCloudContainerEnvironment: "Production" },
+      export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id), # This requires the team_id to be set in the fastlane `Appfile`
+      skip_build_archive: true,
+      skip_package_dependencies_resolution: true,
+      archive_path: "/Users/appveyor/projects/kumpe3d-kiosk/build/ipa/Runner.xcarchive",
+      export_options: {
+        provisioningProfiles: { 
+          "com.kumpeapps.flet.kumpe3dkiosk" => "match AppStore com.kumpeapps.flet.kumpe3dkiosk"
+        }
+      }
+   )
+  
+   upload_to_testflight(
+      skip_waiting_for_build_proccessing: true,
+      api_key: api_key,
+      submit_for_review: false,
+      automatic_release: true,
+      precheck_include_in_app_purchases: false,
+      skip_metadata: true,
+      skip_screenshots: true,
+      changelog: "Bug Fixes and New Features",
     )
   end
 end
