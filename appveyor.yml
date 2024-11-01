@@ -130,7 +130,7 @@ for:
   - brew install graphicsmagick
   - bundle install
   - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer
-  - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
+  # - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
   - bundle exec fastlane matchget
 
   build_script:
