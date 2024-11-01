@@ -125,7 +125,7 @@ for:
   - gem install bundler
   - pip install -r requirements.txt
   - flutter upgrade
-  - brew update
+  - brew install ruby
   - export PATH="/usr/local/opt/ruby/bin:$PATH"
   - brew install graphicsmagick
   - bundle install
