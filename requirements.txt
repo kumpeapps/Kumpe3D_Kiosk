@@ -6,3 +6,4 @@ parse==1.20.1
 chardet==5.2.0
 flet-easy==0.2.6
 loguru==0.7.2
+flet-toast==0.5.0

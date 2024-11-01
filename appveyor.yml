@@ -125,7 +125,7 @@ for:
   - gem install bundler
   - pip install -r requirements.txt
   - flutter upgrade
-  - brew upgrade
+  - brew update
   - brew install graphicsmagick
   - bundle install
   - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer

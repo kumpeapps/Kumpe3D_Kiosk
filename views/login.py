@@ -12,6 +12,7 @@ from helpers.is_port_open import rw_sql
 from models.user import User
 
 login = fs.AddPagesy()
+hf = ft.HapticFeedback()
 
 
 @login.page(route="/login")
@@ -19,6 +20,7 @@ def login_page(data: fs.Datasy):
     """Login Page"""
     page = data.page
     view = data.view
+    page.overlay.append(hf)
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
     pr_container = ft.Container(
         content=pr,
@@ -133,7 +135,7 @@ def login_page(data: fs.Datasy):
             success = data["ok"]
             if not success:
                 show_banner_click(data["msg"])
-                beep.error(page)
+                beep.error(page, hf)
                 logging_in(False)
             else:
                 user = User(**data)
@@ -146,7 +148,7 @@ def login_page(data: fs.Datasy):
                     access_granted(user, computername, "basic")
                 else:
                     show_banner_click("Access Denied")
-                    beep.error(page)
+                    beep.error(page, hf)
                     log_access(user.user_id, f"/{computername}/denied")
                     password_field.value = ""
                     logging_in(False)
