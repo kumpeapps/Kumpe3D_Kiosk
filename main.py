@@ -114,6 +114,10 @@ def view(data: fs.Datasy):
         page.session.set("selected_page", "pendingorders")
         page.go("/orders/pending")
 
+    def add_filament_go(_):
+        page.session.set("selected_page", "addstock")
+        page.go("/add_filament")
+
     return fs.Viewsy(
         drawer=ft.NavigationDrawer(
             controls=[
@@ -140,6 +144,9 @@ def view(data: fs.Datasy):
                         ),
                         ft.FilledButton(
                             text="Pending Orders", on_click=pendingorders_go
+                        ),
+                        ft.FilledButton(
+                            text="Add Filament", on_click=add_filament_go
                         ),
                         ft.FilledButton(
                             text="Logout",

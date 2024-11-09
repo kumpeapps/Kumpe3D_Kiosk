@@ -7,6 +7,7 @@ import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 from core.params import Params as params
 import sounds.beep as beep
+from core.params import logger
 
 pendingorders = fs.AddPagesy()
 
@@ -66,8 +67,8 @@ def pendingorders_page(data: fs.Datasy):
 
     def get_pending_orders():
         """Add's Roll to Stock"""
-        if params.SQL.username == "":
-            params.SQL.get_values()
+
+        params.SQL.get_values()
         sql_params = params.SQL
         db = pymysql.connect(
             db=sql_params.database,
