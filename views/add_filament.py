@@ -295,4 +295,5 @@ def add_filament_page(data: fs.Datasy):
             progress_ring,
         ],
         drawer=view.drawer,
+        scroll="always",
     )
