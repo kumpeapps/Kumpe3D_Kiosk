@@ -10,6 +10,7 @@ from core.params import logger
 import sounds.beep as beep
 from helpers.is_port_open import rw_sql
 from models.user import User
+from api import login as api_login
 
 login = fs.AddPagesy()
 hf = ft.HapticFeedback()
@@ -116,29 +117,14 @@ def login_page(data: fs.Datasy):
     def send_request(username: str, password: str):
         """KumpeApps SSO Login"""
         logger.debug(f"Sending Login Request for {username}")
-        # Login
-        # GET https://www.kumpeapps.com/api/check-access/by-login-pass
-        if params.KumpeApps.api_key == "":
-            params.KumpeApps.get_values()
         try:
-            response = requests.get(
-                url=f"{params.KumpeApps.api_url}/check-access/by-login-pass",
-                params={
-                    "_key": params.KumpeApps.api_key,
-                    "login": username,
-                    "pass": password,
-                },
-                timeout=10,
-            )
-
-            data = response.json()
-            success = data["ok"]
-            if not success:
-                show_banner_click(data["msg"])
+            api_login.login(page, username, password)
+            if not page.session.contains_key("user"):
+                show_banner_click("Access Denied")
                 beep.error(page, hf)
                 logging_in(False)
             else:
-                user = User(**data)
+                user: User = page.session.get("user")
                 computername = socket.gethostname()
                 if user.Access.admin:
                     access_granted(user, computername, "admin")
@@ -149,7 +135,7 @@ def login_page(data: fs.Datasy):
                 else:
                     show_banner_click("Access Denied")
                     beep.error(page, hf)
-                    log_access(user.user_id, f"/{computername}/denied")
+                    log_access(f"{user.user_id}", f"/{computername}/denied")
                     password_field.value = ""
                     logging_in(False)
                     page.update()
@@ -160,11 +146,10 @@ def login_page(data: fs.Datasy):
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
         logger.success("Access Granted!")
-        page.session.set("username", username_field.value)
-        page.session.set("user", user)
+        page.session.set("username", user.username)
         params.SHIPPO.get_values()
         params.SQL.get_values()
-        log_access(user.user_id, f"/{computername}/granted/{access_level}")
+        log_access(f"{user.user_id}", f"/{computername}/granted/{access_level}")
         logging_in(False)
         page.update()
         page.session.set("selected_page", "home")

@@ -5,8 +5,9 @@ import base64
 import requests  # type: ignore
 import flet as ft  # type: ignore
 from core.params import Params as params
+from models.user import User
 
-
+params.API.get_values()
 # Configuration
 TOKEN_URL = f"{params.API.url}/oauth/token"
 CLIENT_ID = params.API.client_id
@@ -90,7 +91,7 @@ def is_token_expired(token_data: dict) -> bool:
 
 def login(page: ft.Page, username: str, password: str) -> dict:
     """
-    Main function to obtain or refresh the OAuth token and return user profile 
+    Main function to obtain or refresh the OAuth token and return user profile
     and access information.
 
     Args:
@@ -113,13 +114,10 @@ def login(page: ft.Page, username: str, password: str) -> dict:
     page.session.set("token_data", token_data)
 
     user_profile = get_user_profile(token_data)
-    user_access = get_user_access(token_data)
+    user = User(**user_profile["profile"])
+    page.session.set("user", user)
 
-    return {
-        "token_data": token_data,
-        "user_profile": user_profile,
-        "user_access": user_access,
-    }
+    return {"token_data": token_data, "user": user}
 
 
 def get_user_profile(token_data: dict) -> dict:
@@ -136,27 +134,29 @@ def get_user_profile(token_data: dict) -> dict:
         requests.exceptions.HTTPError: If the HTTP request returned an unsuccessful status code.
     """
     headers = {"Authorization": f"Bearer {token_data['access_token']}"}
-    response = requests.get(
-        f"{params.API.url}/v1/profile", headers=headers, timeout=10
-    )
+    response = requests.get(f"{params.API.url}/v1/profile", headers=headers, timeout=10)
     response.raise_for_status()
     return response.json()
 
 
-def get_user_access(token_data: dict) -> dict:
+def logout(page: ft.Page):
     """
-    Get the user access information using the saved OAuth credentials.
+    Revokes the access token to log the user out.
 
     Args:
-        token_data (dict): The token data containing the access token.
-
-    Returns:
-        dict: A dictionary containing the user access information.
+        token_data (dict): A dictionary containing the access token.
 
     Raises:
         requests.exceptions.HTTPError: If the HTTP request returned an unsuccessful status code.
     """
+    token_data = page.session.get("token_data")
     headers = {"Authorization": f"Bearer {token_data['access_token']}"}
-    response = requests.get(f"{params.API.url}/v1/access", headers=headers, timeout=10)
+    response = requests.post(
+        f"{params.API.url}/oauth/revoke",
+        headers=headers,
+        timeout=10,
+        data={"token": token_data["access_token"]},
+    )
     response.raise_for_status()
+    page.session.clear()
     return response.json()

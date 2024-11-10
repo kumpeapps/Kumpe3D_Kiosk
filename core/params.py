@@ -18,7 +18,7 @@ log_level = os.getenv("LOG_LEVEL", "INFO")
 logger = loguru.logger
 logger.remove()
 logger.add(sys.stderr, level=log_level)
-logger.add("/var/log/apache/flet-kumpe3dkiosk.log", retention="2 days")
+logger.add("flet-kumpe3dkiosk.log", retention="2 days")
 
 class Params:
     """Parameters"""
@@ -96,4 +96,24 @@ class Params:
             ).secretValue
             Params.KumpeApps.api_key = creds.get_secret(  # pylint: disable=no-member
                 secret_name="KA_SSO_APIKEY", environment=app_env, path="/KUMPEAPPS/"
+            ).secretValue
+
+    class API:
+        """API Params"""
+
+        url = ""
+        client_id = ""
+        client_secret = ""
+
+        @staticmethod
+        def get_values():
+            """Get Values"""
+            Params.API.url = creds.get_secret(  # pylint: disable=no-member
+                secret_name="URL", environment=app_env, path="/API/"
+            ).secretValue
+            Params.API.client_id = creds.get_secret(  # pylint: disable=no-member
+                secret_name="CLIENT_ID", environment=app_env, path="/API/"
+            ).secretValue
+            Params.API.client_secret = creds.get_secret(  # pylint: disable=no-member
+                secret_name="CLIENT_SECRET", environment=app_env, path="/API/"
             ).secretValue
