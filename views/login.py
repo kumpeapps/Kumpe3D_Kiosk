@@ -12,6 +12,7 @@ from helpers.is_port_open import rw_sql
 from models.user import User
 
 login = fs.AddPagesy()
+hf = ft.HapticFeedback()
 
 
 @login.page(route="/login")
@@ -19,6 +20,7 @@ def login_page(data: fs.Datasy):
     """Login Page"""
     page = data.page
     view = data.view
+    page.overlay.append(hf)
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
     pr_container = ft.Container(
         content=pr,
@@ -40,7 +42,9 @@ def login_page(data: fs.Datasy):
         if server_up:
             send_request(username_field.value, password_field.value)
         else:
-            show_banner_click("Server Unreachable. Please check internet and VPN connection.")
+            show_banner_click(
+                "Server Unreachable. Please check internet and VPN connection."
+            )
             logging_in(False)
         page.update()
 
@@ -48,13 +52,15 @@ def login_page(data: fs.Datasy):
         label="Password",
         password=True,
         can_reveal_password=False,
-        autocorrect=False,
-        enable_suggestions=False,
+        adaptive=True,
+        autocorrect=True,
+        enable_suggestions=True,
         prefix_icon=ft.icons.PASSWORD,
         on_submit=did_login,
         visible=True,
         text_align=ft.TextAlign.CENTER,
         width=250,
+        autofill_hints=ft.AutofillHint.PASSWORD,
     )
 
     def username_submit(_):
@@ -64,13 +70,15 @@ def login_page(data: fs.Datasy):
     username_field = ft.TextField(
         label="Username",
         autofocus=True,
-        autocorrect=False,
-        enable_suggestions=False,
+        autocorrect=True,
+        enable_suggestions=True,
         prefix_icon=ft.icons.PERSON,
+        adaptive=True,
         on_submit=username_submit,
         visible=True,
         text_align=ft.TextAlign.CENTER,
         width=250,
+        autofill_hints=ft.AutofillHint.USERNAME,
     )
 
     submit_container = ft.Container(
@@ -127,7 +135,7 @@ def login_page(data: fs.Datasy):
             success = data["ok"]
             if not success:
                 show_banner_click(data["msg"])
-                beep.error(page)
+                beep.error(page, hf)
                 logging_in(False)
             else:
                 user = User(**data)
@@ -140,7 +148,7 @@ def login_page(data: fs.Datasy):
                     access_granted(user, computername, "basic")
                 else:
                     show_banner_click("Access Denied")
-                    beep.error(page)
+                    beep.error(page, hf)
                     log_access(user.user_id, f"/{computername}/denied")
                     password_field.value = ""
                     logging_in(False)
@@ -207,5 +215,5 @@ def login_page(data: fs.Datasy):
             pr_container,
         ],
         drawer=view.drawer,
-        horizontal_alignment="center"
+        horizontal_alignment="center",
     )

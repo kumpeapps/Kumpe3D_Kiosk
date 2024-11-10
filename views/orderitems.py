@@ -6,10 +6,11 @@ import flet_easy as fs  # type: ignore
 from core.params import Params as params
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
+from core.params import logger
 
 orderitems = fs.AddPagesy()
-COMPANY_USE_ORDER = 163
-DEFECTIVE_ORDER = 169
+COMPANY_USE_ORDER = "163"
+DEFECTIVE_ORDER = "169"
 
 
 @orderitems.page(route="/orders/pending/order_items/{order_id}", protected_route=True)
@@ -77,6 +78,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             translation = "defective_translation"
         else:
             translation = "to_order_translation"
+        logger.debug(f"Translation: {translation}")
         scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, cursor)
         sql = """
             INSERT INTO Web_3dprints.orders__items

@@ -3,8 +3,13 @@
 import flet as ft  # type: ignore
 
 
-def error(page: ft.Page):
+def error(page: ft.Page, hf: ft.HapticFeedback = None):
     """Play Error Beep"""
+    if hf:
+        try:
+            hf.heavy_impact()
+        except AttributeError:
+            pass
     error_file = ft.Audio(
         src="/audio/error.wav",  # pylint: disable=line-too-long
         autoplay=True,
@@ -13,8 +18,15 @@ def error(page: ft.Page):
     page.update()
 
 
-def success(page: ft.Page):
+def success(page: ft.Page, hf: ft.HapticFeedback = None):
     """Play Success Beep"""
+    if hf:
+        try:
+            hf = ft.HapticFeedback()
+            page.overlay.append(hf)
+            hf.light_impact()
+        except AttributeError:
+            pass
     success_file = ft.Audio(
         src="/audio/success.wav",  # pylint: disable=line-too-long
         autoplay=True,
