@@ -35,7 +35,7 @@ def login_page(data: fs.Datasy):
         authorization_endpoint=f"{params.API.url}/oauth/authorize",
         token_endpoint=f"{params.API.url}/oauth/token",
         user_endpoint=f"{params.API.url}/v1/me",
-        user_scopes="profile access app k3d:read k3d:write k3d:profile k3d:access",
+        user_scopes=["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"],
         user_id_fn=lambda u: u["id"],
         redirect_url="https://kiosk.kumpe3d.com/oauth_callback",
     )
