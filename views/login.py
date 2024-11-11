@@ -37,7 +37,7 @@ def login_page(data: fs.Datasy):
         user_endpoint=f"{params.API.url}/v1/me",
         user_scopes=["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"],
         user_id_fn=lambda u: u["id"],
-        redirect_url="https://kiosk.kumpe3d.com/oauth_callback",
+        redirect_url="http://172.16.16.5:8001/oauth_callback",
     )
     def on_login(e):
         if e.error:
