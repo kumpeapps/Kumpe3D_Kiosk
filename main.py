@@ -95,8 +95,6 @@ def view(data: fs.Datasy):
 
     def logout(_):
         api_login.logout(page)
-        page.session.set("selected_page", "login")
-        page.go("/login")
 
     def addstock_go(_):
         page.session.set("selected_page", "addstock")

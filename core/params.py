@@ -20,6 +20,7 @@ logger.remove()
 logger.add(sys.stderr, level=log_level)
 logger.add("flet-kumpe3dkiosk.log", retention="2 days")
 
+
 class Params:
     """Parameters"""
 
@@ -101,9 +102,9 @@ class Params:
     class API:
         """API Params"""
 
-        url = ""
-        client_id = ""
-        client_secret = ""
+        url: str
+        client_id: str
+        client_secret: str
 
         @staticmethod
         def get_values():

@@ -48,7 +48,7 @@ def get_token(username: str, password: str) -> dict:
         "grant_type": "password",
         "username": username,
         "password": password,
-        "scope": "profile access",
+        "scope": "profile access app k3d:read k3d:write k3d:profile k3d:access",
     }
     headers = get_basic_auth_header(CLIENT_ID, CLIENT_SECRET)
     response = requests.post(TOKEN_URL, data=data, headers=headers, timeout=10)
@@ -89,7 +89,7 @@ def is_token_expired(token_data: dict) -> bool:
     return token_data["expires_at"] < time.time()
 
 
-def login(page: ft.Page, username: str, password: str) -> dict:
+def login(page: ft.Page, username: str, password: str) -> None:
     """
     Main function to obtain or refresh the OAuth token and return user profile
     and access information.
@@ -98,26 +98,25 @@ def login(page: ft.Page, username: str, password: str) -> dict:
         page (ft.Page): The Flet page object containing the session.
         username (str): The username.
         password (str): The password.
-
-    Returns:
-        dict: A dictionary containing the token data, user profile, and user access information.
     """
-    token_data = page.session.get("token_data")
-    if token_data is None or is_token_expired(token_data):
-        if token_data and "refresh_token" in token_data:
-            token_data = refresh_token(token_data["refresh_token"])
-        else:
-            token_data = get_token(username, password)
+    try:
+        token_data = page.session.get("token_data")
+        if token_data is None or is_token_expired(token_data):
+            if token_data and "refresh_token" in token_data:
+                token_data = refresh_token(token_data["refresh_token"])
+            else:
+                token_data = get_token(username, password)
 
-        token_data["expires_at"] = time.time() + token_data["expires_in"]
+            token_data["expires_at"] = time.time() + token_data["expires_in"]
 
-    page.session.set("token_data", token_data)
+        page.session.set("token_data", token_data)
 
-    user_profile = get_user_profile(token_data)
-    user = User(**user_profile["profile"])
-    page.session.set("user", user)
-
-    return {"token_data": token_data, "user": user}
+        user_profile = get_user_profile(token_data)
+        user = User(**user_profile["profile"])
+        page.session.set("user", user)
+    except requests.exceptions.HTTPError as e:
+        page.session.clear()
+        raise requests.exceptions.HTTPError("Login failed") from e
 
 
 def get_user_profile(token_data: dict) -> dict:
@@ -159,4 +158,34 @@ def logout(page: ft.Page):
     )
     response.raise_for_status()
     page.session.clear()
-    return response.json()
+    page.session.set("selected_page", "login")
+    page.go("/login")
+
+
+def check_and_refresh_token(page: ft.Page):
+    """
+    Check if the token is expired and refresh it if necessary.
+
+    Args:
+        page (ft.Page): The Flet page object containing the session.
+
+    """
+    token_data = page.session.get("token_data")
+    if token_data is None or is_token_expired(token_data):
+        if token_data and "refresh_token" in token_data:
+            try:
+                token_data = refresh_token(token_data["refresh_token"])
+            except requests.exceptions.HTTPError:
+                logout(page)
+                return
+        else:
+            logout(page)
+            return
+
+        token_data["expires_at"] = time.time() + token_data["expires_in"]
+
+    page.session.set("token_data", token_data)
+
+    user_profile = get_user_profile(token_data)
+    user = User(**user_profile["profile"])
+    page.session.set("user", user)

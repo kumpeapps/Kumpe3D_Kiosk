@@ -3,9 +3,12 @@
 import pymysql
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
+import api.post
 from core.params import Params as params
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
+from models.print_label import K3DPrintLabel
+import api
 
 printproductlabel = fs.AddPagesy()
 items_list = ""  # pylint: disable=invalid-name
@@ -76,35 +79,13 @@ def printproductlabel_page(data: fs.Datasy):
 
     def add_label_to_printq(sku: str, qr_data: str, label_type: str):
         qty = qty_field.value
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
+        label = K3DPrintLabel(
+            sku=sku,
+            qr_data=qr_data,
+            label_type=label_type,
+            qty=qty,
         )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-        sql = """
-            INSERT INTO `Automation_PrintQueue`.`kumpe3d_labels`
-                (`sku`,
-                `qr_data`,
-                `label_type`,
-                `distributor_id`,
-                `qty`)
-            VALUES
-                (%s,
-                %s,
-                %s,
-                0,
-                %s);
-        """
-        cursor.execute(sql, (sku, qr_data, label_type, qty))
-        db.commit()
-        cursor.close()
-        db.close()
+        api.post.print_label(page, label)
         show_banner_click(
             "Print Job Sent. May take a couple of min to print",
             ft.colors.GREEN_200,
@@ -416,7 +397,6 @@ def printproductlabel_page(data: fs.Datasy):
                     subtitle=ft.Text(f"{item['sku']}\nQty: {item['qty']}"),
                     is_three_line=True,
                     trailing=integrity_icon,
-                    # on_click=lambda orderid: tile_clicked(idorders), # pylint: disable=cell-var-from-loop
                 )
                 tiles.append(tile)
             if len(items) == 0:

@@ -119,6 +119,11 @@ def login_page(data: fs.Datasy):
         logger.debug(f"Sending Login Request for {username}")
         try:
             api_login.login(page, username, password)
+        except requests.exceptions.HTTPError:
+            show_banner_click("Login Failed")
+            beep.error(page, hf)
+            logging_in(False)
+        else:
             if not page.session.contains_key("user"):
                 show_banner_click("Access Denied")
                 beep.error(page, hf)
@@ -140,8 +145,6 @@ def login_page(data: fs.Datasy):
                     logging_in(False)
                     page.update()
 
-        except requests.exceptions.RequestException:
-            logger.exception("KumpeApps SSO Login Failed")
 
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
