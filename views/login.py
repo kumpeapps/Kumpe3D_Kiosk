@@ -36,6 +36,7 @@ def login_page(data: fs.Datasy):
         token_endpoint=f"{params.API.url}/oauth/token",
         user_endpoint=f"{params.API.url}/v1/me",
         user_scopes=["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"],
+        group_scopes=["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"],
         scopes=["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"],
         user_id_fn=lambda u: u["id"],
         redirect_url="http://172.16.16.5:8001/oauth_callback",
