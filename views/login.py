@@ -11,7 +11,6 @@ import sounds.beep as beep
 from helpers.is_port_open import rw_sql
 from models.user import User
 from api import login as api_login
-from flet.auth import OAuthProvider
 
 login = fs.AddPagesy()
 hf = ft.HapticFeedback()
@@ -28,29 +27,7 @@ def login_page(data: fs.Datasy):
         content=pr,
         alignment=ft.alignment.center,
     )
-    scope = ["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"]
-    provider = OAuthProvider(
-        client_id=params.API.client_id,
-        client_secret=params.API.client_secret,
-        authorization_endpoint=f"{params.API.url}/oauth/authorize",
-        token_endpoint=f"{params.API.url}/oauth/token",
-        user_endpoint=f"{params.API.url}/v1/me",
-        user_scopes=["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"],
-        group_scopes=["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"],
-        scopes=["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"],
-        user_id_fn=lambda u: u["id"],
-        redirect_url="http://172.16.16.5:8001/oauth_callback",
-    )
-    def on_login(e):
-        if e.error:
-            raise Exception(e.error)
-        print("User ID:", page.auth.user.id)
-        print("Access token:", page.auth.token.access_token)
 
-    page.on_login = on_login
-    def login_click(e):
-        page.login(provider, scope=scope)
-    test = ft.ElevatedButton("Login with LinkedIn", on_click=login_click)
     def show_drawer(_):
         view.drawer.open = True
         page.update()
@@ -168,7 +145,6 @@ def login_page(data: fs.Datasy):
                     logging_in(False)
                     page.update()
 
-
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
         logger.success("Access Granted!")
@@ -224,7 +200,6 @@ def login_page(data: fs.Datasy):
             password_field,
             submit_container,
             pr_container,
-            test,
         ],
         drawer=view.drawer,
         horizontal_alignment="center",
