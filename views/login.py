@@ -28,7 +28,7 @@ def login_page(data: fs.Datasy):
         content=pr,
         alignment=ft.alignment.center,
     )
-    
+    scope = ["profile","access","app","k3d:read","k3d:write","k3d:profile","k3d:access"]
     provider = OAuthProvider(
         client_id=params.API.client_id,
         client_secret=params.API.client_secret,
@@ -49,7 +49,7 @@ def login_page(data: fs.Datasy):
 
     page.on_login = on_login
     def login_click(e):
-        page.login(provider)
+        page.login(provider, scope=scope)
     test = ft.ElevatedButton("Login with LinkedIn", on_click=login_click)
     def show_drawer(_):
         view.drawer.open = True
