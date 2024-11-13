@@ -37,16 +37,21 @@ def home_page(data: fs.Datasy):
         drawer=view.drawer,
     )
 
+@home.page(route="/json", title="JSON Response", protected_route=False)
+def json_page(data: fs.Datasy):
+    """JSON Response Page"""
+    page = data.page
 
-@home.page(route="/.well-known/assetlinks.json", title="Android Links", protected_route=False)
-def assetlinks(data: fs.Datasy):
-    """Android Asset Links"""
-    return [{
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.kumpe3d.kiosk",
-      "sha256_cert_fingerprints":
-      ["98:0D:71:8C:CB:0A:53:82:FC:71:E7:48:3F:C1:3F:0B:9B:4D:1F:58:C7:2D:8E:AD:72:39:E5:84:B4:EF:29:8A"]
-    }
-  }]
+    def return_json(_):
+        page.response = ft.Response(
+            status_code=200,
+            headers={"Content-Type": "application/json"},
+            body='{"message": "Hello, World!"}'
+        )
+        page.update()
+
+    return_json(None)
+
+# Run the app
+if __name__ == "__main__":
+    home.run()
