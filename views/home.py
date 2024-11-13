@@ -38,7 +38,7 @@ def home_page(data: fs.Datasy):
     )
 
 
-@home.page(route="/.well-known/assetlinks.json", title="Android Links", protected_route=True)
+@home.page(route="/.well-known/assetlinks.json", title="Android Links")
 def assetlinks():
     """Android Asset Links"""
     return [{
