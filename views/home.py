@@ -39,7 +39,7 @@ def home_page(data: fs.Datasy):
 
 
 @home.page(route="/.well-known/assetlinks.json", title="Android Links", protected_route=False)
-def assetlinks():
+def assetlinks(data: fs.Datasy):
     """Android Asset Links"""
     return [{
     "relation": ["delegate_permission/common.handle_all_urls"],
