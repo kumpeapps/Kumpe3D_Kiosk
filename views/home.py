@@ -36,22 +36,3 @@ def home_page(data: fs.Datasy):
         ],
         drawer=view.drawer,
     )
-
-@home.page(route="/json", title="JSON Response", protected_route=False)
-def json_page(data: fs.Datasy):
-    """JSON Response Page"""
-    page = data.page
-
-    def return_json(_):
-        page.response = ft.Response(
-            status_code=200,
-            headers={"Content-Type": "application/json"},
-            body='{"message": "Hello, World!"}'
-        )
-        page.update()
-
-    return_json(None)
-
-# Run the app
-if __name__ == "__main__":
-    home.run()
