@@ -3,12 +3,12 @@
 import pymysql
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-import api.post
 from core.params import Params as params
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
-from models.print_label import K3DPrintLabel
-import api
+from models.print_label import K3DPrintLabelItem, K3DPrintLabel
+import api.post
+import api.get
 
 printproductlabel = fs.AddPagesy()
 items_list = ""  # pylint: disable=invalid-name
@@ -79,7 +79,7 @@ def printproductlabel_page(data: fs.Datasy):
 
     def add_label_to_printq(sku: str, qr_data: str, label_type: str):
         qty = qty_field.value
-        label = K3DPrintLabel(
+        label = K3DPrintLabelItem(
             sku=sku,
             qr_data=qr_data,
             label_type=label_type,

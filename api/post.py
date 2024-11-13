@@ -2,12 +2,12 @@
 
 import requests  # type: ignore
 import flet as ft  # type: ignore
-from api import login as api_login
+import api.oauth
 from core.params import Params as params
-from models.print_label import K3DPrintLabel
+from models.print_label import K3DPrintLabel, K3DPrintLabelItem
 
 
-def post_to_api(page: ft.Page, endpoint, data):
+def post(page: ft.Page, endpoint, data):
     """
     Posts data to the specified API endpoint using OAuth credentials.
 
@@ -21,7 +21,7 @@ def post_to_api(page: ft.Page, endpoint, data):
     """
     base_url = params.API.url
     url = f"{base_url}{endpoint}"
-    api_login.check_and_refresh_token(page)
+    api.oauth.check_and_refresh_token(page)
     token_data = page.session.get("token_data")
     token = token_data["access_token"]
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
@@ -34,7 +34,7 @@ def post_to_api(page: ft.Page, endpoint, data):
     return response.json()
 
 
-def print_label(page: ft.Page, label: K3DPrintLabel):
+def print_label(page: ft.Page, label: K3DPrintLabelItem):
     """
     Print a product label using the API.
 
@@ -45,4 +45,4 @@ def print_label(page: ft.Page, label: K3DPrintLabel):
     Returns:
         dict: The response from the API.
     """
-    return post_to_api(page, "/v1/k3d/printq", label.to_dict())
+    return post(page, "/v1/k3d/printq", label.to_dict())

@@ -6,7 +6,7 @@ import flet_easy as fs  # type: ignore
 from helpers.is_port_open import rw_sql
 from models.user import User
 from core.params import logger
-from api import login as api_login
+import api.oauth
 
 app = fs.FletEasy(
     route_init="/login",
@@ -94,7 +94,7 @@ def view(data: fs.Datasy):
         page.go("/home")
 
     def logout(_):
-        api_login.logout(page)
+        api.oauth.logout(page)
 
     def addstock_go(_):
         page.session.set("selected_page", "addstock")

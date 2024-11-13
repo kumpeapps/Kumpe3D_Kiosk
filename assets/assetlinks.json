@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.kumpe3d.kiosk",
+      "sha256_cert_fingerprints":
+      ["98:0D:71:8C:CB:0A:53:82:FC:71:E7:48:3F:C1:3F:0B:9B:4D:1F:58:C7:2D:8E:AD:72:39:E5:84:B4:EF:29:8A"]
+    }
+  }]

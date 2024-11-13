@@ -10,7 +10,7 @@ from core.params import logger
 import sounds.beep as beep
 from helpers.is_port_open import rw_sql
 from models.user import User
-from api import login as api_login
+import api.oauth
 
 login = fs.AddPagesy()
 hf = ft.HapticFeedback()
@@ -118,7 +118,7 @@ def login_page(data: fs.Datasy):
         """KumpeApps SSO Login"""
         logger.debug(f"Sending Login Request for {username}")
         try:
-            api_login.login(page, username, password)
+            api.oauth.login(page, username, password)
         except requests.exceptions.HTTPError:
             show_banner_click("Login Failed")
             beep.error(page, hf)
