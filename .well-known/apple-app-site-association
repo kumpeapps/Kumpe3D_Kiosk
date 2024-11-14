@@ -1,0 +1,20 @@
+{
+  "applinks":{
+    "apps":[
+       
+    ],
+    "details":[
+      {
+        "appIDs":[
+          "2T42Z3DM34.com.kumpeapps.flet.kumpe3dkiosk"
+        ],
+        "components":[
+          {
+            "/":"*",
+            "comment":"Allow All"
+          }
+        ]
+      }
+    ]
+  }
+}
