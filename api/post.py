@@ -5,9 +5,10 @@ import flet as ft  # type: ignore
 import api.oauth
 from core.params import Params as params
 from models.print_label import K3DPrintLabel, K3DPrintLabelItem
+from models.kumpeapi_response import KumpeApiResponse
 
 
-def post(page: ft.Page, endpoint, data):
+def post(page: ft.Page, endpoint, data) -> KumpeApiResponse:
     """
     Posts data to the specified API endpoint using OAuth credentials.
 
@@ -26,23 +27,38 @@ def post(page: ft.Page, endpoint, data):
     token = token_data["access_token"]
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
-    response = requests.post(url, json=data, headers=headers, timeout=10)
+    response: requests.Response = requests.post(
+        url, json=data, headers=headers, timeout=10
+    )
 
-    if response.status_code != 200:
-        response.raise_for_status()
-
-    return response.json()
+    return KumpeApiResponse(response)
 
 
-def print_label(page: ft.Page, label: K3DPrintLabelItem):
+def print_label(page: ft.Page, label: dict) -> KumpeApiResponse:
     """
     Print a product label using the API.
 
     Args:
         page (ft.Page): The Flet page object containing the session.
-        label (K3DPrintLabel): The label object containing the label details.
+        label (dict): The label object containing the label details.
 
     Returns:
         dict: The response from the API.
     """
-    return post(page, "/v1/k3d/printq", label.to_dict())
+    return post(page, "/v1/k3d/printq", label)
+
+
+def add_label_item(page: ft.Page, item: K3DPrintLabelItem) -> KumpeApiResponse:
+    """
+    Add a label item to the product label using the API.
+
+    Args:
+        page (ft.Page): The Flet page object containing the session.
+        item (K3DPrintLabelItem): The label item object containing the item details.
+
+    Returns:
+        dict: The response from the API.
+    """
+    response = post(page, "/v1/k3d/build_label", item.to_dict())
+    response.model = K3DPrintLabelItem
+    return response

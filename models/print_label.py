@@ -1,5 +1,7 @@
 """Kumpe 3D label printer model."""
 
+from typing import Optional
+
 
 class K3DPrintLabel:  # type: ignore
     """Kumpes 3D label model."""
@@ -11,7 +13,7 @@ class K3DPrintLabel:  # type: ignore
         Args:
             items (list): A list of K3DPrintLabelItem objects.
         """
-        self.items: list
+        self.items: list = []
         for item in items:
             if not isinstance(item, K3DPrintLabelItem):
                 self.items.append(K3DPrintLabelItem(**item))
@@ -43,28 +45,25 @@ class K3DPrintLabelItem:  # type: ignore
     def __init__(
         self,
         sku: str,
-        qr_data: str,
-        label_type: str,
-        qty: int = 1,
-        enable_print: bool = True,
+        qty: int,
+        username: str,
+        id: Optional[int] = None,
+        title: Optional[str] = None,
     ) -> None:
         """
-        Initialize a K3DPrintLabel object.
+        Initialize a K3DPrintLabelItem instance.
 
         Args:
-            sku (str): The stock keeping unit for the label.
-            qr_data (str): The QR code data for the label.
-            label_type (str): The type of the label.
-            qty (int, optional): The quantity of labels to print. Defaults to 1.
-            enable_print (bool, optional): Flag to enable or disable printing. Defaults to True.
+            id (int): The unique identifier for the label item.
+            sku (str): The stock keeping unit for the label item.
+            qty (int): The quantity of the label item.
+            username (str): The username associated with the label item.
         """
-
+        self.id: Optional[int] = id
         self.sku: str = sku
-        self.qr_data: str = qr_data
-        self.label_type: str = label_type
-        self.distributor_id: int = 0
         self.qty: int = qty
-        self.enable_print: bool = enable_print
+        self.username: str = username
+        self.title = title if title else sku
 
     def to_dict(self):
         """
@@ -74,10 +73,12 @@ class K3DPrintLabelItem:  # type: ignore
             dict: A dictionary containing the label printer's attributes.
         """
         return {
+            "id": self.id,
             "sku": self.sku,
-            "qr_data": self.qr_data,
-            "label_type": self.label_type,
-            "distributor_id": self.distributor_id,
             "qty": self.qty,
-            "enable_print": self.enable_print,
+            "username": self.username,
+            "title": self.title,
         }
+
+    def __str__(self):
+        return f"K3DPrintLabelItem({self.sku}, {self.qty}, {self.username})"

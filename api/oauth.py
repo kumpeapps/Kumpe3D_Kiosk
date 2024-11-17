@@ -6,6 +6,7 @@ import requests  # type: ignore
 import flet as ft  # type: ignore
 from core.params import Params as params
 from models.user import User
+from models.kumpeapi_response import KumpeApiResponse
 
 params.API.get_values()
 # Configuration
@@ -111,15 +112,18 @@ def login(page: ft.Page, username: str, password: str) -> None:
 
         page.session.set("token_data", token_data)
 
-        user_profile = get_user_profile(token_data)
-        user = User(**user_profile["profile"])
+        get_user = get_user_profile(token_data)
+        if not get_user.success:
+            raise requests.exceptions.HTTPError("Login failed")
+        get_user.model = User
+        user = get_user.data
         page.session.set("user", user)
     except requests.exceptions.HTTPError as e:
         page.session.clear()
         raise requests.exceptions.HTTPError("Login failed") from e
 
 
-def get_user_profile(token_data: dict) -> dict:
+def get_user_profile(token_data: dict) -> KumpeApiResponse:
     """
     Get the user profile using the saved OAuth credentials.
 
@@ -134,8 +138,8 @@ def get_user_profile(token_data: dict) -> dict:
     """
     headers = {"Authorization": f"Bearer {token_data['access_token']}"}
     response = requests.get(f"{params.API.url}/v1/profile", headers=headers, timeout=10)
-    response.raise_for_status()
-    return response.json()
+    response = KumpeApiResponse(response)
+    return response
 
 
 def logout(page: ft.Page):
@@ -156,7 +160,6 @@ def logout(page: ft.Page):
         timeout=10,
         data={"token": token_data["access_token"]},
     )
-    response.raise_for_status()
     page.session.clear()
     page.session.set("selected_page", "login")
     page.go("/login")
@@ -186,6 +189,9 @@ def check_and_refresh_token(page: ft.Page):
 
     page.session.set("token_data", token_data)
 
-    user_profile = get_user_profile(token_data)
-    user = User(**user_profile["profile"])
+    get_user = get_user_profile(token_data)
+    if not get_user.success:
+        logout(page)
+    get_user.model = User
+    user = get_user.data
     page.session.set("user", user)

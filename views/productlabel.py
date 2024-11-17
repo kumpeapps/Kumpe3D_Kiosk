@@ -1,14 +1,15 @@
 """Print Product Labels"""
 
-import pymysql
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from core.params import Params as params
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 from models.print_label import K3DPrintLabelItem, K3DPrintLabel
+from models.kumpeapi_response import KumpeApiResponse
+from core.params import logger
 import api.post
 import api.get
+import api.delete
 
 printproductlabel = fs.AddPagesy()
 items_list = ""  # pylint: disable=invalid-name
@@ -55,18 +56,7 @@ def printproductlabel_page(data: fs.Datasy):
         print_button.disabled = True
         page.update()
         qr_data = items_list
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-        items = slb.build_k3d_item_dict(qr_data, "to_order_translation", cursor)
+        items = slb.build_k3d_item_dict(qr_data, "to_order_translation", page)
         sku = items[0]["sku"]
         if shelf_label_check.value:
             add_label_to_printq(sku, sku, "product_label")
@@ -79,13 +69,25 @@ def printproductlabel_page(data: fs.Datasy):
 
     def add_label_to_printq(sku: str, qr_data: str, label_type: str):
         qty = qty_field.value
-        label = K3DPrintLabelItem(
-            sku=sku,
-            qr_data=qr_data,
-            label_type=label_type,
-            qty=qty,
-        )
-        api.post.print_label(page, label)
+        label = {
+            "sku": sku,
+            "qty": qty,
+            "label_type": label_type,
+            "qr_data": qr_data,
+        }
+        response = api.post.print_label(page, label)
+        if response.success:
+            show_banner_click(
+                "Print Job Sent. May take a couple of min to print",
+                ft.colors.GREEN_200,
+                ft.icons.CHECK_BOX_ROUNDED,
+                ft.colors.GREEN_900,
+            )
+            beep.success(page)
+        else:
+            show_banner_click(response.error_message, ft.colors.RED_200)
+            beep.error(page)
+        get_items()
         show_banner_click(
             "Print Job Sent. May take a couple of min to print",
             ft.colors.GREEN_200,
@@ -96,30 +98,12 @@ def printproductlabel_page(data: fs.Datasy):
         get_items()
 
     def clear_clicked(_):
-
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-
-        sql = """
-            DELETE
-            FROM
-                Web_3dprints.temp__build_label
-            WHERE 1=1
-                AND username = %s;
-        """
-        cursor.execute(sql, page.session.get("username"))
-        db.commit()
-        cursor.close()
-        db.close()
+        response = api.delete.clear_build_label(page)
+        if response.success:
+            beep.success(page)
+        else:
+            show_banner_click(response.error_message, ft.colors.RED_200)
+            beep.error(page)
         get_items()
 
     print_button = ft.IconButton(
@@ -159,69 +143,32 @@ def printproductlabel_page(data: fs.Datasy):
     def scanned(_):
         """Add Item to Label"""
         success = True
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
+
         scanned_list = slb.build_k3d_item_dict(
-            scan_field.value, "to_order_translation", cursor
+            scan_field.value, "to_order_translation", page
         )
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-        sql = """
-            INSERT INTO Web_3dprints.temp__build_label
-            (
-                sku,
-                qty,
-                username
-                )
-            VALUES
-            (
-                %s,
-                %s,
-                %s
-            )
-            ON DUPLICATE KEY UPDATE qty = qty + %s;
-        """
+
         for item in scanned_list:
             sku = item["sku"]
             qty = item["qty"]
-            values = (
-                sku,
-                qty,
-                page.session.get("username"),
-                qty,
+            item = K3DPrintLabelItem(
+                sku=sku, qty=qty, username=page.session.get("username")
             )
+            logger.trace(f"Adding {item} to label")
             try:
-                cursor.execute(sql, values)
-            except:  # pylint: disable=bare-except
+                response = api.post.add_label_item(page, item)
+                if not response.success:
+                    raise ValueError(response.error_message)
+            except ValueError as error:
                 success = False
-                show_banner_click(f"Invalid SKU: {sku}")
+                show_banner_click(error)
                 break
+            logger.trace(f"Added {item} to label")
         scan_field.value = ""
         if success:
             beep.success(page)
-            db.commit()
-            db.close()
         else:
             beep.error(page)
-            db.close()
         tiles.clear()
         get_items()
         scan_field.focus()
@@ -253,6 +200,7 @@ def printproductlabel_page(data: fs.Datasy):
         bottom=False,
     )
     tiles: list = []
+    list_view = ft.Row(wrap=True, scroll="always", expand=True, controls=tiles)
 
     product_label_check = ft.Checkbox(label="Product Label", value=True)
     wide_barcode_label_check = ft.Checkbox(label="Wide Barcode Label")
@@ -278,146 +226,52 @@ def printproductlabel_page(data: fs.Datasy):
         ],
     )
 
-    def assign_upc(item: dict) -> bool:
-        if item["L3"] == "K3D":
-            try:
-                if params.SQL.username == "":
-                    params.SQL.get_values()
-                sql_params = params.SQL
-                db = pymysql.connect(
-                    db=sql_params.database,
-                    user=sql_params.username,
-                    passwd=sql_params.password,
-                    host=sql_params.server,
-                    port=3306,
-                )
-                cursor = db.cursor(pymysql.cursors.DictCursor)
-
-                sku = item["sku"]
-                short_sku_base = item["short_sku"]
-                short_sku = short_sku_base.replace("000", item["R3"])
-                psd_sku = f"K3D {short_sku.replace('-','')}"
-                upc_sql = """
-                        SELECT 
-                            upc,
-                            ean
-                        FROM
-                            Web_3dprints.upc_codes
-                        WHERE
-                            sku IS NULL
-                        LIMIT 1;
-                """
-                cursor.execute(upc_sql)
-                upc_data = cursor.fetchone()
-                upc = upc_data["upc"]  # type: ignore
-                assign_upc_sql = """
-                    UPDATE Web_3dprints.upc_codes
-                    SET
-                        sku = %s,
-                        short_sku = %s,
-                        psd_sku = %s
-                    WHERE 1=1
-                        AND upc = %s;
-                """
-                cursor.execute(assign_upc_sql, (sku, short_sku, psd_sku, upc))
-                db.commit()
-                db.close()
-                return True
-            except:  # pylint: disable=bare-except
-                return False
-        else:
-            return False
-
     def get_items():
         """Populates existing items for label"""
+        logger.trace("Getting items for label")
         progress_ring.visible = True
         tiles.clear()
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.ro_server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-
-        try:
-            sql = """
-                SELECT 
-                    `label`.`idtemp__build_label` AS `idtemp__build_label`,
-                    products.title AS `title`,
-                    `label`.`sku` AS `sku`,
-                    left(`label`.`sku`, 3) AS 'L3',
-                    right(`label`.`sku`, 3) AS 'R3',
-                    `label`.`qty` AS `qty`,
-                    `label`.`username` AS `username`,
-                    `products`.`short_sku` AS `short_sku`,
-                    IFNULL(`upc`.`upc`, '') AS `upc`,
-                    CASE
-                        WHEN `upc`.`upc` IS NULL THEN 0
-                        ELSE 1
-                    END AS `has_upc`
-                FROM
-                    ((`temp__build_label` `label`
-                    LEFT JOIN `upc_codes` `upc` ON (`upc`.`sku` = `label`.`sku`))
-                    LEFT JOIN products ON products.sku = label.sku OR products.sku = concat(left(label.sku,12),'000'))
-                WHERE 1=1
-                    AND username = %s
-                ORDER BY idtemp__build_label;
-            """
-            cursor.execute(sql, (page.session.get("username")))
-            items = cursor.fetchall()
+        get_label: KumpeApiResponse = api.get.get_build_label(page)  # type: ignore
+        if get_label.success:
+            logger.debug(get_label.data.items)
+            items: K3DPrintLabel = get_label.data  # type: ignore
             global items_list  # pylint: disable=global-statement
             items_list = ""
-            for item in items:
-                has_upc = bool(item["has_upc"])
-                if not has_upc:
-                    has_upc = assign_upc(item)
-                if has_upc:
-                    integrity_icon = ft.Icon(
-                        name=ft.icons.CHECK_CIRCLE_ROUNDED, color=ft.colors.GREEN_300
-                    )
-                else:
-                    integrity_icon = ft.Icon(
-                        name=ft.icons.ERROR_ROUNDED, color=ft.colors.RED_300
-                    )
+            for item in items.items:
                 if items_list == "":
-                    items_list = f"{item['qty']};;{item['sku']}"
+                    items_list = f"{item.qty};;{item.sku}"
                 else:
-                    items_list = f"{items_list}|{item['qty']};;{item['sku']}"
+                    items_list = f"{items_list}|{item.qty};;{item.sku}"
+
+                logger.debug(f"https://images.kumpeapps.com/filament?sku={item.sku}")
                 tile = ft.ListTile(
                     bgcolor_activated=ft.colors.AMBER_ACCENT,
                     leading=ft.Image(
-                        src=f"https://images.kumpeapps.com/filament?sku={item['sku']}"
+                        src=f"https://images.kumpeapps.com/filament?sku={item.sku}"
                     ),
-                    title=ft.Text(item["title"]),
-                    subtitle=ft.Text(f"{item['sku']}\nQty: {item['qty']}"),
+                    title=ft.Text(item.title),
+                    subtitle=ft.Text(f"{item.sku}\nQty: {item.qty}"),
                     is_three_line=True,
-                    trailing=integrity_icon,
                 )
                 tiles.append(tile)
-            if len(items) == 0:
+            if len(items.items) == 0:
                 print_button.disabled = True
                 clear_button.disabled = True
             else:
                 print_button.disabled = False
                 clear_button.disabled = False
             page.update()
-        except (KeyError, TypeError):
+            logger.trace("Items for label retrieved")
+        else:
             beep.error(page)
-            show_banner_click("Unknown Error")
+            show_banner_click(get_label.error_message)
             print_button.disabled = True
             page.update()
-        cursor.close()
-        db.close()
         progress_ring.visible = False
+        list_view.controls = tiles
+        page.update()
 
     get_items()
-
-    list_view = ft.Row(wrap=True, scroll="always", expand=True, controls=tiles)
 
     return ft.View(
         route="/print_product_label",
