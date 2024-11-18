@@ -8,6 +8,8 @@ def error(page: ft.Page, hf: ft.HapticFeedback = None):
     if hf:
         try:
             hf.heavy_impact()
+            hf.heavy_impact()
+            hf.heavy_impact()
         except AttributeError:
             pass
     error_file = ft.Audio(
@@ -25,6 +27,7 @@ def success(page: ft.Page, hf: ft.HapticFeedback = None):
             hf = ft.HapticFeedback()
             page.overlay.append(hf)
             hf.light_impact()
+            hf.heavy_impact()
         except AttributeError:
             pass
     success_file = ft.Audio(

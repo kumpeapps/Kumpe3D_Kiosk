@@ -4,9 +4,9 @@ import pymysql
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 from core.params import Params as params
+from core.params import logger
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
-from core.params import logger
 
 orderitems = fs.AddPagesy()
 COMPANY_USE_ORDER = "163"
@@ -79,7 +79,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
         else:
             translation = "to_order_translation"
         logger.debug(f"Translation: {translation}")
-        scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, cursor)
+        scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, page)
         sql = """
             INSERT INTO Web_3dprints.orders__items
             (
