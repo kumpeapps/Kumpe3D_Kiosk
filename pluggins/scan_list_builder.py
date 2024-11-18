@@ -1,10 +1,8 @@
 """Kumpe3D Scan List Builder"""
 
-import pymysql
-import pymysql.cursors
 import flet as ft # type: ignore
 import api.get
-from models.scan_translation import ScanTranslations, ScanTranslation
+from models.scan_translation import ScanTranslations
 
 def convert_to_list(string: str, delimiter: str) -> list:
     """Convert to List"""

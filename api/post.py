@@ -4,7 +4,7 @@ import requests  # type: ignore
 import flet as ft  # type: ignore
 import api.oauth
 from core.params import Params as params
-from models.print_label import K3DPrintLabel, K3DPrintLabelItem
+from models.print_label import K3DPrintLabelItem
 from models.kumpeapi_response import KumpeApiResponse
 
 

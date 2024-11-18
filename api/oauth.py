@@ -154,7 +154,7 @@ def logout(page: ft.Page):
     """
     token_data = page.session.get("token_data")
     headers = {"Authorization": f"Bearer {token_data['access_token']}"}
-    response = requests.post(
+    _ = requests.post(
         f"{params.API.url}/oauth/revoke",
         headers=headers,
         timeout=10,
