@@ -1,5 +1,6 @@
 version: '2.3.6({build})'
 environment:
+
   matrix:
   - job_name: "build Android"
     appveyor_build_worker_image: Ubuntu
@@ -151,8 +152,6 @@ for:
 # 
 -
   matrix:
-    on:
-        APPVEYOR_REPO_TAG: false
     only:
     - job_name: "build Android"
     - SERVICE_TOKEN: $SERVICE_TOKEN
@@ -179,6 +178,7 @@ for:
     on:
         APPVEYOR_REPO_TAG: true
     only:
+    - branch: master
     - job_name: "build Android AAB"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
