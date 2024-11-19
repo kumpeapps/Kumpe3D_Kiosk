@@ -4,13 +4,9 @@ environment:
   - job_name: "build Android"
     appveyor_build_worker_image: Ubuntu
     build: Script
-    on:
-      APPVEYOR_REPO_TAG: true
   - job_name: "build Android AAB"
     appveyor_build_worker_image: Ubuntu
     build: Script
-    on:
-      APPVEYOR_REPO_TAG: false
   # - job_name: "build macOS"
   #   appveyor_build_worker_image: macOS-Sonoma
   #   build: Script
@@ -155,6 +151,8 @@ for:
 # 
 -
   matrix:
+    on:
+        APPVEYOR_REPO_TAG: false
     only:
     - job_name: "build Android"
     - SERVICE_TOKEN: $SERVICE_TOKEN
@@ -178,6 +176,8 @@ for:
 # 
 -
   matrix:
+    on:
+        APPVEYOR_REPO_TAG: true
     only:
     - job_name: "build Android AAB"
     - SERVICE_TOKEN: $SERVICE_TOKEN
