@@ -21,3 +21,8 @@ jobs:
         uses: PSModule/Auto-Release@v1
         env:
           GITHUB_TOKEN: ${{ github.token }} # Used for GitHub CLI authentication
+        with:
+          VersionPrefix: ''
+          CreateMajorTag: false
+          CreateMinorTag: false
+          AutoPatching: false
