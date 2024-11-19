@@ -1,5 +1,4 @@
 VersionPrefix: ''
-CreateMajorTag: true
-CreateMinorTag: true
-CreatePatchTag: true
+CreateMajorTag: false
+CreateMinorTag: false
 AutoPatching: false
