@@ -2,10 +2,10 @@ version: '2.3.6({build})'
 environment:
 
   matrix:
-  - job_name: "build Android"
+  - job_name: "build Android AAB"
     appveyor_build_worker_image: Ubuntu
     build: Script
-  - job_name: "build Android AAB"
+  - job_name: "build Android"
     appveyor_build_worker_image: Ubuntu
     build: Script
   # - job_name: "build macOS"
@@ -174,9 +174,11 @@ for:
 #   Android package AAB
 # 
 -
+  branches:
+    only:
+    - main
   matrix:
     only:
-    - branch: master
     - job_name: "build Android AAB"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
