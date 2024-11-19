@@ -175,8 +175,6 @@ for:
 # 
 -
   matrix:
-    on:
-        APPVEYOR_REPO_TAG: true
     only:
     - branch: master
     - job_name: "build Android AAB"
