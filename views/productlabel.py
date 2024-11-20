@@ -88,14 +88,6 @@ def printproductlabel_page(data: fs.Datasy):
             show_banner_click(response.error_message, ft.colors.RED_200)
             beep.error(page)
         get_items()
-        show_banner_click(
-            "Print Job Sent. May take a couple of min to print",
-            ft.colors.GREEN_200,
-            ft.icons.CHECK_BOX_ROUNDED,
-            ft.colors.GREEN_900,
-        )
-        beep.success(page)
-        get_items()
 
     def clear_clicked(_):
         response = api.delete.clear_build_label(page)

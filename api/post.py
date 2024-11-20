@@ -6,6 +6,7 @@ import api.oauth
 from core.params import Params as params
 from models.print_label import K3DPrintLabelItem
 from models.kumpeapi_response import KumpeApiResponse
+from core.params import logger
 
 
 def post(page: ft.Page, endpoint, data) -> KumpeApiResponse:
@@ -30,6 +31,8 @@ def post(page: ft.Page, endpoint, data) -> KumpeApiResponse:
     response: requests.Response = requests.post(
         url, json=data, headers=headers, timeout=10
     )
+    logger.debug(f"Status code: {response.status_code}")
+    print(response.json())
 
     return KumpeApiResponse(response)
 
