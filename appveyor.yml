@@ -2,16 +2,22 @@ version: '2.3.6({build})'
 environment:
 
   matrix:
-  - job_name: "build Android AAB"
+  - job_name: "build Android AAB- Release"
     appveyor_build_worker_image: Ubuntu
     build: Script
-  - job_name: "build Android"
+  - job_name: "build Android- Release"
+    appveyor_build_worker_image: Ubuntu
+    build: Script
+  - job_name: "build Android- BETA"
     appveyor_build_worker_image: Ubuntu
     build: Script
   # - job_name: "build macOS"
   #   appveyor_build_worker_image: macOS-Sonoma
   #   build: Script
-  - job_name: "build iOS"
+  - job_name: "build iOS- BETA"
+    appveyor_build_worker_image: macOS-Sonoma
+    build: Script
+  - job_name: "build iOS- Release"
     appveyor_build_worker_image: macOS-Sonoma
     build: Script
 
@@ -106,7 +112,7 @@ for:
     - main
   matrix:
     only:
-    - job_name: "build iOS"
+    - job_name: "build iOS- BETA"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
@@ -159,7 +165,7 @@ for:
     - main
   matrix:
     only:
-    - job_name: "build Android"
+    - job_name: "build Android- BETA"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
@@ -186,7 +192,7 @@ for:
     - main
   matrix:
     only:
-    - job_name: "build Android"
+    - job_name: "build Android- Release"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
@@ -212,7 +218,7 @@ for:
     - main
   matrix:
     only:
-    - job_name: "build Android AAB"
+    - job_name: "build Android AAB- Release"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
