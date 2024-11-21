@@ -2,16 +2,22 @@ version: '2.3.6({build})'
 environment:
 
   matrix:
-  - job_name: "build Android AAB"
+  - job_name: "build Android AAB- Release"
     appveyor_build_worker_image: Ubuntu
     build: Script
-  - job_name: "build Android"
+  - job_name: "build Android- Release"
+    appveyor_build_worker_image: Ubuntu
+    build: Script
+  - job_name: "build Android- BETA"
     appveyor_build_worker_image: Ubuntu
     build: Script
   # - job_name: "build macOS"
   #   appveyor_build_worker_image: macOS-Sonoma
   #   build: Script
-  - job_name: "build iOS"
+  - job_name: "build iOS- BETA"
+    appveyor_build_worker_image: macOS-Sonoma
+    build: Script
+  - job_name: "build iOS- Release"
     appveyor_build_worker_image: macOS-Sonoma
     build: Script
 
@@ -106,7 +112,7 @@ for:
     - main
   matrix:
     only:
-    - job_name: "build iOS"
+    - job_name: "build iOS- BETA"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
@@ -150,6 +156,58 @@ for:
   artifacts:
   - path: kumpe3dkiosk-ios.tar.gz
 
+# #
+# #   iOS package- BETA
+# # 
+-
+  branches:
+    only:
+    - main
+  matrix:
+    only:
+    - job_name: "build iOS- Release"
+    - SERVICE_TOKEN: $SERVICE_TOKEN
+    - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
+    - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
+    - APPLE_APP_STORE_API_KEY_ID: $APPLE_APP_STORE_API_KEY_ID
+    - APPLE_APPSTORE_API_ISSUER_ID: $APPLE_APPSTORE_API_ISSUER_ID
+    - APPLE_APP_STORE_API_KEY: $APPLE_APP_STORE_API_KEY
+    - FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
+    - FASTLANE_PASSWORD: $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
+    - FASTLANE_USER: "jakumpe@justinkumpe.net"
+    - MATCH_PASSWORD: $MATCH_KEYCHAIN_PASSWORD
+    - MATCH_KEYCHAIN_PASSWORD: $MATCH_KEYCHAIN_PASSWORD
+    - MATCH_DEPLOY_KEY: $MATCH_DEPLOY_KEY
+    - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
+    - GITHUB_TOKEN: $(GITHUB_TOKEN)
+  
+  install:
+  - xcodebuild -downloadPlatform iOS
+  - gem install cocoapods
+  - gem install bundler
+  - pip install -r requirements.txt
+  - flutter upgrade
+  - brew install ruby
+  - brew install graphicsmagick
+  - bundle install
+  - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer
+  - git clone https://justinkumpe:${GITHUB_TOKEN}@github.com/kumpeapps/fastlane_certs.git
+  - bundle exec fastlane matchget
+
+  build_script:
+  - echo "is_mobile=1" >> .env
+  # - bundle exec badge --shield "V${APPVEYOR_REPO_TAG_NAME:-"2.3.6"}-${APPVEYOR_BUILD_NUMBER}-blue" --shield_geometry "+0+25%" --shield_scale 0.75 --glob "/assets/icon.png"
+  - flet build ipa --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.6"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio --flutter-build-args=--release --flutter-build-args=--no-codesign --template https://github.com/kumpeapps/flet-build-template.git --template-ref Kumpe3D_Kiosk
+  # --team 2T42Z3DM34
+  - bundle exec fastlane upload_testflight
+
+  after_build:
+  - tar -czvf kumpe3dkiosk-ios.tar.gz -C build ipa
+  # - xcrun altool --upload-app -t ios -f /build/ipa/kumpe3dkiosk.ipa -u jakumpe@justinkumpe.net -p $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
+
+  artifacts:
+  - path: kumpe3dkiosk-ios.tar.gz
+
 #
 #   Android package -BETA
 # 
@@ -159,7 +217,7 @@ for:
     - main
   matrix:
     only:
-    - job_name: "build Android"
+    - job_name: "build Android- BETA"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
@@ -186,7 +244,7 @@ for:
     - main
   matrix:
     only:
-    - job_name: "build Android"
+    - job_name: "build Android- Release"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
@@ -212,7 +270,7 @@ for:
     - main
   matrix:
     only:
-    - job_name: "build Android AAB"
+    - job_name: "build Android AAB- Release"
     - SERVICE_TOKEN: $SERVICE_TOKEN
     - APPVEYOR_BUILD_VERSION: $APPVEYOR_BUILD_VERSION
     - APPVEYOR_BUILD_NUMBER: $APPVEYOR_BUILD_NUMBER
