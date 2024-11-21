@@ -161,7 +161,7 @@ for:
 # # 
 -
   branches:
-    except:
+    only:
     - main
   matrix:
     only:
