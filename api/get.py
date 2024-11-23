@@ -9,6 +9,7 @@ from models.print_label import K3DPrintLabel
 from models.user import User
 from models.kumpeapi_response import KumpeApiResponse
 from models.scan_translation import ScanTranslations
+from models.production_q import ProductionQ
 
 
 def get(
@@ -66,3 +67,16 @@ def get_scan_translations(page: ft.Page) -> KumpeApiResponse:
     """
     translations = get(page, "/v1/k3d/scan_translations", None, ScanTranslations)
     return translations
+
+def get_production_q(page: ft.Page) -> KumpeApiResponse:
+    """
+    Get the production queue.
+
+    Args:
+        page (ft.Page): The Flet page object containing the session.
+
+    Returns:
+        KumpeApiResponse: The response from the API.
+    """
+    production_q = get(page, "/v1/k3d/production_q", None, ProductionQ)
+    return production_q
