@@ -32,6 +32,3 @@ host = "kiosk.kumpe3d.com"
 key_store = "/tmp/kumpe3dkiosk" # --android-signing-key-store
 key_alias = "upload" # --android-signing-key-alias
 
-[tool.flet.template]
-path = "https://github.com/kumpeapps/flet-build-template.git" # --template
-ref = "Kumpe3D_Kiosk" # --template-ref
