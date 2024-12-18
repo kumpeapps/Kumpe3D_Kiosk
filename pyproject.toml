@@ -8,7 +8,7 @@ authors = [
 flutter.dependencies = ["flet_audio"]
 
 dependencies = [
-  "flet[all]==0.25.2",
+  "flet==0.25.2",
   "PyMySQL==1.1.1",
   "python-dotenv==1.0.1",
   "infisical_api==1.0.0",
