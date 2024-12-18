@@ -26,7 +26,7 @@ stack: python 3.11
 
 install:
 - pip install -r requirements.txt
-- flutter upgrade --force
+- flutter doctor -v
 
 before_build:
 - echo "APP_ENV=prod" > .env
@@ -86,7 +86,7 @@ for:
   - gem install cocoapods
   - gem install bundler
   - pip install -r requirements.txt
-  - flutter upgrade --force
+  # - flutter upgrade --force
   - bundle install
   - bundle update fastlane
   - sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain AppleWWDRCAG2.cer
@@ -187,7 +187,7 @@ for:
   - gem install cocoapods
   - gem install bundler
   - pip install -r requirements.txt
-  - flutter upgrade
+  # - flutter upgrade
   - brew install ruby
   - brew install graphicsmagick
   - bundle install
