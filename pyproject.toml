@@ -7,6 +7,18 @@ authors = [
 
 flutter.dependencies = ["flet_audio"]
 
+dependencies = [
+  "flet==0.25.2",
+  "PyMySQL==1.1.1",
+  "python-dotenv==1.0.1",
+  "infisical_api==1.0.0",
+  "parse==1.20.1",
+  "chardet==5.2.0",
+  "flet-easy==0.2.7",
+  "loguru==0.7.2",
+  "flet-toast==0.5.0"
+  ]
+
 [tool.flet]
 org = "com.kumpeapps.flet" # --org
 product = "Kumpe3D Kiosk" # --product
