@@ -134,6 +134,7 @@ for:
   - gem install bundler
   - pip install -r requirements.txt
   # - flutter upgrade
+  - flutter doctor -v
   - brew install ruby
   - brew install graphicsmagick
   - bundle install
