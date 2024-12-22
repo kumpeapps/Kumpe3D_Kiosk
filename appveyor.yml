@@ -26,7 +26,7 @@ stack: python 3.11
 
 install:
 - pip install -r requirements.txt
-- cd /home/appveyor/flutter && git checkout 3.24.4
+- cd /home/appveyor/flutter && git checkout flutter-3.24-candidate.1
 - flutter doctor -v
 
 before_build:
