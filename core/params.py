@@ -11,7 +11,8 @@ load_dotenv(override=True)
 service_token = os.getenv("SERVICE_TOKEN")
 app_env = os.getenv("APP_ENV")
 creds = infisical_api(
-    service_token=service_token, infisical_url="https://creds.kumpeapps.com"
+    service_token=service_token,
+    infisical_url="https://creds.kumpeapps.com",
 )
 is_mobile = os.getenv("is_mobile")
 log_level = os.getenv("LOG_LEVEL", "INFO")

@@ -3,30 +3,29 @@ environment:
 
   matrix:
   - job_name: "build Android AAB- Release"
-    appveyor_build_worker_image: Ubuntu
+    appveyor_build_worker_image: appveyor-runner-debian
     build: Script
   - job_name: "build Android- Release"
-    appveyor_build_worker_image: Ubuntu
+    appveyor_build_worker_image: appveyor-runner-debian
     build: Script
   - job_name: "build Android- BETA"
-    appveyor_build_worker_image: Ubuntu
+    appveyor_build_worker_image: appveyor-runner-debian
     build: Script
   # - job_name: "build macOS"
   #   appveyor_build_worker_image: macOS-Sonoma
   #   build: Script
-  - job_name: "build iOS- BETA"
-    appveyor_build_worker_image: macOS-Sonoma
-    build: Script
-  - job_name: "build iOS- Release"
-    appveyor_build_worker_image: macOS-Sonoma
-    build: Script
+  # - job_name: "build iOS- BETA"
+  #   appveyor_build_worker_image: macOS-Sonoma
+  #   build: Script
+  # - job_name: "build iOS- Release"
+  #   appveyor_build_worker_image: macOS-Sonoma
+  #   build: Script
 
 #  skip_branch_with_pr: true
 stack: python 3.11
 
 install:
 - pip install -r requirements.txt
-- flutter upgrade --force
 - flutter doctor -v
 
 before_build:
