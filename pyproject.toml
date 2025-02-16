@@ -43,4 +43,3 @@ host = "kiosk.kumpe3d.com"
 # and FLET_ANDROID_SIGNING_KEY_PASSWORD environment variables.
 key_store = "/tmp/kumpe3dkiosk" # --android-signing-key-store
 key_alias = "upload" # --android-signing-key-alias
-
