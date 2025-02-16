@@ -3,13 +3,13 @@ environment:
 
   matrix:
   - job_name: "build Android AAB- Release"
-    build_cloud: appveyor-runner-debian
+    appveyor_build_worker_image: Ubuntu
     build: Script
   - job_name: "build Android- Release"
-    build_cloud: appveyor-runner-debian
+    appveyor_build_worker_image: Ubuntu
     build: Script
   - job_name: "build Android- BETA"
-    build_cloud: appveyor-runner-debian
+    appveyor_build_worker_image: Ubuntu
     build: Script
   # - job_name: "build macOS"
   #   appveyor_build_worker_image: macOS-Sonoma
@@ -26,6 +26,7 @@ stack: python 3.11
 
 install:
 - pip install -r requirements.txt
+# - flutter upgrade --force
 - flutter doctor -v
 
 before_build:
@@ -33,7 +34,6 @@ before_build:
 - echo "SERVICE_TOKEN=$SERVICE_TOKEN" >> .env
 - echo "VERSION=$APPVEYOR_BUILD_VERSION" >> .env
 - echo "BUILD=$APPVEYOR_BUILD_NUMBER" >> .env
-- echo whoami
 
 test: false
 
