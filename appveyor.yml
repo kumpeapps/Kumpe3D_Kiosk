@@ -33,6 +33,7 @@ before_build:
 - echo "SERVICE_TOKEN=$SERVICE_TOKEN" >> .env
 - echo "VERSION=$APPVEYOR_BUILD_VERSION" >> .env
 - echo "BUILD=$APPVEYOR_BUILD_NUMBER" >> .env
+- echo whoami
 
 test: false
 
