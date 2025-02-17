@@ -1,0 +1,45 @@
+[project]
+name = "kumpe3dkiosk"
+description = "Kiosk App for Kumpe 3D"
+authors = [
+  {name = "Justin Kumpe", email = "jakumpe@kumpeapps.com"}
+]
+
+flutter.dependencies = ["flet_audio"]
+
+dependencies = [
+  "flet==0.26.0",
+  "PyMySQL==1.1.1",
+  "python-dotenv==1.0.1",
+  "infisical_api==1.0.0",
+  "parse==1.20.1",
+  "chardet==5.2.0",
+  "flet-easy==0.2.8",
+  "loguru==0.7.2",
+  "flet-toast==0.5.0"
+  ]
+
+[tool.flet]
+org = "com.kumpeapps.flet" # --org
+product = "Kumpe3D Kiosk" # --product
+company = "KumpeApps LLC" # --company
+copyright = "Copyright (C) 2024 by KumpeApps LLC" # --copyright
+
+[tool.flet.ios]
+team = "2T42Z3DM34"
+
+[tool.flet.ios.deep_linking]
+scheme = "https"
+host = "kiosk.kumpe3d.com"
+
+[tool.flet.android.deep_linking]
+scheme = "https"
+host = "kiosk.kumpe3d.com"
+
+[tool.flet.android.signing]
+# store and key passwords can be passed with `--android-signing-key-store-password`
+# and `--android-signing-key-password` options or
+# FLET_ANDROID_SIGNING_KEY_STORE_PASSWORD
+# and FLET_ANDROID_SIGNING_KEY_PASSWORD environment variables.
+key_store = "/tmp/kumpe3dkiosk" # --android-signing-key-store
+key_alias = "upload" # --android-signing-key-alias
