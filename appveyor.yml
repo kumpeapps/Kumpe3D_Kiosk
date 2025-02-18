@@ -34,6 +34,11 @@ before_build:
 - echo "SERVICE_TOKEN=$SERVICE_TOKEN" >> .env
 - echo "VERSION=$APPVEYOR_BUILD_VERSION" >> .env
 - echo "BUILD=$APPVEYOR_BUILD_NUMBER" >> .env
+- echo "KA_SSO_APIKEY=$KA_SSO_APIKEY" >> .env
+- echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
+- echo "API_CLIENT_ID=$API_CLIENT_ID" >> .env
+- echo "API_CLIENT_SECRET=$API_CLIENT_SECRET" >> .env
+- echo "API_URL=$API_URL" >> .env
 
 test: false
 
