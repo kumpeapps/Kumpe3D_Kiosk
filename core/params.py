@@ -3,17 +3,11 @@
 import os
 import sys
 from dotenv import load_dotenv
-from infisical_api import infisical_api  # type: ignore
 import loguru
 
 
 load_dotenv(override=True)
-service_token = os.getenv("SERVICE_TOKEN")
 app_env = os.getenv("APP_ENV")
-creds = infisical_api(
-    service_token=service_token,
-    infisical_url="https://creds.kumpeapps.com",
-)
 is_mobile = os.getenv("is_mobile")
 log_level = os.getenv("LOG_LEVEL", "INFO")
 logger = loguru.logger
@@ -27,51 +21,34 @@ class Params:
 
     mobile = bool(int(is_mobile))  # type: ignore
 
-    class SHIPPO:
-        """Shippo Parameters"""
+    # class SHIPPO:
+    #     """Shippo Parameters"""
 
-        base_url = ""
-        api_key = ""
+    #     base_url = ""
+    #     api_key = ""
 
-        @staticmethod
-        def get_values():
-            """Get Values"""
-            Params.SHIPPO.base_url = "https://api.goshippo.com"
-            Params.SHIPPO.api_key = creds.get_secret(  # pylint: disable=no-member
-                secret_name="APIKEY", environment="dev", path="/SHIPPO/"
-            ).secretValue
+    #     @staticmethod
+    #     def get_values():
+    #         """Get Values"""
+    #         Params.SHIPPO.base_url = "https://api.goshippo.com"
+    #         Params.SHIPPO.api_key = creds.get_secret(  # pylint: disable=no-member
+    #             secret_name="APIKEY", environment="dev", path="/SHIPPO/"
+    #         ).secretValue
 
     class SQL:
         """SQL Parameters for Web_3d User"""
 
-        username = ""
-        password = ""
-        server = ""
-        port = ""
-        database = ""
-        ro_server = ""
+        username = "Web_3d"
+        password = os.getenv("MYSQL_PASSWORD")
+        server = "rw.sql.pvt.kumpedns.us"
+        port = "3306"
+        database = "Web_3dprints"
+        ro_server = "ro.sql.pvt.kumpedns.us"
 
         @staticmethod
         def get_values():
             """Get Values"""
-            Params.SQL.username = creds.get_secret(  # pylint: disable=no-member
-                secret_name="USERNAME", environment=app_env, path="/MYSQL/"
-            ).secretValue
-            Params.SQL.password = creds.get_secret(  # pylint: disable=no-member
-                secret_name="PASSWORD", environment=app_env, path="/MYSQL/"
-            ).secretValue
-            Params.SQL.server = creds.get_secret(  # pylint: disable=no-member
-                secret_name="SERVER", environment=app_env, path="/MYSQL/"
-            ).secretValue
-            Params.SQL.port = creds.get_secret(  # pylint: disable=no-member
-                secret_name="PORT", environment=app_env, path="/MYSQL/"
-            ).secretValue
-            Params.SQL.database = creds.get_secret(  # pylint: disable=no-member
-                secret_name="DATABASE", environment=app_env, path="/MYSQL/"
-            ).secretValue
-            Params.SQL.ro_server = creds.get_secret(  # pylint: disable=no-member
-                secret_name="RO_SERVER", environment=app_env, path="/MYSQL/"
-            ).secretValue
+            pass
 
         @staticmethod
         def dict():
@@ -87,35 +64,22 @@ class Params:
     class KumpeApps:
         """KumpeApps Params"""
 
-        api_url = ""
-        api_key = ""
+        api_url = "https://www.kumpeapps.com/api"
+        api_key = os.getenv("KA_SSO_APIKEY")
 
         @staticmethod
         def get_values():
             """Get Values"""
-            Params.KumpeApps.api_url = creds.get_secret(  # pylint: disable=no-member
-                secret_name="KA_API_URL", environment=app_env, path="/KUMPEAPPS/"
-            ).secretValue
-            Params.KumpeApps.api_key = creds.get_secret(  # pylint: disable=no-member
-                secret_name="KA_SSO_APIKEY", environment=app_env, path="/KUMPEAPPS/"
-            ).secretValue
+            pass
 
     class API:
         """API Params"""
 
-        url: str
-        client_id: str
-        client_secret: str
+        url = "https://api.kumpeapps.us"
+        client_id = os.getenv("API_CLIENT_ID")
+        client_secret = os.getenv("API_CLIENT_SECRET")
 
         @staticmethod
         def get_values():
             """Get Values"""
-            Params.API.url = creds.get_secret(  # pylint: disable=no-member
-                secret_name="URL", environment=app_env, path="/API/"
-            ).secretValue
-            Params.API.client_id = creds.get_secret(  # pylint: disable=no-member
-                secret_name="CLIENT_ID", environment=app_env, path="/API/"
-            ).secretValue
-            Params.API.client_secret = creds.get_secret(  # pylint: disable=no-member
-                secret_name="CLIENT_SECRET", environment=app_env, path="/API/"
-            ).secretValue
+            pass
