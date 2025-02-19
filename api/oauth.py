@@ -8,7 +8,6 @@ from core.params import Params as params
 from models.user import User
 from models.kumpeapi_response import KumpeApiResponse
 
-params.API.get_values()
 # Configuration
 TOKEN_URL = f"{params.API.url}/oauth/token"
 CLIENT_ID = params.API.client_id

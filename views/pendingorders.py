@@ -66,9 +66,8 @@ def pendingorders_page(data: fs.Datasy):
 
     def get_pending_orders():
         """Add's Roll to Stock"""
-
-        params.SQL.get_values()
         sql_params = params.SQL
+
         db = pymysql.connect(
             db=sql_params.database,
             user=sql_params.username,
