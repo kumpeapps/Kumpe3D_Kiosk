@@ -16,7 +16,7 @@ dependencies = [
   "flet-easy==0.2.8",
   "loguru==0.7.2",
   "flet-toast==0.5.0",
-  "requests==2.31.0"
+  "requests==2.32.0"
   ]
 
 [tool.flet]
