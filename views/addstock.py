@@ -21,8 +21,6 @@ def addstock_page(data: fs.Datasy):
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
 
     page.title = "Add to Stock"
-    if params.SQL.username == "":
-        params.SQL.get_values()
     sql_params = params.SQL
 
     def show_drawer(_):

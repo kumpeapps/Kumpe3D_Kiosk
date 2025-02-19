@@ -149,8 +149,6 @@ def login_page(data: fs.Datasy):
         """Access Granted"""
         logger.success("Access Granted!")
         page.session.set("username", user.username)
-        params.SHIPPO.get_values()
-        params.SQL.get_values()
         log_access(f"{user.user_id}", f"/{computername}/granted/{access_level}")
         logging_in(False)
         page.update()
