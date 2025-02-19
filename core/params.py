@@ -21,19 +21,16 @@ class Params:
 
     mobile = bool(int(is_mobile))  # type: ignore
 
-    # class SHIPPO:
-    #     """Shippo Parameters"""
+    class SHIPPO:
+        """Shippo Parameters"""
 
-    #     base_url = ""
-    #     api_key = ""
+        base_url = ""
+        api_key = ""
 
-    #     @staticmethod
-    #     def get_values():
-    #         """Get Values"""
-    #         Params.SHIPPO.base_url = "https://api.goshippo.com"
-    #         Params.SHIPPO.api_key = creds.get_secret(  # pylint: disable=no-member
-    #             secret_name="APIKEY", environment="dev", path="/SHIPPO/"
-    #         ).secretValue
+        @staticmethod
+        def get_values():
+            """Get Values"""
+            pass
 
     class SQL:
         """SQL Parameters for Web_3d User"""
