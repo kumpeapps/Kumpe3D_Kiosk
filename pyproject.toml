@@ -13,7 +13,7 @@ dependencies = [
   "python-dotenv==1.0.1",
   "parse==1.20.1",
   "chardet==5.2.0",
-  "flet-easy==0.2.8",
+  "flet-easy==0.2.9",
   "loguru==0.7.2",
   "flet-toast==0.5.0",
   "requests==2.32.0"
