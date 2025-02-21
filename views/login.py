@@ -55,7 +55,7 @@ def login_page(data: fs.Datasy):
         page.update()
 
     password_field = ft.TextField(
-        label="Password",
+        label="Passworddd",
         password=True,
         can_reveal_password=False,
         adaptive=True,
@@ -71,6 +71,7 @@ def login_page(data: fs.Datasy):
 
     def username_submit(_):
         """Activate Password Field on Submit"""
+        show_banner_click("Username Submitted")
         logger.trace("Username Field Submitted")
         password_field.focus()
 
@@ -122,6 +123,7 @@ def login_page(data: fs.Datasy):
 
     def send_request(username: str, password: str):
         """KumpeApps SSO Login"""
+        show_banner_click("Logging In")
         logger.debug(f"Sending Login Request for {username}")
         try:
             api.oauth.login(page, username, password)
@@ -153,6 +155,7 @@ def login_page(data: fs.Datasy):
 
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
+        show_banner_click("Access Granted", ft.colors.GREEN_400, ft.icons.CHECK)
         logger.success("Access Granted!")
         page.session.set("username", user.username)
         log_access(f"{user.user_id}", f"/{computername}/granted/{access_level}")
