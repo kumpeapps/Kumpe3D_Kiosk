@@ -203,6 +203,7 @@ for:
 
   build_script:
   - echo "is_mobile=1" >> .env
+  - echo "LOG_LEVEL=TRACE" >> .env
   # - bundle exec badge --shield "V${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}-${APPVEYOR_BUILD_NUMBER}-blue" --shield_geometry "+0+25%" --shield_scale 0.75 --glob "/assets/icon.png"
   - flet build ipa --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --flutter-build-args=--release --flutter-build-args=--no-codesign --template https://github.com/kumpeapps/flet-build-template.git
   # --team 2T42Z3DM34

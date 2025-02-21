@@ -19,6 +19,7 @@ hf = ft.HapticFeedback()
 @login.page(route="/login")
 def login_page(data: fs.Datasy):
     """Login Page"""
+    logger.trace("Loading Login Page")
     page = data.page
     view = data.view
     page.overlay.append(hf)
@@ -38,11 +39,15 @@ def login_page(data: fs.Datasy):
     )
 
     def did_login(_):
+        """Login Button Pressed"""
+        logger.trace("Login Button Pressed")
         server_up = rw_sql()
         logging_in()
         if server_up:
+            logger.debug("Server is reachable")
             send_request(username_field.value, password_field.value)
         else:
+            logger.error("Server is unreachable")
             show_banner_click(
                 "Server Unreachable. Please check internet and VPN connection."
             )
@@ -66,6 +71,7 @@ def login_page(data: fs.Datasy):
 
     def username_submit(_):
         """Activate Password Field on Submit"""
+        logger.trace("Username Field Submitted")
         password_field.focus()
 
     username_field = ft.TextField(
