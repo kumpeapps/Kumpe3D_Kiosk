@@ -9,6 +9,7 @@ flutter.dependencies = ["flet_audio"]
 
 dependencies = [
   "flet==0.26.0",
+  "flet-permission-handler==0.1.0",
   "PyMySQL==1.1.1",
   "python-dotenv==1.0.1",
   "parse==1.20.1",
