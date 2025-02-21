@@ -241,7 +241,7 @@ for:
   - tar -czvf kumpe3dkiosk-apk-debug.tar.gz -C build apk
 
   artifacts:
-  - path: kumpe3dkiosk-apk.tar.gz
+  - path: kumpe3dkiosk-apk-debug.tar.gz
 
 #
 #   Android package - Release
