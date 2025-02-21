@@ -37,16 +37,6 @@ host = "kiosk.kumpe3d.com"
 scheme = "https"
 host = "kiosk.kumpe3d.com"
 
-[tool.flet.android.permission]
-"android.permission.INTERNET" = true
-"android.permission.ACCESS_NETWORK_STATE" = true
-"android.permission.ACCESS_WIFI_STATE" = true
-"android.permission.CHANGE_WIFI_STATE" = true
-"android.permission.ACCESS_FINE_LOCATION" = true
-"android.permission.ACCESS_COARSE_LOCATION" = true
-"android.permission.BLUETOOTH" = true
-"android.permission.BLUETOOTH_CONNECT" = true
-
 [tool.flet.android.signing]
 # store and key passwords can be passed with `--android-signing-key-store-password`
 # and `--android-signing-key-password` options or
