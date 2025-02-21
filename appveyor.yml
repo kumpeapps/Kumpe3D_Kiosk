@@ -238,7 +238,7 @@ for:
   - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --template https://github.com/kumpeapps/flet-build-template.git --template-ref=0.26.0-debug --flutter-build-args=--debug
 
   after_build:
-  - tar -czvf kumpe3dkiosk-apk.tar.gz -C build apk
+  - tar -czvf kumpe3dkiosk-apk-debug.tar.gz -C build apk
 
   artifacts:
   - path: kumpe3dkiosk-apk.tar.gz
