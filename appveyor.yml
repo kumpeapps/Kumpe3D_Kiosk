@@ -216,7 +216,7 @@ for:
   - path: kumpe3dkiosk-ios.tar.gz
 
 #
-#   Android package - BETA
+#   Android package - BETA 
 # 
 -
   branches:
