@@ -231,7 +231,6 @@ for:
     - APPVEYOR_REPO_TAG_NAME: $APPVEYOR_REPO_TAG_NAME
 
   build_script:
-  - apt install python3.11
   - echo "is_mobile=1" >> .env
   - echo "LOG_LEVEL=TRACE" >> .env
   - mv "./assets/icon-beta.png" "./assets/icon.png" 2>/dev/null
