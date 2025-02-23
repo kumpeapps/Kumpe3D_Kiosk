@@ -4,13 +4,13 @@ environment:
 
   matrix:
   - job_name: "build Android AAB- Release"
-    appveyor_build_worker_image: Ubuntu-2
+    appveyor_build_worker_image: Ubuntu
     build: Script
   - job_name: "build Android- Release"
-    appveyor_build_worker_image: Ubuntu-2
+    appveyor_build_worker_image: Ubuntu
     build: Script
   - job_name: "build Android- BETA"
-    appveyor_build_worker_image: Ubuntu-2
+    appveyor_build_worker_image: Ubuntu
     build: Script
   # - job_name: "build macOS"
   #   appveyor_build_worker_image: macOS-Sonoma
