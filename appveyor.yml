@@ -1,5 +1,5 @@
 version: '2.3.7({build})'
-build_cloud: Docker
+build_cloud: Process
 environment:
 
   matrix:
