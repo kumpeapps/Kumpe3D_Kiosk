@@ -28,8 +28,8 @@ install:
 # - sudo ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && sudo echo $CONTAINER_TIMEZONE > /etc/timezone
 - sudo apt-get -y update
 - sudo apt-get -y install tk-dev
-- sudo apt-get update && apt-get install -y wget unzip
-- sudo wget https://appveyordownloads.blob.core.windows.net/packer/packer-linux-1.5-azure-fix.zip && unzip packer-linux-1.5-azure-fix.zip -d /usr/bin && chmod +x /usr/bin/packer
+- sudo apt-get update && apt-get sudo install -y wget unzip
+- sudo wget https://appveyordownloads.blob.core.windows.net/packer/packer-linux-1.5-azure-fix.zip && sudo unzip packer-linux-1.5-azure-fix.zip -d /usr/bin && sudo chmod +x /usr/bin/packer
 - sudo apt-get install -y build-essential
 - sudo apt-get install -y libreadline-dev
 - sudo apt-get install -y libncursesw5-dev
@@ -43,7 +43,7 @@ install:
 - sudo apt-get install -y wget
 - sudo wget -c https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
 - sudo tar -Jxf Python-3.11.0.tar.xz
-- sudo cd Python-3.11.0/ && ./configure --enable-optimizations && make -j4 && make altinstall
+- sudo cd Python-3.11.0/ && sudo ./configure --enable-optimizations && sudo make -j4 && sudo make altinstall
 - pip install -r requirements.txt
 # - flutter upgrade --force
 - flutter doctor -v
