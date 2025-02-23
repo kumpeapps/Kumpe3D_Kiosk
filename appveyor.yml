@@ -23,9 +23,27 @@ environment:
   #   build: Script
 
 #  skip_branch_with_pr: true 
-stack: python 3.11
 
 install:
+- ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+- apt-get -y update
+- apt-get -y install tk-dev
+- apt-get update && apt-get install -y wget unzip
+- wget https://appveyordownloads.blob.core.windows.net/packer/packer-linux-1.5-azure-fix.zip && unzip packer-linux-1.5-azure-fix.zip -d /usr/bin && chmod +x /usr/bin/packer
+- apt-get install -y build-essential
+- apt-get install -y libreadline-dev
+- apt-get install -y libncursesw5-dev
+- apt-get install -y libssl-dev
+- apt-get install -y libsqlite3-dev
+- apt-get install -y libgdbm-dev
+- apt-get install -y libc6-dev
+- apt-get install -y libbz2-dev
+- apt-get install -y libffi-dev
+- apt-get install -y zlib1g-dev
+- apt-get install -y wget
+- wget -c https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
+- tar -Jxf Python-3.11.0.tar.xz
+- cd Python-3.11.0/ && ./configure --enable-optimizations && make -j4 && make altinstall
 - pip install -r requirements.txt
 # - flutter upgrade --force
 - flutter doctor -v
