@@ -1,4 +1,5 @@
 version: '2.3.7({build})'
+build_cloud: appveyor-server Docker
 environment:
 
   matrix:
