@@ -21,7 +21,7 @@ environment:
   #   appveyor_build_worker_image:  macOS-Sonoma
   #   build: Script
 
-#  skip_branch_with_pr: true
+#  skip_branch_with_pr: true 
 stack: python 3.11
 
 install:
