@@ -25,7 +25,7 @@ environment:
 #  skip_branch_with_pr: true 
 
 install:
-- sudo ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && sudo echo $CONTAINER_TIMEZONE > /etc/timezone
+# - sudo ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && sudo echo $CONTAINER_TIMEZONE > /etc/timezone
 - sudo apt-get -y update
 - sudo apt-get -y install tk-dev
 - sudo apt-get update && apt-get install -y wget unzip
