@@ -28,7 +28,7 @@ install:
 # - sudo ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && sudo echo $CONTAINER_TIMEZONE > /etc/timezone
 - sudo apt-get -y update
 - sudo apt-get -y install tk-dev
-- sudo apt-get update && apt-get sudo install -y wget unzip
+- sudo apt-get update && sudo apt-get install -y wget unzip
 - sudo wget https://appveyordownloads.blob.core.windows.net/packer/packer-linux-1.5-azure-fix.zip && sudo unzip packer-linux-1.5-azure-fix.zip -d /usr/bin && sudo chmod +x /usr/bin/packer
 - sudo apt-get install -y build-essential
 - sudo apt-get install -y libreadline-dev
