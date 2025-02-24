@@ -1,5 +1,5 @@
 version: '2.3.7({build})'
-build_cloud: Docker
+build_cloud: appveyor-workers Docker
 
 environment:
 
@@ -11,7 +11,7 @@ environment:
     appveyor_build_worker_image: Ubuntu
     build: Script
   - job_name: "build Android- BETA"
-    appveyor_build_worker_image: Ubuntu
+    appveyor_build_worker_image: Ubuntu-20.4-pythons
     build: Script
   # - job_name: "build macOS"
   #   appveyor_build_worker_image: macOS-Sonoma
@@ -24,29 +24,29 @@ environment:
   #   build: Script
 
 #  skip_branch_with_pr: true
-# stack: python 3.11
+stack: python 3.11
 
 install:
-- sudo ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && sudo echo $CONTAINER_TIMEZONE > /etc/timezone
-- sudo apt-get -y update
-- sudo apt-get -y install tk-dev
-- sudo apt-get update && sudo apt-get install -y wget unzip
-- sudo apt-get install -y build-essential
-- sudo apt-get install -y libreadline-dev
-- sudo apt-get install -y libncursesw5-dev
-- sudo apt-get install -y libssl-dev
-- sudo apt-get install -y libsqlite3-dev
-- sudo apt-get install -y libgdbm-dev
-- sudo apt-get install -y libc6-dev
-- sudo apt-get install -y libbz2-dev
-- sudo apt-get install -y libffi-dev
-- sudo apt-get install -y zlib1g-dev
-- sudo apt-get install -y wget
-- sudo wget -c https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
-- sudo tar -Jxf Python-3.11.0.tar.xz
-- cd Python-3.11.0/ && sudo ./configure --enable-optimizations && sudo make -j4 && sudo make altinstall
+# - sudo ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && sudo echo $CONTAINER_TIMEZONE > /etc/timezone
+# - sudo apt-get -y update
+# - sudo apt-get -y install tk-dev
+# - sudo apt-get update && sudo apt-get install -y wget unzip
+# - sudo apt-get install -y build-essential
+# - sudo apt-get install -y libreadline-dev
+# - sudo apt-get install -y libncursesw5-dev
+# - sudo apt-get install -y libssl-dev
+# - sudo apt-get install -y libsqlite3-dev
+# - sudo apt-get install -y libgdbm-dev
+# - sudo apt-get install -y libc6-dev
+# - sudo apt-get install -y libbz2-dev
+# - sudo apt-get install -y libffi-dev
+# - sudo apt-get install -y zlib1g-dev
+# - sudo apt-get install -y wget
+# - sudo wget -c https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
+# - sudo tar -Jxf Python-3.11.0.tar.xz
+# - cd Python-3.11.0/ && sudo ./configure --enable-optimizations && sudo make -j4 && sudo make altinstall
 - python3.11 -m pip install -r requirements.txt
-# - flutter doctor -v
+- flutter doctor -v
 
 before_build:
 - echo "APP_ENV=prod" > .env
