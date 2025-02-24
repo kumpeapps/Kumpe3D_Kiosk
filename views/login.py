@@ -55,7 +55,7 @@ def login_page(data: fs.Datasy):
         page.update()
 
     password_field = ft.TextField(
-        label="Passworddd",
+        label="Password",
         password=True,
         can_reveal_password=False,
         adaptive=True,
