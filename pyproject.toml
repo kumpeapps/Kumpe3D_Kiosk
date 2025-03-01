@@ -8,7 +8,7 @@ authors = [
 flutter.dependencies = ["flet_audio"]
 
 dependencies = [
-  "flet==0.25.0",
+  "flet==0.27.4",
   "PyMySQL==1.1.1",
   "python-dotenv==1.0.1",
   "parse==1.20.1",
@@ -16,7 +16,8 @@ dependencies = [
   "flet-easy==0.2.9",
   "loguru==0.7.2",
   "flet-toast==0.5.0",
-  "requests==2.32.0"
+  "requests==2.32.0",
+  "flet-permission-handler==0.1.0"
   ]
 
 [tool.flet]
@@ -43,3 +44,15 @@ host = "kiosk.kumpe3d.com"
 # and FLET_ANDROID_SIGNING_KEY_PASSWORD environment variables.
 key_store = "/tmp/kumpe3dkiosk" # --android-signing-key-store
 key_alias = "upload" # --android-signing-key-alias
+
+[tool.flet.android.permission]
+"android.permission.CAMERA" = true
+"android.permission.INTERNET" = true
+"android.permission.READ_MEDIA_AUDIO" = true
+"android.permission.READ_MEDIA_VIDEO" = true
+"android.permission.READ_EXTERNAL_STORAGE" = true
+"android.permission.WRITE_EXTERNAL_STORAGE" = true
+"android.permission.FOREGROUND_SERVICE" = true
+"android.permission.FOREGROUND_SERVICE_LOCATION" = true
+"android.permission.WAKE_LOCK" = true
+"android.permission.POST_NOTIFICATIONS" = true

@@ -46,10 +46,6 @@ install:
 # - sudo tar -Jxf Python-3.11.0.tar.xz
 # - cd Python-3.11.0/ && sudo ./configure --enable-optimizations && sudo make -j4 && sudo make altinstall
 - pip install -r requirements.txt
-- cd /home/appveyor/flutter && git checkout 3.24.5
-- flutter channel stable
-- flutter downgrade v3.24.5
-- cd /home/appveyor/projects/kumpe3d-kiosk
 - flutter doctor -v
 
 before_build:
@@ -259,7 +255,7 @@ for:
   - mv "./assets/icon-beta.png" "./assets/icon.png" 2>/dev/null
   - curl https://$MATCH_DEPLOY_KEY@raw.githubusercontent.com/kumpeapps/android_certs/main/kumpe3dkiosk -o /tmp/kumpe3dkiosk
   #- flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --flutter-build-args=--debug 
-  - flet build apk --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
+  - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload --flutter-build-args=--debug 
 
   after_build:
   - tar -czvf kumpe3dkiosk-apk-debug.tar.gz -C build apk
