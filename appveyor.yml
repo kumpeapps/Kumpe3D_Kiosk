@@ -47,6 +47,7 @@ install:
 # - cd Python-3.11.0/ && sudo ./configure --enable-optimizations && sudo make -j4 && sudo make altinstall
 - pip install -r requirements.txt
 - cd /home/appveyor/flutter && git checkout 3.24.5
+- flutter channel stable
 - cd /home/appveyor/projects/kumpe3d-kiosk
 - flutter doctor -v
 
