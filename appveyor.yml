@@ -1,5 +1,5 @@
 version: '2.3.7({build})'
-build_cloud: appveyor-workers Docker
+# build_cloud: appveyor-workers Docker
 
 environment:
 
@@ -11,7 +11,7 @@ environment:
     appveyor_build_worker_image: Ubuntu
     build: Script
   - job_name: "build Android- BETA"
-    appveyor_build_worker_image: Ubuntu-20.4-pythons
+    appveyor_build_worker_image: Ubuntu
     build: Script
   # - job_name: "build macOS"
   #   appveyor_build_worker_image: macOS-Sonoma
@@ -45,7 +45,7 @@ install:
 # - sudo wget -c https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
 # - sudo tar -Jxf Python-3.11.0.tar.xz
 # - cd Python-3.11.0/ && sudo ./configure --enable-optimizations && sudo make -j4 && sudo make altinstall
-- python3.11 -m pip install -r requirements.txt
+- pip install -r requirements.txt
 - flutter doctor -v
 
 before_build:
