@@ -5,7 +5,7 @@ authors = [
   {name = "Justin Kumpe", email = "jakumpe@kumpeapps.com"}
 ]
 
-flutter.dependencies = ["flet_audio"]
+flutter.dependencies = ["flet_audio", "flet_permission_handler"]
 
 dependencies = [
   "flet==0.27.4",
@@ -25,6 +25,7 @@ org = "com.kumpeapps.flet" # --org
 product = "Kumpe3D Kiosk" # --product
 company = "KumpeApps LLC" # --company
 copyright = "Copyright (C) 2024 by KumpeApps LLC" # --copyright
+permissions = ["camera", "microphone", "internet", "read_media_audio", "read_media_video", "read_external_storage", "write_external_storage", "foreground_service", "foreground_service_location", "wake_lock", "post_notifications", "access_fine_location", "access_coarse_location"] # --permissions
 
 [tool.flet.ios]
 team = "2T42Z3DM34"
@@ -56,3 +57,10 @@ key_alias = "upload" # --android-signing-key-alias
 "android.permission.FOREGROUND_SERVICE_LOCATION" = true
 "android.permission.WAKE_LOCK" = true
 "android.permission.POST_NOTIFICATIONS" = true
+"android.permission.ACCESS_FINE_LOCATION" = true
+"android.permission.ACCESS_COARSE_LOCATION" = true
+
+[tool.flet.android.feature]
+"android.hardware.camera" = true
+"android.software.leanback" = false
+"android.hardware.touchscreen" = false
