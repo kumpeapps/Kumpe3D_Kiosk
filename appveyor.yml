@@ -45,8 +45,8 @@ install:
 # - sudo wget -c https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tar.xz
 # - sudo tar -Jxf Python-3.11.0.tar.xz
 # - cd Python-3.11.0/ && sudo ./configure --enable-optimizations && sudo make -j4 && sudo make altinstall
-- cd /home/appveyor/flutter && git checkout 3.24.5
 - pip install -r requirements.txt
+- cd /home/appveyor/flutter && git checkout 3.24.5
 - flutter doctor -v
 
 before_build:
