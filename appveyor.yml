@@ -46,6 +46,7 @@ install:
 # - sudo tar -Jxf Python-3.11.0.tar.xz
 # - cd Python-3.11.0/ && sudo ./configure --enable-optimizations && sudo make -j4 && sudo make altinstall
 - pip install -r requirements.txt
+- flutter upgrade --force
 - flutter doctor -v
 
 before_build:
