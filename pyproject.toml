@@ -5,10 +5,10 @@ authors = [
   {name = "Justin Kumpe", email = "jakumpe@kumpeapps.com"}
 ]
 
-flutter.dependencies = ["flet_audio", "flet_permission_handler"]
+flutter.dependencies = ["flet_audio"]
 
 dependencies = [
-  "flet==0.27.4",
+  "flet==0.25.0",
   "PyMySQL==1.1.1",
   "python-dotenv==1.0.1",
   "parse==1.20.1",
@@ -16,8 +16,7 @@ dependencies = [
   "flet-easy==0.2.9",
   "loguru==0.7.2",
   "flet-toast==0.5.0",
-  "requests==2.32.0",
-  "flet-permission-handler==0.1.0"
+  "requests==2.32.0"
   ]
 
 [tool.flet]
