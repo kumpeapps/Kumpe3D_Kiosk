@@ -161,5 +161,6 @@ def view(data: fs.Datasy):
         horizontal_alignment="center",
     )
 
-
-app.run()
+if __name__ == "__main__":
+    logger.info("Starting Kumpe3D")
+    app.run()
