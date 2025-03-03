@@ -127,9 +127,7 @@ def view(data: fs.Datasy):
                         ft.FilledButton(
                             text="Pending Orders", on_click=pendingorders_go
                         ),
-                        ft.FilledButton(
-                            text="Add Filament", on_click=add_filament_go
-                        ),
+                        ft.FilledButton(text="Add Filament", on_click=add_filament_go),
                         ft.FilledButton(
                             text="Logout",
                             on_click=logout,
@@ -143,6 +141,7 @@ def view(data: fs.Datasy):
         vertical_alignment="center",
         horizontal_alignment="center",
     )
+
 
 if __name__ == "__main__":
     logger.info("Starting Kumpe3D")
