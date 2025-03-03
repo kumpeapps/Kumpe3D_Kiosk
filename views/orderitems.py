@@ -9,9 +9,8 @@ import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 
 orderitems = fs.AddPagesy()
-COMPANY_USE_ORDER = "163"
-DEFECTIVE_ORDER = "169"
-
+COMPANY_USE_ORDER = "240"
+DEFECTIVE_ORDER = "241"
 
 @orderitems.page(route="/orders/pending/order_items/{order_id}", protected_route=True)
 def orderitems_page(data: fs.Datasy, order_id: int):

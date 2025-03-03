@@ -8,7 +8,6 @@ import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
 from core.params import logger
 import sounds.beep as beep
-from helpers.is_port_open import rw_sql
 from models.user import User
 import api.oauth
 
@@ -19,6 +18,7 @@ hf = ft.HapticFeedback()
 @login.page(route="/login")
 def login_page(data: fs.Datasy):
     """Login Page"""
+    logger.trace("Loading Login Page")
     page = data.page
     view = data.view
     page.overlay.append(hf)
@@ -38,11 +38,15 @@ def login_page(data: fs.Datasy):
     )
 
     def did_login(_):
-        server_up = rw_sql()
+        """Login Button Pressed"""
+        logger.trace("Login Button Pressed")
+        server_up = True
         logging_in()
         if server_up:
+            logger.debug("Server is reachable")
             send_request(username_field.value, password_field.value)
         else:
+            logger.error("Server is unreachable")
             show_banner_click(
                 "Server Unreachable. Please check internet and VPN connection."
             )
@@ -66,6 +70,8 @@ def login_page(data: fs.Datasy):
 
     def username_submit(_):
         """Activate Password Field on Submit"""
+        show_banner_click("Username Submitted")
+        logger.trace("Username Field Submitted")
         password_field.focus()
 
     username_field = ft.TextField(
@@ -116,6 +122,7 @@ def login_page(data: fs.Datasy):
 
     def send_request(username: str, password: str):
         """KumpeApps SSO Login"""
+        show_banner_click("Logging In")
         logger.debug(f"Sending Login Request for {username}")
         try:
             api.oauth.login(page, username, password)
@@ -147,6 +154,7 @@ def login_page(data: fs.Datasy):
 
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
+        show_banner_click("Access Granted", ft.colors.GREEN_400, ft.icons.CHECK)
         logger.success("Access Granted!")
         page.session.set("username", user.username)
         log_access(f"{user.user_id}", f"/{computername}/granted/{access_level}")

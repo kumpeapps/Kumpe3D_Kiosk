@@ -3,7 +3,6 @@
 from pathlib import Path
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from helpers.is_port_open import rw_sql
 from models.user import User
 from core.params import logger
 import api.oauth
@@ -19,7 +18,7 @@ app = fs.FletEasy(
 def login_x(data: fs.Datasy):
     """Require Login Function"""
     logger.trace("Starting login_x")
-    server_up = rw_sql()
+
     page = data.page
     if page.session.contains_key("user"):
         user: User = page.session.get("user")
@@ -34,22 +33,6 @@ def login_x(data: fs.Datasy):
         adaptive=False,
         bgcolor=ft.colors.RED_300,
     )
-
-    dlg_nointernet = ft.AlertDialog(
-        title=ft.Text(
-            "Server Unreachable. Please confirm VPN is connected!",
-            text_align=ft.TextAlign.CENTER,
-        ),
-        on_dismiss=lambda e: print("Dialog dismissed!"),
-        adaptive=False,
-        bgcolor=ft.colors.RED_300,
-    )
-
-    if not server_up:
-        page.dialog = dlg_nointernet
-        dlg_nointernet.open = True
-        page.update()
-        return False
 
     def open_dlg():
         page.dialog = dlg
@@ -144,9 +127,7 @@ def view(data: fs.Datasy):
                         ft.FilledButton(
                             text="Pending Orders", on_click=pendingorders_go
                         ),
-                        ft.FilledButton(
-                            text="Add Filament", on_click=add_filament_go
-                        ),
+                        ft.FilledButton(text="Add Filament", on_click=add_filament_go),
                         ft.FilledButton(
                             text="Logout",
                             on_click=logout,
@@ -162,4 +143,6 @@ def view(data: fs.Datasy):
     )
 
 
-app.run()
+if __name__ == "__main__":
+    logger.info("Starting Kumpe3D")
+    app.run()
