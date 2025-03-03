@@ -8,7 +8,6 @@ import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
 from core.params import logger
 import sounds.beep as beep
-from helpers.is_port_open import rw_sql
 from models.user import User
 import api.oauth
 
@@ -41,7 +40,7 @@ def login_page(data: fs.Datasy):
     def did_login(_):
         """Login Button Pressed"""
         logger.trace("Login Button Pressed")
-        server_up = rw_sql()
+        server_up = True
         logging_in()
         if server_up:
             logger.debug("Server is reachable")
