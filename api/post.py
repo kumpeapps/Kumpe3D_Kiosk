@@ -77,6 +77,6 @@ def add_stock(page: ft.Page, sku: str, qty: int) -> KumpeApiResponse:
         qty (int): The quantity to add to the stock.
 
     Returns:
-        dict: The response from the API.
+        KumpeApiResponse: The response from the API.
     """
     return post(page, f"/v1/k3d/product/{sku}/stock/increment/{qty}", {})
