@@ -1,13 +1,11 @@
 """Add to Stock"""
 
-import pymysql
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from pluggins.helpers import get_sku_array
-from core.params import Params as params
 from core.params import logger
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
+from api.post import add_stock as add_stock_api
 
 addstock = fs.AddPagesy()
 
@@ -21,7 +19,6 @@ def addstock_page(data: fs.Datasy):
     pr = ft.ProgressRing(width=16, height=16, stroke_width=2, visible=False)
 
     page.title = "Add to Stock"
-    sql_params = params.SQL
 
     def show_drawer(_):
         view.drawer.open = True
@@ -51,14 +48,6 @@ def addstock_page(data: fs.Datasy):
 
     def add_stock(_):
         updating()
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
         scanned_list = slb.build_k3d_item_dict(
             sku.value, "to_stock_translation", page
         )
@@ -66,37 +55,19 @@ def addstock_page(data: fs.Datasy):
         try:
             while quantity > 0:
                 for item in scanned_list:
-                    sku_array = get_sku_array(item["sku"])
-                    sql = """INSERT INTO `Web_3dprints`.`stock`
-                                (`sku`,
-                                `swatch_id`,
-                                `qty`)
-                            VALUES
-                                (%s, %s, %s)
-                            ON DUPLICATE KEY UPDATE qty = qty + %s;"""
-                    cursor.execute(
-                        sql,
-                        (
-                            sku_array["base_sku"],
-                            sku_array["color"],
-                            item["qty"],
-                            item["qty"],
-                        ),
-                    )
+                    response = add_stock_api(page, item["sku"], item["qty"])
+                    if response.status_code != 200:
+                        raise ValueError(response.json())
                 quantity -= 1
-            db.commit()
             sku.value = ""
             updating(False)
             sku.focus()
             page.update()
             beep.success(page)
-        except (KeyError, pymysql.IntegrityError):
+        except (KeyError, ValueError):
             beep.error(page)
             show_banner_click(f"Invalid SKU in [{sku.value}]")
             updating(False)
-        finally:
-            cursor.close()
-            db.close()
 
     text = ft.Container(
         content=ft.Text(

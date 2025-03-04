@@ -5,7 +5,7 @@ authors = [
   {name = "Justin Kumpe", email = "jakumpe@kumpeapps.com"}
 ]
 
-flutter.dependencies = ["flet_audio"]
+flutter.dependencies = ["flet_audio", "flet_permission_handler"]
 
 dependencies = [
   "flet==0.27.4",
@@ -16,7 +16,8 @@ dependencies = [
   "flet-easy==0.2.9",
   "loguru==0.7.2",
   "flet-toast==0.5.0",
-  "requests==2.32.0"
+  "requests==2.32.0",
+  "flet-permission-handler==0.1.0"
   ]
 
 [tool.flet]
@@ -46,21 +47,15 @@ key_store = "/tmp/kumpe3dkiosk" # --android-signing-key-store
 key_alias = "upload" # --android-signing-key-alias
 
 [tool.flet.android.permission]
-"android.permission.CAMERA" = true
 "android.permission.INTERNET" = true
 "android.permission.READ_MEDIA_AUDIO" = true
-"android.permission.READ_MEDIA_VIDEO" = true
 "android.permission.READ_EXTERNAL_STORAGE" = true
 "android.permission.WRITE_EXTERNAL_STORAGE" = true
 "android.permission.FOREGROUND_SERVICE" = true
 "android.permission.FOREGROUND_SERVICE_LOCATION" = true
-"android.permission.WAKE_LOCK" = true
 "android.permission.POST_NOTIFICATIONS" = true
-"android.permission.ACCESS_FINE_LOCATION" = true
-"android.permission.ACCESS_COARSE_LOCATION" = true
 "android.permission.ACCEPT_HANDOVER" = true
 
 [tool.flet.android.feature]
-"android.hardware.camera" = true
 "android.software.leanback" = false
 "android.hardware.touchscreen" = false

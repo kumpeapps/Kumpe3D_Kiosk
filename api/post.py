@@ -65,3 +65,18 @@ def add_label_item(page: ft.Page, item: K3DPrintLabelItem) -> KumpeApiResponse:
     response = post(page, "/v1/k3d/build_label", item.to_dict())
     response.model = K3DPrintLabelItem
     return response
+
+
+def add_stock(page: ft.Page, sku: str, qty: int) -> KumpeApiResponse:
+    """
+    Add stock to the inventory using the API.
+
+    Args:
+        page (ft.Page): The Flet page object containing the session.
+        sku (str): The SKU of the product.
+        qty (int): The quantity to add to the stock.
+
+    Returns:
+        KumpeApiResponse: The response from the API.
+    """
+    return post(page, f"/v1/k3d/product/{sku}/stock/increment/{qty}", {})

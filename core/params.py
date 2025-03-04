@@ -32,10 +32,10 @@ class Params:
 
         username = "Web_3d"
         password = os.getenv("MYSQL_PASSWORD", "")
-        server = "rw.sql.pvt.kumpedns.us"
+        server = "rw.sql.pvt.kumpedns.us" if app_env == "prod" else "preprod.sql.pvt.kumpedns.us"
         port = "3306"
         database = "Web_3dprints"
-        ro_server = "ro.sql.pvt.kumpedns.us"
+        ro_server = "ro.sql.pvt.kumpedns.us" if app_env == "prod" else "preprod.sql.pvt.kumpedns.us"
 
         @staticmethod
         def dict():
@@ -57,6 +57,6 @@ class Params:
     class API:
         """API Params"""
 
-        url = "https://api.kumpeapps.us"
+        url = "https://api.kumpeapps.us" if app_env == "prod" else "https://api-dev.kumpeapps.us"
         client_id = os.getenv("API_CLIENT_ID", "")
         client_secret = os.getenv("API_CLIENT_SECRET", "")
