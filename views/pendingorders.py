@@ -3,7 +3,6 @@
 from functools import partial
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from core.params import Params as params
 import sounds.beep as beep
 from api.get import get_pending_orders as get_orders
 from models.order import Orders

@@ -10,7 +10,7 @@ from models.user import User
 from models.kumpeapi_response import KumpeApiResponse
 from models.scan_translation import ScanTranslations
 from models.production_q import ProductionQ
-from models.order import Orders
+from models.order import Orders, Order
 
 
 def get(
@@ -100,3 +100,18 @@ def get_pending_orders(page: ft.Page) -> KumpeApiResponse:
         page, "/v1/k3d/orders?status_id_min=3&status_id_max=13", None, Orders
     )
     return pending_orders
+
+
+def get_order(page: ft.Page, order_id: int) -> KumpeApiResponse:
+    """
+    Get an order by ID.
+
+    Args:
+        page (ft.Page): The Flet page object containing the session.
+        order_id (int): The order ID.
+
+    Returns:
+        KumpeApiResponse: The response from the API.
+    """
+    order = get(page, f"/v1/k3d/order/{order_id}", None, Order)
+    return order
