@@ -81,6 +81,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             translation = "to_order_translation"
         logger.debug(f"Translation: {translation}")
         scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, page)
+        # TODO: change to use the API
         sql = """
             INSERT INTO Web_3dprints.orders__items
             (
