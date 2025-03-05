@@ -1,11 +1,12 @@
 """Pending Orders"""
 
 from functools import partial
-import pymysql
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from core.params import Params as params
 import sounds.beep as beep
+from api.get import get_pending_orders as get_orders
+from models.order import Orders
+from core.params import logger
 
 
 pendingorders = fs.AddPagesy()
@@ -66,71 +67,17 @@ def pendingorders_page(data: fs.Datasy):
 
     def get_pending_orders():
         """Add's Roll to Stock"""
-        sql_params = params.SQL
-
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
 
         try:
-            sql = """
-                SELECT
-                    idorders,
-                    idcustomers,
-                    first_name,
-                    last_name,
-                    company_name,
-                    email,
-                    street_address,
-                    street_address_2,
-                    city,
-                    state,
-                    zip,
-                    country,
-                    subtotal,
-                    taxes,
-                    shipping_cost,
-                    discount,
-                    total,
-                    order_date,
-                    timestamp,
-                    status_id,
-                    os.status,
-                    payment_method,
-                    paypal_transaction_id,
-                    paypal_capture_id,
-                    notes,
-                    sales_channel,
-                    referral,
-                    state_tax,
-                    city_tax,
-                    county_tax,
-                    taxable_state,
-                    taxable_city,
-                    taxable_county,
-                    client_ip,
-                    client_browser,
-                    printed
-                FROM Web_3dprints.orders orders
-                LEFT JOIN Web_3dprints.orders__statuses os ON orders.status_id = os.idorders__statuses
-                WHERE 1=1
-                    AND status_id < 14
-            """
-            cursor.execute(sql)
-            orders = cursor.fetchall()
-            for order in orders:
-                idorders = order["idorders"]
+            orders: Orders = get_orders(page).data # type: ignore
+            for order in orders.orders:
+                idorders = order["id"]
                 tile = ft.CupertinoListTile(
                     additional_info=ft.Text(order["status"]),
                     bgcolor_activated=ft.colors.AMBER_ACCENT,
                     leading=ft.Icon(name=ft.cupertino_icons.SHOPPING_CART),
                     title=ft.Text(
-                        f"{order['idorders']}: {order['company_name']} {order['first_name']} {order['last_name']} ({order['country']})"  # pylint: disable=line-too-long
+                        f"{order['id']}: {order['company_name']} {order['first_name']} {order['last_name']} ({order['country']})"  # pylint: disable=line-too-long
                     ),
                     subtitle=ft.Text(f"{order['email']}"),
                     trailing=ft.PopupMenuButton(
@@ -149,7 +96,8 @@ def pendingorders_page(data: fs.Datasy):
                 )
                 tiles.controls.append(tile)
             page.update()
-        except (KeyError, TypeError):
+        except (KeyError, TypeError) as error:
+            logger.error(error)
             beep.error(page)
             show_banner_click("Unknown Error")
 

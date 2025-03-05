@@ -7,6 +7,8 @@ from core.params import Params as params
 from core.params import logger
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
+from models.order import Order
+from api.get import get_order
 
 orderitems = fs.AddPagesy()
 COMPANY_USE_ORDER = "240"
@@ -79,6 +81,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             translation = "to_order_translation"
         logger.debug(f"Translation: {translation}")
         scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, page)
+        # TODO: change to use the API
         sql = """
             INSERT INTO Web_3dprints.orders__items
             (
@@ -162,45 +165,27 @@ def orderitems_page(data: fs.Datasy, order_id: int):
 
     def get_items():
         """Populates Order Items"""
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
 
         try:
-            sql = """
-                SELECT 
-                    *
-                FROM
-                    Web_3dprints.orders__items
-                WHERE 1=1
-                    AND idorders = %s;
-            """
-            cursor.execute(sql, order_id)
-            items = cursor.fetchall()
+            order: Order = get_order(page, order_id).data  # type: ignore
+            items = order.items
             for item in items:
                 tile = ft.ListTile(
                     bgcolor_activated=ft.colors.AMBER_ACCENT,
                     leading=ft.Image(
-                        src=f"https://images.kumpeapps.com/filament?sku={item['sku']}"
+                        src=f"https://images.kumpeapps.com/filament?sku={item.sku}"
                     ),
-                    title=ft.Text(item["sku"]),
+                    title=ft.Text(item.sku),
                     subtitle=ft.Text(
-                        f"{item['title']}\nOrdered: {item['qty']}, Filled: {item['qty_filled']}"
+                        f"{item.title}\nOrdered: {item.qty}, Filled: {item.qty_filled}"
                     ),
                     is_three_line=True,
                     # on_click=lambda orderid: tile_clicked(idorders), # pylint: disable=cell-var-from-loop
                 )
                 tiles.append(tile)
             page.update()
-        except (KeyError, TypeError):
+        except (KeyError, TypeError) as error:
+            logger.error(error)
             beep.error(page)
             show_banner_click("Unknown Error")
 
