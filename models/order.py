@@ -290,8 +290,6 @@ class Orders:
     def __init__(self, orders: list[Order]):
         self.orders: list[Order] = orders
 
-
     def to_dict(self) -> dict:
         """Convert the Orders object to a dictionary."""
         return {"orders": [order.to_dict() for order in self.orders]}
-    

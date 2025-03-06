@@ -7,6 +7,7 @@ import flet as ft  # type: ignore
 from core.params import Params as params
 from models.user import User
 from models.kumpeapi_response import KumpeApiResponse
+from core.params import logger
 
 # Configuration
 TOKEN_URL = f"{params.API.url}/oauth/token"
@@ -113,6 +114,8 @@ def login(page: ft.Page, username: str, password: str) -> None:
 
         get_user = get_user_profile(token_data)
         if not get_user.success:
+            logger.error("Login failed")
+            logger.error(get_user)
             raise requests.exceptions.HTTPError("Login failed")
         get_user.model = User
         user = get_user.data

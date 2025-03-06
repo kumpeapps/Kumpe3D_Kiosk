@@ -126,7 +126,8 @@ def login_page(data: fs.Datasy):
         logger.debug(f"Sending Login Request for {username}")
         try:
             api.oauth.login(page, username, password)
-        except requests.exceptions.HTTPError:
+        except requests.exceptions.HTTPError as error:
+            logger.error(f"HTTP Error: {error}")
             show_banner_click("Login Failed")
             beep.error(page, hf)
             logging_in(False)

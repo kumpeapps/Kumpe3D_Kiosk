@@ -1,18 +1,18 @@
 """Order Items"""
 
-import pymysql
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-from core.params import Params as params
 from core.params import logger
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 from models.order import Order
 from api.get import get_order
+from api.put import update_order_item
 
 orderitems = fs.AddPagesy()
 COMPANY_USE_ORDER = "240"
 DEFECTIVE_ORDER = "241"
+
 
 @orderitems.page(route="/orders/pending/order_items/{order_id}", protected_route=True)
 def orderitems_page(data: fs.Datasy, order_id: int):
@@ -61,18 +61,6 @@ def orderitems_page(data: fs.Datasy, order_id: int):
 
     def scanned(_):
         """Add Item as Picked"""
-        success = True
-        if params.SQL.username == "":
-            params.SQL.get_values()
-        sql_params = params.SQL
-        db = pymysql.connect(
-            db=sql_params.database,
-            user=sql_params.username,
-            passwd=sql_params.password,
-            host=sql_params.server,
-            port=3306,
-        )
-        cursor = db.cursor(pymysql.cursors.DictCursor)
         if order_id == COMPANY_USE_ORDER:
             translation = "company_use_translation"
         elif order_id == DEFECTIVE_ORDER:
@@ -81,58 +69,19 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             translation = "to_order_translation"
         logger.debug(f"Translation: {translation}")
         scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, page)
-        # TODO: change to use the API
-        sql = """
-            INSERT INTO Web_3dprints.orders__items
-            (
-                idorders
-                ,title
-                ,sku
-                ,qty
-                ,qty_filled
-                ,customization
-                ,price
-                ,last_updated_by
-                )
-            VALUES
-            (
-                %s,
-                (SELECT title from Web_3dprints.products where sku = %s OR sku = CONCAT(LEFT(%s,11),"-000")),
-                %s,
-                0,
-                %s,
-                '',
-                0,
-                %s
-            )
-            ON DUPLICATE KEY UPDATE qty_filled=qty_filled + %s;
-        """
+
         for item in scanned_list:
             sku = item["sku"]
             qty = item["qty"]
-            values = (
-                order_id,
-                sku,
-                sku,
-                sku,
-                qty,
-                page.session.get("username"),
-                qty,
-            )
+            user = page.session.get("username")
             try:
-                cursor.execute(sql, values)
+                update_order_item(page, sku, order_id, qty, user)
+                beep.success(page)
             except:  # pylint: disable=bare-except
-                success = False
                 show_banner_click(f"Invalid SKU: {sku}")
+                beep.error(page)
                 break
         scan_field.value = ""
-        if success:
-            beep.success(page)
-            db.commit()
-            db.close()
-        else:
-            beep.error(page)
-            db.close()
         tiles.clear()
         get_items()
         scan_field.focus()
