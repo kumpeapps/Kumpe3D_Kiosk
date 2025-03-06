@@ -28,7 +28,7 @@ flet_audio = "2.0.0"
 org = "com.kumpeapps.flet" # --org
 product = "Kumpe3D Kiosk" # --product
 company = "KumpeApps LLC" # --company
-copyright = "Copyright (C) 2024 by KumpeApps LLC" # --copyright
+copyright = "Copyright (C) 2025 by KumpeApps LLC" # --copyright
 
 [tool.flet.ios]
 team = "2T42Z3DM34"
