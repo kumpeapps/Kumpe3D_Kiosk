@@ -5,10 +5,9 @@ authors = [
   {name = "Justin Kumpe", email = "jakumpe@kumpeapps.com"}
 ]
 
-flutter.dependencies = ["flet_audio", "flet_permission_handler"]
 
 dependencies = [
-  "flet==0.27.4",
+  "flet==0.27.5",
   "PyMySQL==1.1.1",
   "python-dotenv==1.0.1",
   "parse==1.20.1",
@@ -20,12 +19,16 @@ dependencies = [
   "flet-permission-handler==0.1.0"
   ]
 
+[tool.flet.flutter.dependencies]
+flet_video = "1.0.0"
+flet_audio = "2.0.0"
+
+
 [tool.flet]
 org = "com.kumpeapps.flet" # --org
 product = "Kumpe3D Kiosk" # --product
 company = "KumpeApps LLC" # --company
 copyright = "Copyright (C) 2024 by KumpeApps LLC" # --copyright
-permissions = ["camera", "microphone", "internet", "read_media_audio", "read_media_video", "read_external_storage", "write_external_storage", "foreground_service", "foreground_service_location", "wake_lock", "post_notifications", "access_fine_location", "access_coarse_location"] # --permissions
 
 [tool.flet.ios]
 team = "2T42Z3DM34"
