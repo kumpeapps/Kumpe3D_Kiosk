@@ -236,7 +236,7 @@ for:
   - echo "LOG_LEVEL=TRACE" >> .env
   - mv "./assets/icon-beta.png" "./assets/icon.png" 2>/dev/null
   - curl https://$MATCH_DEPLOY_KEY@raw.githubusercontent.com/kumpeapps/android_certs/main/kumpe3dkiosk -o /tmp/kumpe3dkiosk
-  - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload --flutter-build-args=--debug 
+  - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload --flutter-build-args=--debug --include-packages flet_audio
 
   after_build:
   - tar -czvf kumpe3dkiosk-apk-debug.tar.gz -C build apk
