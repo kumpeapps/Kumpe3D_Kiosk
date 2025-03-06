@@ -32,7 +32,7 @@ def put(page: ft.Page, endpoint, data) -> KumpeApiResponse:
         url, json=data, headers=headers, timeout=10
     )
     logger.debug(f"Status code: {response.status_code}")
-    print(response.json())
+    logger.debug(f"Response: {response.json()}")
 
     return KumpeApiResponse(response)
 
