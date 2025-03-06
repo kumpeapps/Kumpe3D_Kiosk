@@ -13,6 +13,7 @@ orderitems = fs.AddPagesy()
 COMPANY_USE_ORDER = "240"
 DEFECTIVE_ORDER = "241"
 
+
 @orderitems.page(route="/orders/pending/order_items/{order_id}", protected_route=True)
 def orderitems_page(data: fs.Datasy, order_id: int):
     """Main Function for Pending Orders"""
@@ -68,7 +69,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             translation = "to_order_translation"
         logger.debug(f"Translation: {translation}")
         scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, page)
-        
+
         for item in scanned_list:
             sku = item["sku"]
             qty = item["qty"]
