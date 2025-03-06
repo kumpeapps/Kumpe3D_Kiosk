@@ -210,8 +210,8 @@ class OrderItem:
 class OrderHistory:
     """Represents the history of an order."""
 
-    def __init__(self, id, order_id, status, timestamp, updated_by):
-        self.id = id
+    def __init__(self, idorders, order_id, status, timestamp, updated_by):
+        self.id = idorders
         self.order_id = order_id
         self.status = status
         self.timestamp = timestamp
