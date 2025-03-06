@@ -210,8 +210,11 @@ class OrderItem:
 class OrderHistory:
     """Represents the history of an order."""
 
-    def __init__(self, idorders, order_id, status, timestamp, updated_by):
-        self.id = idorders
+    def __init__(self, order_id, status, timestamp, updated_by, **kwargs):
+        if "id" in kwargs:
+            self.id = kwargs["id"]
+        else:
+            self.id = kwargs["idorders"]
         self.order_id = order_id
         self.status = status
         self.timestamp = timestamp
