@@ -8,15 +8,18 @@ def error(page: ft.Page, hf: ft.HapticFeedback = None):
     if hf:
         try:
             hf.heavy_impact()
+            page.update()
             hf.heavy_impact()
+            page.update()
             hf.heavy_impact()
+            page.update()
         except AttributeError:
             pass
-    # error_file = ft.Audio(
-    #     src="/audio/error.wav",  # pylint: disable=line-too-long
-    #     autoplay=True,
-    # )
-    # page.overlay.append(error_file)
+    error_file = ft.Audio(
+        src="/audio/error.wav",  # pylint: disable=line-too-long
+        autoplay=True,
+    )
+    page.overlay.append(error_file)
     page.update()
 
 
@@ -27,14 +30,16 @@ def success(page: ft.Page, hf: ft.HapticFeedback = None):
             hf = ft.HapticFeedback()
             page.overlay.append(hf)
             hf.light_impact()
+            page.update()
             hf.heavy_impact()
+            page.update()
         except AttributeError:
             pass
-    # success_file = ft.Audio(
-    #     src="/audio/success.wav",  # pylint: disable=line-too-long
-    #     autoplay=True,
-    # )
-    # page.overlay.append(success_file)
+    success_file = ft.Audio(
+        src="/audio/success.wav",  # pylint: disable=line-too-long
+        autoplay=True,
+    )
+    page.overlay.append(success_file)
     page.update()
 
 
