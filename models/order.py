@@ -211,7 +211,8 @@ class OrderHistory:
     """Represents the history of an order."""
 
     def __init__(self, **kwargs):
-        self.id = id
+        if “id” in kwargs:
+            self.id = kwargs[”id”]
         if "order_id" in kwargs:
             self.order_id = kwargs["order_id"]
         elif "idorders" in kwargs:
