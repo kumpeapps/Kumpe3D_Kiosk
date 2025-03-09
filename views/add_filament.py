@@ -32,13 +32,13 @@ def add_filament_page(data: fs.Datasy):
 
     def show_banner_click(
         message: str,
-        color: ft.colors = ft.colors.RED_400,
+        color: ft.colors = ft.Colors.RED_400,
         icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         """Show Banner"""
         page.banner = ft.Banner(
             bgcolor=color,
-            leading=ft.Icon(icon, color=ft.colors.RED_900, size=40),
+            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
             content=ft.Text(message),
             actions=[
                 ft.TextButton("Dismiss", on_click=close_banner),

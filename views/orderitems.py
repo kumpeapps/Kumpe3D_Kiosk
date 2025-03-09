@@ -34,13 +34,13 @@ def orderitems_page(data: fs.Datasy, order_id: int):
 
     def show_banner_click(
         message: str,
-        color: ft.colors = ft.colors.RED_400,
+        color: ft.colors = ft.Colors.RED_400,
         icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         """Show Banner"""
         page.banner = ft.Banner(
             bgcolor=color,
-            leading=ft.Icon(icon, color=ft.colors.RED_900, size=40),
+            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
             content=ft.Text(message),
             actions=[
                 ft.TextButton("Dismiss", on_click=close_banner),
@@ -121,7 +121,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             items = order.items
             for item in items:
                 tile = ft.ListTile(
-                    bgcolor_activated=ft.colors.AMBER_ACCENT,
+                    bgcolor_activated=ft.Colors.AMBER_ACCENT,
                     leading=ft.Image(
                         src=f"https://images.kumpeapps.com/filament?sku={item.sku}"
                     ),
