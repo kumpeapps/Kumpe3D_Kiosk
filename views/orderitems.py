@@ -35,7 +35,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
     def show_banner_click(
         message: str,
         color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
+        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         """Show Banner"""
         page.banner = ft.Banner(
@@ -50,7 +50,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
         page.update()
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
     )
 
@@ -71,6 +71,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
         scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, page)
 
         for item in scanned_list:
+            logger.debug(f"Item: {item}")
             sku = item["sku"]
             qty = item["qty"]
             user = page.session.get("username")

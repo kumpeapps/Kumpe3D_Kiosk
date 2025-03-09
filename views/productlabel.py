@@ -36,7 +36,7 @@ def printproductlabel_page(data: fs.Datasy):
     def show_banner_click(
         message: str,
         color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
+        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
         icon_color: ft.colors = ft.colors.RED_900,
     ):
         """Show Banner"""
@@ -80,7 +80,7 @@ def printproductlabel_page(data: fs.Datasy):
             show_banner_click(
                 "Print Job Sent. May take a couple of min to print",
                 ft.colors.GREEN_200,
-                ft.icons.CHECK_BOX_ROUNDED,
+                ft.Icons.CHECK_BOX_ROUNDED,
                 ft.colors.GREEN_900,
             )
             beep.success(page)
@@ -99,7 +99,7 @@ def printproductlabel_page(data: fs.Datasy):
         get_items()
 
     print_button = ft.IconButton(
-        icon=ft.icons.PRINT_ROUNDED,
+        icon=ft.Icons.PRINT_ROUNDED,
         icon_color="green500",
         icon_size=50,
         tooltip="Print Label",
@@ -107,7 +107,7 @@ def printproductlabel_page(data: fs.Datasy):
         disabled=True,
     )
     clear_button = ft.IconButton(
-        icon=ft.icons.DELETE_SWEEP_ROUNDED,
+        icon=ft.Icons.DELETE_SWEEP_ROUNDED,
         icon_color="red400",
         icon_size=50,
         tooltip="Clear List",
@@ -123,7 +123,7 @@ def printproductlabel_page(data: fs.Datasy):
     )
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
     )
 
@@ -174,7 +174,7 @@ def printproductlabel_page(data: fs.Datasy):
         height=30,
         capitalization=ft.TextCapitalization.CHARACTERS,
         label="Scan SKU",
-        icon=ft.icons.BARCODE_READER,
+        icon=ft.Icons.BARCODE_READER,
     )
 
     scan_container = ft.Container(alignment=ft.alignment.top_center, content=scan_field)

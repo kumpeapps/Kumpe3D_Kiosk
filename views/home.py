@@ -19,12 +19,12 @@ def home_page(data: fs.Datasy):
         page.update()
 
     img_container = ft.Container(
-        content=ft.Image(src_base64=logo.logo_base64, height=page.height / 5),
+        content=ft.Image(src="/logo.png", height=page.height / 5),
         alignment=ft.alignment.top_center,
     )
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
         disabled=False,
     )

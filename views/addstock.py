@@ -32,7 +32,7 @@ def addstock_page(data: fs.Datasy):
     def show_banner_click(
         message: str,
         color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
+        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         """Show Banner"""
         page.banner = ft.Banner(
@@ -80,7 +80,7 @@ def addstock_page(data: fs.Datasy):
         autofocus=False,
         autocorrect=False,
         enable_suggestions=False,
-        prefix_icon=ft.icons.NUMBERS_SHARP,
+        prefix_icon=ft.Icons.NUMBERS_SHARP,
         text_align=ft.TextAlign.LEFT,
         input_filter=ft.InputFilter(
             allow=True, regex_string=r"[0-9]", replacement_string=""
@@ -94,7 +94,7 @@ def addstock_page(data: fs.Datasy):
         autofocus=True,
         autocorrect=False,
         enable_suggestions=False,
-        prefix_icon=ft.icons.BARCODE_READER,
+        prefix_icon=ft.Icons.BARCODE_READER,
         on_submit=add_stock,
         text_align=ft.TextAlign.CENTER,
     )
@@ -104,7 +104,7 @@ def addstock_page(data: fs.Datasy):
     )
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
         disabled=False
     )

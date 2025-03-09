@@ -33,7 +33,7 @@ def pendingorders_page(data: fs.Datasy):
     def show_banner_click(
         message: str,
         color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
+        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         """Show Banner"""
         page.banner = ft.Banner(
@@ -48,7 +48,7 @@ def pendingorders_page(data: fs.Datasy):
         page.update()
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
     )
 
@@ -81,7 +81,7 @@ def pendingorders_page(data: fs.Datasy):
                     ),
                     subtitle=ft.Text(f"{order['email']}"),
                     trailing=ft.PopupMenuButton(
-                        icon=ft.icons.MORE_VERT,
+                        icon=ft.Icons.MORE_VERT,
                         items=[
                             ft.PopupMenuItem(
                                 text="View Order",
