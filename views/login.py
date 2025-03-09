@@ -4,7 +4,6 @@ import socket
 import requests  # type: ignore
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-import assets.logo as logo  # pylint: disable=import-error
 from core.params import Params as params
 from core.params import logger
 import sounds.beep as beep
@@ -33,7 +32,7 @@ def login_page(data: fs.Datasy):
         page.update()
 
     img_container = ft.Container(
-        content=ft.Image(src_base64=logo.logo_base64, height=page.height / 5),
+        content=ft.Image(src="/logo.png", height=page.height / 5),
         alignment=ft.alignment.top_center,
     )
 
@@ -60,7 +59,7 @@ def login_page(data: fs.Datasy):
         adaptive=True,
         autocorrect=True,
         enable_suggestions=True,
-        prefix_icon=ft.icons.PASSWORD,
+        prefix_icon=ft.Icons.PASSWORD,
         on_submit=did_login,
         visible=True,
         text_align=ft.TextAlign.CENTER,
@@ -79,7 +78,7 @@ def login_page(data: fs.Datasy):
         autofocus=True,
         autocorrect=True,
         enable_suggestions=True,
-        prefix_icon=ft.icons.PERSON,
+        prefix_icon=ft.Icons.PERSON,
         adaptive=True,
         on_submit=username_submit,
         visible=True,
@@ -95,19 +94,19 @@ def login_page(data: fs.Datasy):
     )
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
         disabled=True,
     )
 
     def show_banner_click(
         message: str,
-        color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
+        color: ft.colors = ft.Colors.RED_400,
+        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         page.banner = ft.Banner(
             bgcolor=color,
-            leading=ft.Icon(icon, color=ft.colors.RED_900, size=40),
+            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
             content=ft.Text(message),
             actions=[
                 ft.TextButton("Dismiss", on_click=close_banner),
@@ -155,7 +154,7 @@ def login_page(data: fs.Datasy):
 
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
-        show_banner_click("Access Granted", ft.colors.GREEN_400, ft.icons.CHECK)
+        show_banner_click("Access Granted", ft.Colors.GREEN_400, ft.Icons.CHECK)
         logger.success("Access Granted!")
         page.session.set("username", user.username)
         log_access(f"{user.user_id}", f"/{computername}/granted/{access_level}")

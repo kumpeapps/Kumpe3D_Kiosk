@@ -32,13 +32,13 @@ def pendingorders_page(data: fs.Datasy):
 
     def show_banner_click(
         message: str,
-        color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
+        color: ft.colors = ft.Colors.RED_400,
+        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         """Show Banner"""
         page.banner = ft.Banner(
             bgcolor=color,
-            leading=ft.Icon(icon, color=ft.colors.RED_900, size=40),
+            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
             content=ft.Text(message),
             actions=[
                 ft.TextButton("Dismiss", on_click=close_banner),
@@ -48,7 +48,7 @@ def pendingorders_page(data: fs.Datasy):
         page.update()
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
     )
 
@@ -74,14 +74,14 @@ def pendingorders_page(data: fs.Datasy):
                 idorders = order["id"]
                 tile = ft.CupertinoListTile(
                     additional_info=ft.Text(order["status"]),
-                    bgcolor_activated=ft.colors.AMBER_ACCENT,
+                    bgcolor_activated=ft.Colors.AMBER_ACCENT,
                     leading=ft.Icon(name=ft.cupertino_icons.SHOPPING_CART),
                     title=ft.Text(
                         f"{order['id']}: {order['company_name']} {order['first_name']} {order['last_name']} ({order['country']})"  # pylint: disable=line-too-long
                     ),
                     subtitle=ft.Text(f"{order['email']}"),
                     trailing=ft.PopupMenuButton(
-                        icon=ft.icons.MORE_VERT,
+                        icon=ft.Icons.MORE_VERT,
                         items=[
                             ft.PopupMenuItem(
                                 text="View Order",

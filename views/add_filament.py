@@ -32,13 +32,13 @@ def add_filament_page(data: fs.Datasy):
 
     def show_banner_click(
         message: str,
-        color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
+        color: ft.colors = ft.Colors.RED_400,
+        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         """Show Banner"""
         page.banner = ft.Banner(
             bgcolor=color,
-            leading=ft.Icon(icon, color=ft.colors.RED_900, size=40),
+            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
             content=ft.Text(message),
             actions=[
                 ft.TextButton("Dismiss", on_click=close_banner),
@@ -246,7 +246,7 @@ def add_filament_page(data: fs.Datasy):
         autofocus=True,
         autocorrect=False,
         enable_suggestions=False,
-        prefix_icon=ft.icons.BARCODE_READER,
+        prefix_icon=ft.Icons.BARCODE_READER,
         on_submit=add_filament_to_database,
         text_align=ft.TextAlign.CENTER,
     )
@@ -256,7 +256,7 @@ def add_filament_page(data: fs.Datasy):
     )
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
         disabled=False,
     )

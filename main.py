@@ -31,7 +31,7 @@ def login_x(data: fs.Datasy):
         ),
         on_dismiss=lambda e: print("Dialog dismissed!"),
         adaptive=False,
-        bgcolor=ft.colors.RED_300,
+        bgcolor=ft.Colors.RED_300,
     )
 
     def open_dlg():

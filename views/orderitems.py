@@ -34,13 +34,13 @@ def orderitems_page(data: fs.Datasy, order_id: int):
 
     def show_banner_click(
         message: str,
-        color: ft.colors = ft.colors.RED_400,
-        icon: ft.icons = ft.icons.ERROR_ROUNDED,
+        color: ft.colors = ft.Colors.RED_400,
+        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
     ):
         """Show Banner"""
         page.banner = ft.Banner(
             bgcolor=color,
-            leading=ft.Icon(icon, color=ft.colors.RED_900, size=40),
+            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
             content=ft.Text(message),
             actions=[
                 ft.TextButton("Dismiss", on_click=close_banner),
@@ -50,7 +50,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
         page.update()
 
     menu_button = ft.Container(
-        content=ft.IconButton(icon=ft.icons.MENU, on_click=show_drawer),
+        content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
     )
 
@@ -71,6 +71,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
         scanned_list = slb.build_k3d_item_dict(scan_field.value, translation, page)
 
         for item in scanned_list:
+            logger.debug(f"Item: {item}")
             sku = item["sku"]
             qty = item["qty"]
             user = page.session.get("username")
@@ -120,7 +121,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             items = order.items
             for item in items:
                 tile = ft.ListTile(
-                    bgcolor_activated=ft.colors.AMBER_ACCENT,
+                    bgcolor_activated=ft.Colors.AMBER_ACCENT,
                     leading=ft.Image(
                         src=f"https://images.kumpeapps.com/filament?sku={item.sku}"
                     ),
