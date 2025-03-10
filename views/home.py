@@ -2,7 +2,6 @@
 
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
-import assets.logo as logo  # pylint: disable=import-error
 
 home = fs.AddPagesy()
 
