@@ -46,10 +46,10 @@ def login_page(data: fs.Datasy):
             send_request(username_field.value, password_field.value)
         else:
             logger.error("Server is unreachable")
+            logging_in(False)
             show_banner_click(
                 page, "Server Unreachable. Please check internet and VPN connection."
             )
-            logging_in(False)
         page.update()
 
     password_field = ft.TextField(
@@ -105,8 +105,8 @@ def login_page(data: fs.Datasy):
             api.oauth.login(page, username, password)
         except requests.exceptions.HTTPError as error:
             logger.error(f"HTTP Error: {error}")
-            show_banner_click(page, "Login Failed")
             logging_in(False)
+            show_banner_click(page, "Login Failed")
         else:
             if not page.session.contains_key("user"):
                 show_banner_click(page, "Access Denied")

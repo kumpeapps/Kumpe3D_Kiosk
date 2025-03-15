@@ -132,7 +132,7 @@ def printproductlabel_page(data: fs.Datasy):
                     raise ValueError(response.error_message)
             except ValueError as error:
                 success = False
-                show_banner_click(page, error)
+                show_banner_click(page, f"{error}")
                 break
             logger.trace(f"Added {item} to label")
         scan_field.value = ""
