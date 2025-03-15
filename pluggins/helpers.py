@@ -1,7 +1,6 @@
 """Helper Funcs"""
 
 import flet as ft  # type: ignore
-import flet_easy as fs  # type: ignore
 from flet_toast import flet_toast as toast  # type: ignore
 import sounds.beep as beeps
 
