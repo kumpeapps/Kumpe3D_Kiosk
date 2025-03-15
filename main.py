@@ -47,7 +47,7 @@ def login_x(data: fs.Datasy):
     logger.trace("Start Selected Page check access")
     match page.session.get("selected_page"):
 
-        case "productlabel" | "addstock" | "productionq":
+        case "productlabel" | "addstock" | "productionq" | "add_filament":
             logger.trace("checking access production")
             return access.production
         case "home":
@@ -97,7 +97,7 @@ def view(data: fs.Datasy):
         page.go("/orders/pending")
 
     def add_filament_go(_):
-        page.session.set("selected_page", "addstock")
+        page.session.set("selected_page", "add_filament")
         page.go("/add_filament")
 
     return fs.Viewsy(
@@ -127,7 +127,7 @@ def view(data: fs.Datasy):
                         ft.FilledButton(
                             text="Pending Orders", on_click=pendingorders_go
                         ),
-                        ft.FilledButton(text="Add Filament", on_click=add_filament_go),
+                        # ft.FilledButton(text="Add Filament", on_click=add_filament_go),
                         ft.FilledButton(
                             text="Logout",
                             on_click=logout,
