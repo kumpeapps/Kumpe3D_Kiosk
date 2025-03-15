@@ -8,6 +8,7 @@ import pluggins.scan_list_builder as slb
 from models.order import Order
 from api.get import get_order
 from api.put import update_order_item
+from pluggins.helpers import show_banner_click
 
 orderitems = fs.AddPagesy()
 COMPANY_USE_ORDER = "240"
@@ -30,23 +31,6 @@ def orderitems_page(data: fs.Datasy, order_id: int):
     def close_banner(_):
         """Close Banner"""
         page.banner.open = False
-        page.update()
-
-    def show_banner_click(
-        message: str,
-        color: ft.colors = ft.Colors.RED_400,
-        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
-    ):
-        """Show Banner"""
-        page.banner = ft.Banner(
-            bgcolor=color,
-            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
-            content=ft.Text(message),
-            actions=[
-                ft.TextButton("Dismiss", on_click=close_banner),
-            ],
-        )
-        page.banner.open = True
         page.update()
 
     menu_button = ft.Container(
@@ -79,8 +63,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
                 update_order_item(page, sku, order_id, qty, user)
                 beep.success(page)
             except:  # pylint: disable=bare-except
-                show_banner_click(f"Invalid SKU: {sku}")
-                beep.error(page)
+                show_banner_click(page, f"Invalid SKU: {sku}")
                 break
         scan_field.value = ""
         tiles.clear()
@@ -136,8 +119,7 @@ def orderitems_page(data: fs.Datasy, order_id: int):
             page.update()
         except (KeyError, TypeError) as error:
             logger.error(error)
-            beep.error(page)
-            show_banner_click("Unknown Error")
+            show_banner_click(page, "Unknown Error")
 
     get_items()
 

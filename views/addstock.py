@@ -6,6 +6,7 @@ from core.params import logger
 import sounds.beep as beep
 import pluggins.scan_list_builder as slb
 from api.post import add_stock as add_stock_api
+from pluggins.helpers import show_banner_click
 
 addstock = fs.AddPagesy()
 
@@ -29,28 +30,9 @@ def addstock_page(data: fs.Datasy):
         page.banner.open = False
         page.update()
 
-    def show_banner_click(
-        message: str,
-        color: ft.colors = ft.Colors.RED_400,
-        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
-    ):
-        """Show Banner"""
-        page.banner = ft.Banner(
-            bgcolor=color,
-            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
-            content=ft.Text(message),
-            actions=[
-                ft.TextButton("Dismiss", on_click=close_banner),
-            ],
-        )
-        page.banner.open = True
-        page.update()
-
     def add_stock(_):
         updating()
-        scanned_list = slb.build_k3d_item_dict(
-            sku.value, "to_stock_translation", page
-        )
+        scanned_list = slb.build_k3d_item_dict(sku.value, "to_stock_translation", page)
         quantity = int(qty.value)
         try:
             while quantity > 0:
@@ -65,8 +47,7 @@ def addstock_page(data: fs.Datasy):
             page.update()
             beep.success(page)
         except (KeyError, ValueError):
-            beep.error(page)
-            show_banner_click(f"Invalid SKU in [{sku.value}]")
+            show_banner_click(page, f"Invalid SKU in [{sku.value}]")
             updating(False)
 
     text = ft.Container(
@@ -106,7 +87,7 @@ def addstock_page(data: fs.Datasy):
     menu_button = ft.Container(
         content=ft.IconButton(icon=ft.Icons.MENU, on_click=show_drawer),
         alignment=ft.alignment.top_left,
-        disabled=False
+        disabled=False,
     )
 
     progress_ring = ft.Container(

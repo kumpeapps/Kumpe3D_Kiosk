@@ -6,9 +6,9 @@ import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 from core.params import Params as params
 from core.params import logger
-import sounds.beep as beep
 from models.user import User
 import api.oauth
+from pluggins.helpers import show_banner_click
 
 login = fs.AddPagesy()
 hf = ft.HapticFeedback()
@@ -47,7 +47,7 @@ def login_page(data: fs.Datasy):
         else:
             logger.error("Server is unreachable")
             show_banner_click(
-                "Server Unreachable. Please check internet and VPN connection."
+                page, "Server Unreachable. Please check internet and VPN connection."
             )
             logging_in(False)
         page.update()
@@ -69,7 +69,6 @@ def login_page(data: fs.Datasy):
 
     def username_submit(_):
         """Activate Password Field on Submit"""
-        show_banner_click("Username Submitted")
         logger.trace("Username Field Submitted")
         password_field.focus()
 
@@ -99,41 +98,18 @@ def login_page(data: fs.Datasy):
         disabled=True,
     )
 
-    def show_banner_click(
-        message: str,
-        color: ft.colors = ft.Colors.RED_400,
-        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
-    ):
-        page.banner = ft.Banner(
-            bgcolor=color,
-            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
-            content=ft.Text(message),
-            actions=[
-                ft.TextButton("Dismiss", on_click=close_banner),
-            ],
-        )
-        page.banner.open = True
-        page.update()
-
-    def close_banner(_):
-        page.banner.open = False
-        page.update()
-
     def send_request(username: str, password: str):
         """KumpeApps SSO Login"""
-        show_banner_click("Logging In")
         logger.debug(f"Sending Login Request for {username}")
         try:
             api.oauth.login(page, username, password)
         except requests.exceptions.HTTPError as error:
             logger.error(f"HTTP Error: {error}")
-            show_banner_click("Login Failed")
-            beep.error(page, hf)
+            show_banner_click(page, "Login Failed")
             logging_in(False)
         else:
             if not page.session.contains_key("user"):
-                show_banner_click("Access Denied")
-                beep.error(page, hf)
+                show_banner_click(page, "Access Denied")
                 logging_in(False)
             else:
                 user: User = page.session.get("user")
@@ -145,8 +121,7 @@ def login_page(data: fs.Datasy):
                 elif user.Access.basic:
                     access_granted(user, computername, "basic")
                 else:
-                    show_banner_click("Access Denied")
-                    beep.error(page, hf)
+                    show_banner_click(page, "Access Denied")
                     log_access(f"{user.user_id}", f"/{computername}/denied")
                     password_field.value = ""
                     logging_in(False)
@@ -154,7 +129,6 @@ def login_page(data: fs.Datasy):
 
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
-        show_banner_click("Access Granted", ft.Colors.GREEN_400, ft.Icons.CHECK)
         logger.success("Access Granted!")
         page.session.set("username", user.username)
         log_access(f"{user.user_id}", f"/{computername}/granted/{access_level}")

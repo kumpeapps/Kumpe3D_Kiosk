@@ -10,6 +10,7 @@ from core.params import logger
 import api.post
 import api.get
 import api.delete
+from pluggins.helpers import show_banner_click
 
 printproductlabel = fs.AddPagesy()
 items_list = ""  # pylint: disable=invalid-name
@@ -31,24 +32,6 @@ def printproductlabel_page(data: fs.Datasy):
     def close_banner(_):
         """Close Banner"""
         page.banner.open = False
-        page.update()
-
-    def show_banner_click(
-        message: str,
-        color: ft.colors = ft.Colors.RED_400,
-        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
-        icon_color: ft.colors = ft.Colors.RED_900,
-    ):
-        """Show Banner"""
-        page.banner = ft.Banner(
-            bgcolor=color,
-            leading=ft.Icon(icon, color=icon_color, size=40),
-            content=ft.Text(message),
-            actions=[
-                ft.TextButton("Dismiss", on_click=close_banner),
-            ],
-        )
-        page.banner.open = True
         page.update()
 
     def print_clicked(_):
@@ -78,15 +61,12 @@ def printproductlabel_page(data: fs.Datasy):
         response = api.post.print_label(page, label)
         if response.success:
             show_banner_click(
+                page,
                 "Print Job Sent. May take a couple of min to print",
-                ft.Colors.GREEN_200,
-                ft.Icons.CHECK_BOX_ROUNDED,
-                ft.Colors.GREEN_900,
+                toast_type="success",
             )
-            beep.success(page)
         else:
-            show_banner_click(response.error_message, ft.Colors.RED_200)
-            beep.error(page)
+            show_banner_click(page, response.error_message)
         get_items()
 
     def clear_clicked(_):
@@ -94,8 +74,7 @@ def printproductlabel_page(data: fs.Datasy):
         if response.success:
             beep.success(page)
         else:
-            show_banner_click(response.error_message, ft.Colors.RED_200)
-            beep.error(page)
+            show_banner_click(page, response.error_message)
         get_items()
 
     print_button = ft.IconButton(
@@ -153,14 +132,12 @@ def printproductlabel_page(data: fs.Datasy):
                     raise ValueError(response.error_message)
             except ValueError as error:
                 success = False
-                show_banner_click(error)
+                show_banner_click(page, error)
                 break
             logger.trace(f"Added {item} to label")
         scan_field.value = ""
         if success:
             beep.success(page)
-        else:
-            beep.error(page)
         tiles.clear()
         get_items()
         scan_field.focus()
@@ -255,8 +232,7 @@ def printproductlabel_page(data: fs.Datasy):
             page.update()
             logger.trace("Items for label retrieved")
         else:
-            beep.error(page)
-            show_banner_click(get_label.error_message)
+            show_banner_click(page, get_label.error_message)
             print_button.disabled = True
             page.update()
         progress_ring.visible = False

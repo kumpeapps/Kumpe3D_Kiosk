@@ -1,5 +1,8 @@
 """Helper Funcs"""
-
+import flet as ft  # type: ignore
+import flet_easy as fs  # type: ignore
+from flet_toast import flet_toast as toast  # type: ignore
+import sounds.beep as beeps
 
 def get_sku_array(sku):
     """Take SKU and seperate it into parts and assign to array"""
@@ -26,3 +29,35 @@ def get_sku_array(sku):
         return sku_array
     except IndexError:
         return {"base_sku": sku, "color": "NNN"}
+
+def show_banner_click(
+    page: ft.Page,
+    message: str,
+    toast_type: str = "error",
+    beep: bool = True,
+    haptic: bool = True,
+    position: str = "top_right",
+):
+    """Show Banner"""
+    if toast_type == "success":
+        if beep:
+            beeps.success(page, haptic)
+        toast.sucess(
+            page=page,
+            message=message,
+            position=position,
+        )
+    elif toast_type == "error":
+        if beep:
+            beeps.error(page, haptic)
+        toast.error(
+            page=page,
+            message=message,
+            position=position,
+        )
+    else:
+        toast.warning(
+            page=page,
+            message=message,
+            position=position,
+        )

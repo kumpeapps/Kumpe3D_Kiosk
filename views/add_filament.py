@@ -1,11 +1,12 @@
 """Add to Stock"""
 
-import pymysql
+import pymysql # type: ignore
 import flet as ft  # type: ignore
 import flet_easy as fs  # type: ignore
 from core.params import Params as params
 from core.params import logger
 import sounds.beep as beep
+from pluggins.helpers import show_banner_click
 
 add_filament = fs.AddPagesy()
 
@@ -30,22 +31,7 @@ def add_filament_page(data: fs.Datasy):
         page.banner.open = False
         page.update()
 
-    def show_banner_click(
-        message: str,
-        color: ft.colors = ft.Colors.RED_400,
-        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
-    ):
-        """Show Banner"""
-        page.banner = ft.Banner(
-            bgcolor=color,
-            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
-            content=ft.Text(message),
-            actions=[
-                ft.TextButton("Dismiss", on_click=close_banner),
-            ],
-        )
-        page.banner.open = True
-        page.update()
+
 
     def add_filament_to_database(_):
         updating()
@@ -161,7 +147,7 @@ def add_filament_page(data: fs.Datasy):
             cursor.execute(scan_translation_sql, scan_translation_values_sku)
         except (KeyError, pymysql.IntegrityError):
             beep.error(page)
-            show_banner_click("Error")
+            show_banner_click(page, "Error")
             updating(False)
         else:
             db.commit()
