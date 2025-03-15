@@ -1,6 +1,7 @@
 """Beep Functions"""
 
 import flet as ft  # type: ignore
+from flet_audio import Audio  # type: ignore
 
 
 def error(page: ft.Page, hf: ft.HapticFeedback = None):
@@ -15,7 +16,7 @@ def error(page: ft.Page, hf: ft.HapticFeedback = None):
             page.update()
         except AttributeError:
             pass
-    error_file = ft.Audio(
+    error_file = Audio(
         src="/audio/error.wav",  # pylint: disable=line-too-long
         autoplay=True,
     )
@@ -35,7 +36,7 @@ def success(page: ft.Page, hf: ft.HapticFeedback = None):
             page.update()
         except AttributeError:
             pass
-    success_file = ft.Audio(
+    success_file = Audio(
         src="/audio/success.wav",  # pylint: disable=line-too-long
         autoplay=True,
     )
@@ -45,7 +46,7 @@ def success(page: ft.Page, hf: ft.HapticFeedback = None):
 
 def login(page: ft.Page):
     """Play Success Beep"""
-    success_file = ft.Audio(
+    success_file = Audio(
         src="/audio/login.aiff",  # pylint: disable=line-too-long
         autoplay=True,
     )

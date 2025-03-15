@@ -7,6 +7,7 @@ import sounds.beep as beep
 from api.get import get_pending_orders as get_orders
 from models.order import Orders
 from core.params import logger
+from pluggins.helpers import show_banner_click
 
 
 pendingorders = fs.AddPagesy()
@@ -28,23 +29,6 @@ def pendingorders_page(data: fs.Datasy):
     def close_banner(_):
         """Close Banner"""
         page.banner.open = False
-        page.update()
-
-    def show_banner_click(
-        message: str,
-        color: ft.colors = ft.Colors.RED_400,
-        icon: ft.icons = ft.Icons.ERROR_ROUNDED,
-    ):
-        """Show Banner"""
-        page.banner = ft.Banner(
-            bgcolor=color,
-            leading=ft.Icon(icon, color=ft.Colors.RED_900, size=40),
-            content=ft.Text(message),
-            actions=[
-                ft.TextButton("Dismiss", on_click=close_banner),
-            ],
-        )
-        page.banner.open = True
         page.update()
 
     menu_button = ft.Container(
@@ -69,7 +53,7 @@ def pendingorders_page(data: fs.Datasy):
         """Add's Roll to Stock"""
 
         try:
-            orders: Orders = get_orders(page).data # type: ignore
+            orders: Orders = get_orders(page).data  # type: ignore
             for order in orders.orders:
                 idorders = order["id"]
                 tile = ft.CupertinoListTile(
@@ -98,8 +82,7 @@ def pendingorders_page(data: fs.Datasy):
             page.update()
         except (KeyError, TypeError) as error:
             logger.error(error)
-            beep.error(page)
-            show_banner_click("Unknown Error")
+            show_banner_click(page, "Unknown Error")
 
     get_pending_orders()
     canvas.append(tiles)
