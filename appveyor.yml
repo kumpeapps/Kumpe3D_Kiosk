@@ -1,4 +1,4 @@
-version: '2.3.7({build})'
+version: '2.5.0({build})'
 # build_cloud: appveyor-workers Docker
 
 environment:
@@ -102,7 +102,7 @@ for:
 
   build_script:
   - echo "is_mobile=0" >> .env
-  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
+  - flet build macos --project "kumpe3dkiosk" --product "Kumpe3D Kiosk" --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.5.0"}" --build-number $APPVEYOR_BUILD_NUMBER --copyright "Copyright (c) 2024 KumpeApps LLC" --org com.kumpeapps.flet --company "KumpeApps LLC" --include-packages flet_audio
 
   after_build:
   - tar -czvf kumpe3dkiosk-macos.tar.gz -C build/macos "Kumpe3D Kiosk.app"
@@ -152,8 +152,8 @@ for:
   build_script:
   - echo "is_mobile=1" >> .env
   - mv "./assets/icon-beta.png" "./assets/icon.png" 2>/dev/null
-  # - bundle exec badge --shield "V${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}-${APPVEYOR_BUILD_NUMBER}-blue" --shield_geometry "+0+25%" --shield_scale 0.75 --glob "/assets/icon.png"
-  - flet build ipa --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --flutter-build-args=--release --flutter-build-args=--no-codesign --template https://github.com/kumpeapps/flet-build-template.git
+  # - bundle exec badge --shield "V${APPVEYOR_REPO_TAG_NAME:-"2.5.0"}-${APPVEYOR_BUILD_NUMBER}-blue" --shield_geometry "+0+25%" --shield_scale 0.75 --glob "/assets/icon.png"
+  - flet build ipa --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.5.0"}" --build-number $APPVEYOR_BUILD_NUMBER --flutter-build-args=--release --flutter-build-args=--no-codesign --template https://github.com/kumpeapps/flet-build-template.git
   # --team 2T42Z3DM34
   - bundle exec fastlane upload_testflight
 
@@ -204,8 +204,8 @@ for:
 
   build_script:
   - echo "is_mobile=1" >> .env
-  # - bundle exec badge --shield "V${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}-${APPVEYOR_BUILD_NUMBER}-blue" --shield_geometry "+0+25%" --shield_scale 0.75 --glob "/assets/icon.png"
-  - flet build ipa --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --flutter-build-args=--release --flutter-build-args=--no-codesign --template https://github.com/kumpeapps/flet-build-template.git
+  # - bundle exec badge --shield "V${APPVEYOR_REPO_TAG_NAME:-"2.5.0"}-${APPVEYOR_BUILD_NUMBER}-blue" --shield_geometry "+0+25%" --shield_scale 0.75 --glob "/assets/icon.png"
+  - flet build ipa --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.5.0"}" --build-number $APPVEYOR_BUILD_NUMBER --flutter-build-args=--release --flutter-build-args=--no-codesign --template https://github.com/kumpeapps/flet-build-template.git
   # --team 2T42Z3DM34
   - bundle exec fastlane upload_testflight
 
@@ -237,7 +237,7 @@ for:
   - mv "./assets/icon-beta.png" "./assets/icon.png" 2>/dev/null
   - curl https://$MATCH_DEPLOY_KEY@raw.githubusercontent.com/kumpeapps/android_certs/main/kumpe3dkiosk -o /tmp/kumpe3dkiosk
   - ls /tmp
-  - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload --flutter-build-args=--debug
+  - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.5.0-beta"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload --flutter-build-args=--debug
 
   after_build:
   - tar -czvf kumpe3dkiosk-apk-debug.tar.gz -C build apk
@@ -252,6 +252,7 @@ for:
   branches:
     only:
     - main
+    - PreProd
   matrix:
     only:
     - job_name: "build Android- Release"
@@ -263,7 +264,7 @@ for:
   build_script:
   - echo "is_mobile=1" >> .env
   - curl https://$MATCH_DEPLOY_KEY@raw.githubusercontent.com/kumpeapps/android_certs/main/kumpe3dkiosk -o /tmp/kumpe3dkiosk
-  - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD  --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload
+  - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.5.0"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD  --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload
 
   after_build:
   - tar -czvf kumpe3dkiosk-apk.tar.gz -C build apk
@@ -289,7 +290,7 @@ for:
   build_script:
   - echo "is_mobile=1" >> .env
   - curl https://$MATCH_DEPLOY_KEY@raw.githubusercontent.com/kumpeapps/android_certs/main/kumpe3dkiosk -o /tmp/kumpe3dkiosk
-  - flet build aab --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.3.7"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD  --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload
+  - flet build aab --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.5.0"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD  --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload
 
   after_build:
   - tar -czvf kumpe3dkiosk-aab.tar.gz -C build aab
