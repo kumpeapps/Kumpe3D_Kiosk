@@ -263,6 +263,8 @@ for:
 
   build_script:
   - echo "is_mobile=1" >> .env
+  - echo "Test"
+  - echo $test
   - curl https://$MATCH_DEPLOY_KEY@raw.githubusercontent.com/kumpeapps/android_certs/main/kumpe3dkiosk -o /tmp/kumpe3dkiosk
   - ls /tmp
   - flet build apk --build-version "${APPVEYOR_REPO_TAG_NAME:-"2.5.0-beta"}" --build-number $APPVEYOR_BUILD_NUMBER --android-signing-key-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store-password $MATCH_KEYCHAIN_PASSWORD --android-signing-key-store /tmp/kumpe3dkiosk --android-signing-key-alias upload
