@@ -107,10 +107,14 @@ def login_page(data: fs.Datasy):
             logger.error(f"HTTP Error: {error}")
             logging_in(False)
             show_banner_click(page, "Login Failed")
+            password_field.value = ""
+            page.update()
         else:
             if not page.session.contains_key("user"):
                 show_banner_click(page, "Access Denied")
                 logging_in(False)
+                password_field.value = ""
+                page.update()
             else:
                 user: User = page.session.get("user")
                 computername = socket.gethostname()
