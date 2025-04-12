@@ -4,10 +4,10 @@ version: '2.5.0({build})'
 environment:
 
   matrix:
-  - job_name: "build Android AAB- Release"
+  - job_name: "build Android- Release"
     appveyor_build_worker_image: Ubuntu
     build: Script
-  - job_name: "build Android- Release"
+  - job_name: "build Android AAB- Release"
     appveyor_build_worker_image: Ubuntu
     build: Script
   - job_name: "build Android- BETA"
