@@ -27,6 +27,17 @@ def login_page(data: fs.Datasy):
         alignment=ft.alignment.center,
     )
 
+    def on_double_tap(_):
+        """Double Tap to Show Drawer"""
+        logger.debug("Double Tap Detected")
+        hf.vibrate()
+        username_field.visible = True
+        username_field.focus()
+        password_field.label = "Password"
+        page.update()
+
+    dt = ft.GestureDetector(on_double_tap=on_double_tap)
+
     def show_drawer(_):
         view.drawer.open = True
         page.update()
@@ -53,11 +64,12 @@ def login_page(data: fs.Datasy):
         page.update()
 
     password_field = ft.TextField(
-        label="Password",
+        label="Yubikey OTP",
         password=True,
         can_reveal_password=False,
         adaptive=True,
         autocorrect=True,
+        autofocus=True,
         enable_suggestions=True,
         prefix_icon=ft.Icons.PASSWORD,
         on_submit=did_login,
@@ -74,13 +86,13 @@ def login_page(data: fs.Datasy):
 
     username_field = ft.TextField(
         label="Username",
-        autofocus=True,
+        autofocus=False,
         autocorrect=True,
         enable_suggestions=True,
         prefix_icon=ft.Icons.PERSON,
         adaptive=True,
         on_submit=username_submit,
-        visible=True,
+        visible=False,
         text_align=ft.TextAlign.CENTER,
         width=250,
         autofill_hints=ft.AutofillHint.USERNAME,
@@ -186,6 +198,7 @@ def login_page(data: fs.Datasy):
             password_field,
             submit_container,
             pr_container,
+            dt,
         ],
         drawer=view.drawer,
         horizontal_alignment="center",
