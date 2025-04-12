@@ -107,10 +107,14 @@ def login_page(data: fs.Datasy):
             logger.error(f"HTTP Error: {error}")
             logging_in(False)
             show_banner_click(page, "Login Failed")
+            password_field.value = ""
+            page.update()
         else:
             if not page.session.contains_key("user"):
                 show_banner_click(page, "Access Denied")
                 logging_in(False)
+                password_field.value = ""
+                page.update()
             else:
                 user: User = page.session.get("user")
                 computername = socket.gethostname()
@@ -130,6 +134,8 @@ def login_page(data: fs.Datasy):
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
         logger.success("Access Granted!")
+        password_field.value = ""
+        username_field.value = ""
         page.session.set("username", user.username)
         log_access(f"{user.user_id}", f"/{computername}/granted/{access_level}")
         logging_in(False)
