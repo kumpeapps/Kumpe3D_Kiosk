@@ -1,7 +1,6 @@
 """Helper Funcs"""
 
 import flet as ft  # type: ignore
-from flet_toast import flet_toast as toast  # type: ignore
 import sounds.beep as beeps
 
 
@@ -43,14 +42,14 @@ def show_banner_click(
     """Show banner and toast message"""
     # Map toast_type to corresponding functions.
     beep_funcs = {"success": beeps.success, "error": beeps.error}
-    toast_funcs = {
-        "success": toast.sucess,
-        "error": toast.error,
-        "warning": toast.warning,
-    }
+    # toast_funcs = {
+    #     "success": toast.sucess,
+    #     "error": toast.error,
+    #     "warning": toast.warning,
+    # }
 
     if beep and toast_type in beep_funcs:
         beep_funcs[toast_type](page, haptic)
     # Use warning as fallback.
-    toast_func = toast_funcs.get(toast_type, toast.warning)
-    toast_func(page=page, message=message, position=position)
+    # toast_func = toast_funcs.get(toast_type, toast.warning)
+    # toast_func(page=page, message=message, position=position)
