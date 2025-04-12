@@ -134,6 +134,8 @@ def login_page(data: fs.Datasy):
     def access_granted(user: User, computername: str, access_level: str):
         """Access Granted"""
         logger.success("Access Granted!")
+        password_field.value = ""
+        username_field.value = ""
         page.session.set("username", user.username)
         log_access(f"{user.user_id}", f"/{computername}/granted/{access_level}")
         logging_in(False)
